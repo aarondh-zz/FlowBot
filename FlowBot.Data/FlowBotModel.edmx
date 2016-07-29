@@ -1,0 +1,396 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FlowBot.Data.Models.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="FlowBotDataModelsStoreContainer">
+    <EntitySet Name="ExternalTasks" EntityType="FlowBot.Data.Models.Store.ExternalTasks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Workflows" EntityType="FlowBot.Data.Models.Store.Workflows" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="FlowBot.Data.Models.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserGroups" EntityType="FlowBot.Data.Models.Store.UserGroups" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Conversations" EntityType="FlowBot.Data.Models.Store.Conversations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Messages" EntityType="FlowBot.Data.Models.Store.Messages" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserGroupUser" EntityType="FlowBot.Data.Models.Store.UserGroupUser" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_UserGroupUser_UserGroup" Association="FlowBot.Data.Models.Store.FK_UserGroupUser_UserGroup">
+      <End Role="UserGroup" EntitySet="UserGroups" />
+      <End Role="UserGroupUser" EntitySet="UserGroupUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserGroupUser_User" Association="FlowBot.Data.Models.Store.FK_UserGroupUser_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserGroupUser" EntitySet="UserGroupUser" />
+    </AssociationSet>
+    <AssociationSet Name="UserGroupExternalTask" Association="FlowBot.Data.Models.Store.UserGroupExternalTask">
+      <End Role="UserGroup" EntitySet="UserGroups" />
+      <End Role="ExternalTask" EntitySet="ExternalTasks" />
+    </AssociationSet>
+    <AssociationSet Name="ConversationMessage" Association="FlowBot.Data.Models.Store.ConversationMessage">
+      <End Role="Conversation" EntitySet="Conversations" />
+      <End Role="Message" EntitySet="Messages" />
+    </AssociationSet>
+    <AssociationSet Name="UserMessage" Association="FlowBot.Data.Models.Store.UserMessageFrom">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Message" EntitySet="Messages" />
+    </AssociationSet>
+    <AssociationSet Name="UserMessage1" Association="FlowBot.Data.Models.Store.UserMessageTo">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Message" EntitySet="Messages" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ExternalTasks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserGroup_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Workflows">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Version" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserGroups">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Conversations">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StartDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="EndDate" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Messages">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Conversation_Id" Type="int" Nullable="false" />
+    <Property Name="From_Id" Type="int" Nullable="false" />
+    <Property Name="To_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserGroupUser">
+    <Key>
+      <PropertyRef Name="UserGroups_Id" />
+      <PropertyRef Name="Users_Id" />
+    </Key>
+    <Property Name="UserGroups_Id" Type="int" Nullable="false" />
+    <Property Name="Users_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="UserGroupExternalTask">
+    <End Role="UserGroup" Type="FlowBot.Data.Models.Store.UserGroups" Multiplicity="1" />
+    <End Role="ExternalTask" Type="FlowBot.Data.Models.Store.ExternalTasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserGroup">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExternalTask">
+        <PropertyRef Name="UserGroup_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ConversationMessage">
+    <End Role="Conversation" Type="FlowBot.Data.Models.Store.Conversations" Multiplicity="1" />
+    <End Role="Message" Type="FlowBot.Data.Models.Store.Messages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Conversation">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Message">
+        <PropertyRef Name="Conversation_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserMessageFrom">
+    <End Role="User" Type="FlowBot.Data.Models.Store.Users" Multiplicity="1" />
+    <End Role="Message" Type="FlowBot.Data.Models.Store.Messages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Message">
+        <PropertyRef Name="From_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserMessageTo">
+    <End Role="User" Type="FlowBot.Data.Models.Store.Users" Multiplicity="1" />
+    <End Role="Message" Type="FlowBot.Data.Models.Store.Messages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Message">
+        <PropertyRef Name="To_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserGroupUser_UserGroup">
+    <End Role="UserGroup" Type="FlowBot.Data.Models.Store.UserGroups" Multiplicity="1" />
+    <End Role="UserGroupUser" Type="FlowBot.Data.Models.Store.UserGroupUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserGroup">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserGroupUser">
+        <PropertyRef Name="UserGroups_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserGroupUser_User">
+    <End Role="UserGroupUser" Type="FlowBot.Data.Models.Store.UserGroupUser" Multiplicity="*" />
+    <End Role="User" Type="FlowBot.Data.Models.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserGroupUser">
+        <PropertyRef Name="Users_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="FlowBot.Data.Models" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="FlowBotModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ExternalTasks" EntityType="FlowBot.Data.Models.ExternalTask" />
+          <EntitySet Name="Workflows" EntityType="FlowBot.Data.Models.Workflow" />
+          <EntitySet Name="Users" EntityType="FlowBot.Data.Models.User" />
+          <EntitySet Name="UserGroups" EntityType="FlowBot.Data.Models.UserGroup" />
+          <AssociationSet Name="UserGroupUser" Association="FlowBot.Data.Models.UserGroupUser">
+            <End Role="UserGroup" EntitySet="UserGroups" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="UserGroupExternalTask" Association="FlowBot.Data.Models.UserGroupExternalTask">
+            <End Role="UserGroup" EntitySet="UserGroups" />
+            <End Role="ExternalTask" EntitySet="ExternalTasks" />
+          </AssociationSet>
+          <EntitySet Name="Conversations" EntityType="FlowBot.Data.Models.Conversation" />
+          <EntitySet Name="Messages" EntityType="FlowBot.Data.Models.Message" />
+          <AssociationSet Name="ConversationMessage" Association="FlowBot.Data.Models.ConversationMessage">
+            <End Role="Conversation" EntitySet="Conversations" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="UserMessage" Association="FlowBot.Data.Models.UserMessageFrom">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+          <AssociationSet Name="UserMessage1" Association="FlowBot.Data.Models.UserMessageTo">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Message" EntitySet="Messages" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ExternalTask">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="UserGroup" Relationship="FlowBot.Data.Models.UserGroupExternalTask" FromRole="ExternalTask" ToRole="UserGroup" />
+        </EntityType>
+        <EntityType Name="Workflow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Version" Type="String" Nullable="false" />
+          <Property Name="Body" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="UserGroups" Relationship="FlowBot.Data.Models.UserGroupUser" FromRole="User" ToRole="UserGroup" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <NavigationProperty Name="Messages" Relationship="FlowBot.Data.Models.UserMessageFrom" FromRole="User" ToRole="Message" />
+          <NavigationProperty Name="MessagesTo" Relationship="FlowBot.Data.Models.UserMessageTo" FromRole="User" ToRole="Message" />
+        </EntityType>
+        <EntityType Name="UserGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Users" Relationship="FlowBot.Data.Models.UserGroupUser" FromRole="UserGroup" ToRole="User" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="ExternalTasks" Relationship="FlowBot.Data.Models.UserGroupExternalTask" FromRole="UserGroup" ToRole="ExternalTask" />
+        </EntityType>
+        <Association Name="UserGroupUser">
+          <End Type="FlowBot.Data.Models.UserGroup" Role="UserGroup" Multiplicity="*" />
+          <End Type="FlowBot.Data.Models.User" Role="User" Multiplicity="*" />
+        </Association>
+        <Association Name="UserGroupExternalTask">
+          <End Type="FlowBot.Data.Models.UserGroup" Role="UserGroup" Multiplicity="1" />
+          <End Type="FlowBot.Data.Models.ExternalTask" Role="ExternalTask" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Conversation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="String" Nullable="false" />
+          <Property Name="EndDate" Type="String" Nullable="true" />
+          <NavigationProperty Name="Messages" Relationship="FlowBot.Data.Models.ConversationMessage" FromRole="Conversation" ToRole="Message" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Conversation" Relationship="FlowBot.Data.Models.ConversationMessage" FromRole="Message" ToRole="Conversation" />
+          <NavigationProperty Name="From" Relationship="FlowBot.Data.Models.UserMessageFrom" FromRole="Message" ToRole="User" />
+          <NavigationProperty Name="To" Relationship="FlowBot.Data.Models.UserMessageTo" FromRole="Message" ToRole="User" />
+          <Property Name="Body" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="ConversationMessage">
+          <End Type="FlowBot.Data.Models.Conversation" Role="Conversation" Multiplicity="1" />
+          <End Type="FlowBot.Data.Models.Message" Role="Message" Multiplicity="*" />
+        </Association>
+        <Association Name="UserMessageFrom">
+          <End Type="FlowBot.Data.Models.User" Role="User" Multiplicity="1" />
+          <End Type="FlowBot.Data.Models.Message" Role="Message" Multiplicity="*" />
+        </Association>
+        <Association Name="UserMessageTo">
+          <End Type="FlowBot.Data.Models.User" Role="User" Multiplicity="1" />
+          <End Type="FlowBot.Data.Models.Message" Role="Message" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="FlowBotDataModelsStoreContainer" CdmEntityContainer="FlowBotModelContainer">
+    <EntitySetMapping Name="ExternalTasks">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.ExternalTask)">
+        <MappingFragment StoreEntitySet="ExternalTasks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Workflows">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.Workflow)">
+        <MappingFragment StoreEntitySet="Workflows">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Version" ColumnName="Version" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserGroups">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.UserGroup)">
+        <MappingFragment StoreEntitySet="UserGroups">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Conversations">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.Conversation)">
+        <MappingFragment StoreEntitySet="Conversations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Messages">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.Message)">
+        <MappingFragment StoreEntitySet="Messages">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="UserGroupUser" TypeName="FlowBot.Data.Models.UserGroupUser" StoreEntitySet="UserGroupUser">
+      <EndProperty Name="UserGroup">
+        <ScalarProperty Name="Id" ColumnName="UserGroups_Id" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Users_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserGroupExternalTask" TypeName="FlowBot.Data.Models.UserGroupExternalTask" StoreEntitySet="ExternalTasks">
+      <EndProperty Name="UserGroup">
+        <ScalarProperty Name="Id" ColumnName="UserGroup_Id" />
+      </EndProperty>
+      <EndProperty Name="ExternalTask">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ConversationMessage" TypeName="FlowBot.Data.Models.ConversationMessage" StoreEntitySet="Messages">
+      <EndProperty Name="Conversation">
+        <ScalarProperty Name="Id" ColumnName="Conversation_Id" />
+      </EndProperty>
+      <EndProperty Name="Message">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserMessage" TypeName="FlowBot.Data.Models.UserMessageFrom" StoreEntitySet="Messages">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="From_Id" />
+      </EndProperty>
+      <EndProperty Name="Message">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserMessage1" TypeName="FlowBot.Data.Models.UserMessageTo" StoreEntitySet="Messages">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="To_Id" />
+      </EndProperty>
+      <EndProperty Name="Message">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

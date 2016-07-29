@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot", "FlowBot\FlowBot.csproj", "{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBotActivityLibrary.Design", "FlowBot.Workflow.Designer\FlowBotActivityLibrary.Design.csproj", "{77AD5C5F-5A36-4B8A-B595-7DF75D05C6A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBotActivityLibrary", "FlowBot.Workflow.Activities\FlowBotActivityLibrary.csproj", "{6C59739F-9190-434F-B643-F8CC6E6815CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.Data", "FlowBot.Data\FlowBot.Data.csproj", "{E772D011-6079-4C29-9D32-5FD8A11AD295}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.Services", "FlowBot.Services\FlowBot.Services.csproj", "{A50B1C2B-830B-4942-8AEC-1D6E96F89330}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.Common", "FlowBot.Common\FlowBot.Common.csproj", "{7A99F2A4-B4F5-4C49-A118-1E3CC823EF12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.Storage", "FlowBot.Storage\FlowBot.Storage.csproj", "{EF49035E-E7F8-4084-A467-BECCD3E251D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8BA1066-5695-4D71-ABB4-65E5A5E0C3D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77AD5C5F-5A36-4B8A-B595-7DF75D05C6A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77AD5C5F-5A36-4B8A-B595-7DF75D05C6A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77AD5C5F-5A36-4B8A-B595-7DF75D05C6A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77AD5C5F-5A36-4B8A-B595-7DF75D05C6A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C59739F-9190-434F-B643-F8CC6E6815CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C59739F-9190-434F-B643-F8CC6E6815CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C59739F-9190-434F-B643-F8CC6E6815CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C59739F-9190-434F-B643-F8CC6E6815CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E772D011-6079-4C29-9D32-5FD8A11AD295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E772D011-6079-4C29-9D32-5FD8A11AD295}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E772D011-6079-4C29-9D32-5FD8A11AD295}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E772D011-6079-4C29-9D32-5FD8A11AD295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A50B1C2B-830B-4942-8AEC-1D6E96F89330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A50B1C2B-830B-4942-8AEC-1D6E96F89330}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A50B1C2B-830B-4942-8AEC-1D6E96F89330}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A50B1C2B-830B-4942-8AEC-1D6E96F89330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A99F2A4-B4F5-4C49-A118-1E3CC823EF12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A99F2A4-B4F5-4C49-A118-1E3CC823EF12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A99F2A4-B4F5-4C49-A118-1E3CC823EF12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A99F2A4-B4F5-4C49-A118-1E3CC823EF12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF49035E-E7F8-4084-A467-BECCD3E251D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF49035E-E7F8-4084-A467-BECCD3E251D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF49035E-E7F8-4084-A467-BECCD3E251D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF49035E-E7F8-4084-A467-BECCD3E251D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

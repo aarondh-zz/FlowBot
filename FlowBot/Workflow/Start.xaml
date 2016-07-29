@@ -1,0 +1,161 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Start" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="FlowBot.Workflow.Activity1_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:f="clr-namespace:FlowBotActivityLibrary;assembly=FlowBotActivityLibrary"
+ xmlns:fcim="clr-namespace:FlowBot.Common.Interfaces.Models;assembly=FlowBot.Common"
+ xmlns:fcm="clr-namespace:FlowBot.Common.Models;assembly=FlowBot.Common"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>FlowBot.Common.Models</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Autofac</AssemblyReference>
+      <AssemblyReference>Chronic</AssemblyReference>
+      <AssemblyReference>Microsoft.Azure.Documents.Client</AssemblyReference>
+      <AssemblyReference>Microsoft.Bot.Builder</AssemblyReference>
+      <AssemblyReference>Microsoft.Bot.Connector</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>Microsoft.IdentityModel.Protocol.Extensions</AssemblyReference>
+      <AssemblyReference>Microsoft.Rest.ClientRuntime</AssemblyReference>
+      <AssemblyReference>Microsoft.WindowsAzure.Configuration</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.IdentityModel.Tokens.Jwt</AssemblyReference>
+      <AssemblyReference>System.Net</AssemblyReference>
+      <AssemblyReference>System.Net.Http</AssemblyReference>
+      <AssemblyReference>System.Net.Http.Formatting</AssemblyReference>
+      <AssemblyReference>System.Net.Http.WebRequest</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Web.DynamicData</AssemblyReference>
+      <AssemblyReference>System.Web.Entity</AssemblyReference>
+      <AssemblyReference>System.Web.ApplicationServices</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.DataAnnotations</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Web</AssemblyReference>
+      <AssemblyReference>System.Web.Extensions</AssemblyReference>
+      <AssemblyReference>System.Web.Http</AssemblyReference>
+      <AssemblyReference>System.Web.Http.WebHost</AssemblyReference>
+      <AssemblyReference>System.Workflow.Activities</AssemblyReference>
+      <AssemblyReference>System.Workflow.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Workflow.Runtime</AssemblyReference>
+      <AssemblyReference>System.WorkflowServices</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Configuration</AssemblyReference>
+      <AssemblyReference>System.Web.Services</AssemblyReference>
+      <AssemblyReference>System.EnterpriseServices</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>FlowBot.Common</AssemblyReference>
+      <AssemblyReference>FlowBot.Data</AssemblyReference>
+      <AssemblyReference>FlowBot.Services</AssemblyReference>
+      <AssemblyReference>FlowBotActivityLibrary</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>FlowBot</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="message" />
+      <Variable x:TypeArguments="fcm:Account" Name="from" />
+      <Variable x:TypeArguments="x:String" Name="conversationId" />
+      <Variable x:TypeArguments="x:String" Name="conversationName" />
+      <Variable x:TypeArguments="scg:List(fcim:IIntent)" Name="intents" />
+      <Variable x:TypeArguments="scg:List(fcim:IEntity)" Name="entities" />
+    </Sequence.Variables>
+    <f:BotDialog ChannelId="{x:Null}" sap2010:WorkflowViewState.IdRef="BotDialog_1">
+      <f:BotDialog.ConversationId>
+        <OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String">conversationId</mca:CSharpReference>
+        </OutArgument>
+      </f:BotDialog.ConversationId>
+      <f:BotDialog.ConversationName>
+        <OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String">conversationName</mca:CSharpReference>
+        </OutArgument>
+      </f:BotDialog.ConversationName>
+      <f:BotDialog.From>
+        <OutArgument x:TypeArguments="fcm:Account">
+          <mca:CSharpReference x:TypeArguments="fcm:Account">from</mca:CSharpReference>
+        </OutArgument>
+      </f:BotDialog.From>
+      <f:BotDialog.Message>
+        <OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String">message</mca:CSharpReference>
+        </OutArgument>
+      </f:BotDialog.Message>
+    </f:BotDialog>
+    <f:LuisActivity sap2010:WorkflowViewState.IdRef="LuisActivity_2" MinScore="0.75">
+      <f:LuisActivity.Entities>
+        <OutArgument x:TypeArguments="scg:List(fcim:IEntity)">
+          <mca:CSharpReference x:TypeArguments="scg:List(fcim:IEntity)">entities</mca:CSharpReference>
+        </OutArgument>
+      </f:LuisActivity.Entities>
+      <f:LuisActivity.Intents>
+        <OutArgument x:TypeArguments="scg:List(fcim:IIntent)">
+          <mca:CSharpReference x:TypeArguments="scg:List(fcim:IIntent)">intents</mca:CSharpReference>
+        </OutArgument>
+      </f:LuisActivity.Intents>
+      <f:LuisActivity.Text>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">message</mca:CSharpValue>
+        </InArgument>
+      </f:LuisActivity.Text>
+    </f:LuisActivity>
+    <If DisplayName="If Salutation" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">intents.Count &gt; 0 &amp;&amp; intents[0].Text == "Salutation"</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_1" Text="Well hi there right back at you!" />
+      </If.Then>
+      <If.Else>
+        <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_2">
+          <f:BotReplyActivity.Text>
+            <InArgument x:TypeArguments="x:String">
+              <mca:CSharpValue x:TypeArguments="x:String">"I don't understand: " + message</mca:CSharpValue>
+            </InArgument>
+          </f:BotReplyActivity.Text>
+        </f:BotReplyActivity>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d1lDOlxVc2Vyc1x2LWFkYWlcRG9jdW1lbnRzXFZpc3VhbCBTdHVkaW8gMjAxNVxQcm9qZWN0c1xGbG93Qm90XEZsb3dCb3RcV29ya2Zsb3dcU3RhcnQueGFtbBFLA48BDgIBAVQFaRMCAStqBXoWAgEUewWNAQoCAQJcC1xhAgFBZgtmWAIBOlcLV18CATNhC2FYAgEsbQttZwIBJGpPalUCASN3C3dQAgEccgtyZgIBFX4LfokBAgEDggEJggF8AgEShQEJiwEeAgEKggFXggF5AgETiAEPiAFtAgEL</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="BotDialog_1" sap:VirtualizedContainerService.HintSize="714,22" />
+      <sap2010:ViewStateData Id="LuisActivity_2" sap:VirtualizedContainerService.HintSize="714,22" />
+      <sap2010:ViewStateData Id="BotReplyActivity_1" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
+      <sap2010:ViewStateData Id="BotReplyActivity_2" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="714,227.333333333333" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="736,475.333333333333">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowBot.Workflow.Activity1_1" sap:VirtualizedContainerService.HintSize="776,555.333333333333" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
