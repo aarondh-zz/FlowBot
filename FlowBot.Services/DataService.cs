@@ -1,4 +1,5 @@
 ﻿using FlowBot.Common.Interfaces;
+using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Data;
 using System;
@@ -15,6 +16,15 @@ namespace FlowBot.Services
         public DataService()
         {
             _container = new FlowBotModelContainer();
+        }
+        public IWorkflow GetWorkflow(string name, string version=null)
+        {
+            var workflows = from w in _container.Workflows
+                            where w.Name == name 
+                            && (version==null || w.Version == version)
+                            orderby w.Version descending
+                            select w;
+            return workflows.FirstOrDefault();
         }
     }
 }

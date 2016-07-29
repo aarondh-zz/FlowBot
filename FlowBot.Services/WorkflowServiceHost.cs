@@ -1,4 +1,5 @@
-﻿using FlowBot.Common.Interfaces;
+﻿using Autofac;
+using FlowBot.Common.Interfaces;
 using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Interfaces.Services;
 using System;
@@ -20,7 +21,7 @@ namespace FlowBot.Services
 {
     public class WorkflowServiceHost : IWorkflowServiceHost
     {
-        private static string workflowInstanceStoreConnectionString = ConfigurationManager.AppSettings["WorkflowInstanceStore"];
+        private static string workflowInstanceStoreConnectionString = null;
         private static InstanceStore s_instanceStore = null;
 
         public static IWorkflowServiceHost Instance = new WorkflowServiceHost();
@@ -37,24 +38,20 @@ namespace FlowBot.Services
         {
             Debug.WriteLine(message);
         }
-        private void ConfigureWorkflow( WorkflowApplication workflowApplication, WorkflowHandle workflowHandle, IDictionary<Type, object> extensions)
+        private void ConfigureWorkflow(ILifetimeScope lifetimeScope, WorkflowApplication workflowApplication, WorkflowHandle workflowHandle)
         {
             if ( s_instanceStore == null)
             {
-                s_instanceStore =new SqlWorkflowInstanceStore(workflowInstanceStoreConnectionString);
+                s_instanceStore = new SqlWorkflowInstanceStore(workflowInstanceStoreConnectionString);
             }
-            if (extensions.ContainsKey(typeof(IConnectorService)))
-            {
-                workflowApplication.Extensions.Add<IConnectorService>(() => { return extensions[typeof(IConnectorService)] as IConnectorService; });
-            }
-            if (extensions.ContainsKey(typeof(ILuisService)))
-            {
-                workflowApplication.Extensions.Add<ILuisService>(() => { return extensions[typeof(ILuisService)] as ILuisService; });
-            }
-            if (extensions.ContainsKey(typeof(IDataService)))
-            {
-                workflowApplication.Extensions.Add<IDataService>(() => { return extensions[typeof(IDataService)] as IDataService; });
-            }
+            workflowApplication.Extensions.Add<IIOCService>(() => { return lifetimeScope.ResolveOptional<IIOCService>( new NamedParameter("lifetimeScope",lifetimeScope) ); });
+
+            workflowApplication.Extensions.Add<IConnectorService>(() => { return lifetimeScope.ResolveOptional<IConnectorService>(); });
+
+            workflowApplication.Extensions.Add<ILuisService>(() => { return lifetimeScope.ResolveOptional<ILuisService>(); });
+
+            workflowApplication.Extensions.Add<IDataService>(() => { return lifetimeScope.ResolveOptional<IDataService>(); });
+
             workflowApplication.InstanceStore = s_instanceStore;
             workflowApplication.Completed = delegate (WorkflowApplicationCompletedEventArgs e)
             {
@@ -107,13 +104,13 @@ namespace FlowBot.Services
                 return ActivityXamlServices.Load(new XamlXmlReader(streamReader), settings);
             }
         }
-        public IWorkflowHandle RunNewWorkflow(string workflowPath, IDictionary<Type,object> extensions, IDictionary<string, object> inputs)
+        public IWorkflowHandle RunNewWorkflow(object lifetimeScope, string workflowPath, IDictionary<string, object> inputs)
         {
             var workflowDefinition = LoadWorkflow(workflowPath);
             var workflowIdentity = new WorkflowIdentity(System.IO.Path.GetFileNameWithoutExtension(workflowPath), new Version(1, 0, 0, 0), "Flowbot");
             var workflowHandle = new WorkflowHandle(workflowIdentity, null, null);
             WorkflowApplication workflowApplication = new WorkflowApplication(workflowDefinition, inputs, workflowIdentity);
-            ConfigureWorkflow(workflowApplication, workflowHandle, extensions);
+            ConfigureWorkflow(lifetimeScope as ILifetimeScope, workflowApplication, workflowHandle);
             workflowApplication.Run();
             return workflowHandle;
         }

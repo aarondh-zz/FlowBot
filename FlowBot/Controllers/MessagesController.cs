@@ -11,12 +11,19 @@ using System.Collections.Generic;
 using FlowBot.Services;
 using System.Web;
 using FlowBot.Common.Interfaces.Services;
+using Autofac;
+using Autofac.Core;
 
 namespace FlowBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        private ILifetimeScope _iocRequestLifetimeScope;
+        public MessagesController(  )
+        {
+            _iocRequestLifetimeScope = WebApiApplication.IOCRequestLifetimeScope;
+        }
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -26,12 +33,12 @@ namespace FlowBot
             if (activity.Type == ActivityTypes.Message)
             {
                 var startWorkflow = HttpRuntime.AppDomainAppPath + "Workflow\\Start.xaml";
-                Dictionary<Type, object> extensions = new Dictionary<Type, object>();
+
                 Dictionary<string, object> inputs = new Dictionary<string, object>();
-                extensions[typeof(IDataService)] = new DataService();
-                extensions[typeof(IConnectorService)] = new ConnectorService(activity);
-                extensions[typeof(ILuisService)] = new LuisService("386327ee-db6e-4042-a3db-3804724d980c", "cb244805c4144637bfadde5d4da230ec");
-                WorkflowServiceHost.Instance.RunNewWorkflow(startWorkflow, extensions, inputs);
+
+                var connectorService = _iocRequestLifetimeScope.Resolve<IConnectorService>( new NamedParameter("activity",activity));
+
+                WorkflowServiceHost.Instance.RunNewWorkflow(_iocRequestLifetimeScope, startWorkflow, inputs);
             }
             else
             {

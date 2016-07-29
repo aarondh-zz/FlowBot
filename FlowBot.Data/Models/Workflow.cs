@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowBot.Common.Interfaces.Services
+namespace FlowBot.Data
 {
-    public interface IDataService
+    public partial class Workflow : IWorkflow
     {
-        IWorkflow GetWorkflow(string name, string version = null);
     }
 }
