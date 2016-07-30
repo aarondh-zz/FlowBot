@@ -12,12 +12,16 @@ namespace FlowBot.Services
 {
     public class ConnectorService : IConnectorService
     {
+        public delegate ConnectorService Factory(Activity activity);
+        public void BindActivity(object activity)
+        {
+            _activity = activity as Activity;
+            _connector = new ConnectorClient(new Uri(_activity.ServiceUrl));
+        }
         private Activity _activity;
         private ConnectorClient _connector;
-        public ConnectorService(Activity activity)
+        public ConnectorService()
         {
-            _activity = activity;
-            _connector = new ConnectorClient(new Uri(activity.ServiceUrl));
         }
 
         public void Reply(string text)

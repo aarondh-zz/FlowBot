@@ -27,7 +27,8 @@ namespace FlowBotActivityLibrary
 
             double minScore = context.GetValue<double>(this.MinScore);
 
-            var luisService = context.GetExtension<ILuisService>();
+            var iocService = context.GetExtension<IIOCService>();
+            var luisService = iocService.Resolve<ILuisService>();
             if (luisService == null)
             {
                 throw new NotSupportedException(typeof(ILuisService).FullName + " extension was not found");

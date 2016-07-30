@@ -42,10 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\Providers\ILifetimeScopeProvider.cs" />
     <Compile Include="Interfaces\Models\IEntity.cs" />
     <Compile Include="Interfaces\Models\IIntent.cs" />
     <Compile Include="Interfaces\Services\IConnectorService.cs" />
     <Compile Include="Interfaces\Services\IDataService.cs" />
+    <Compile Include="Interfaces\Services\IIOCService.cs" />
     <Compile Include="Interfaces\Services\ILuisService.cs" />
     <Compile Include="Interfaces\Models\IUser.cs" />
     <Compile Include="Interfaces\Models\IWorkflow.cs" />

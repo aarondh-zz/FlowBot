@@ -9,6 +9,7 @@ namespace FlowBot.Common.Interfaces.Services
 {
     public interface IConnectorService
     {
+        void BindActivity(object activity);
         void Reply(string text);
         Account GetFrom();
         string GetMessage();

@@ -11,34 +11,49 @@ using System.Collections.Generic;
 using FlowBot.Services;
 using System.Web;
 using FlowBot.Common.Interfaces.Services;
+using System.Diagnostics;
+using Autofac;
 
 namespace FlowBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        public IWorkflowServiceHost _workflowServiceHost;
+        public MessagesController(IWorkflowServiceHost workflowServiceHost)
+        {
+            _workflowServiceHost = workflowServiceHost;
+        }
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message)
+            string workflowPath = null;
+            try
             {
-                var startWorkflow = HttpRuntime.AppDomainAppPath + "Workflow\\Start.xaml";
-                Dictionary<Type, object> extensions = new Dictionary<Type, object>();
-                Dictionary<string, object> inputs = new Dictionary<string, object>();
-                extensions[typeof(IDataService)] = new DataService();
-                extensions[typeof(IConnectorService)] = new ConnectorService(activity);
-                extensions[typeof(ILuisService)] = new LuisService("386327ee-db6e-4042-a3db-3804724d980c", "cb244805c4144637bfadde5d4da230ec");
-                WorkflowServiceHost.Instance.RunNewWorkflow(startWorkflow, extensions, inputs);
+                if (activity.Type == ActivityTypes.Message)
+                {
+                    workflowPath = HttpRuntime.AppDomainAppPath + "Workflow\\Start.xaml";
+                    Dictionary<string, object> inputs = new Dictionary<string, object>();
+                    _workflowServiceHost.RunNewWorkflow(workflowPath, inputs, activity);
+                }
+                else
+                {
+                    workflowPath = "Handle-System-Message";
+                    HandleSystemMessage(activity);
+                }
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                return response;
             }
-            else
+            catch(Exception e)
             {
-                HandleSystemMessage(activity);
+                Debug.WriteLine(e);
+                var apiResponse = new APIResponse($"Workflow {workflowPath} reported {e.Message}");
+                var response = Request.CreateResponse<APIResponse>(HttpStatusCode.InternalServerError, apiResponse);
+                return response;
             }
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            return response;
         }
 
         private Activity HandleSystemMessage(Activity message)

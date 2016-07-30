@@ -24,7 +24,8 @@ namespace FlowBotActivityLibrary
         protected override void Execute(CodeActivityContext context)
         {
             // Obtain the runtime value of the Text input argument
-            var connectorService = context.GetExtension<IConnectorService>();
+            var iocService = context.GetExtension<IIOCService>();
+            var connectorService = iocService.Resolve<IConnectorService>();
             if ( connectorService == null)
             {
                 throw new NotSupportedException(typeof(IConnectorService).FullName + " extension was not found");
