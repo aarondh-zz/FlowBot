@@ -24,8 +24,6 @@ namespace FlowBot.Services
         private static string workflowInstanceStoreConnectionString = null;
         private static InstanceStore s_instanceStore = null;
 
-        public static IWorkflowServiceHost Instance = new WorkflowServiceHost();
-
         private WorkflowServiceHost()
         {
 

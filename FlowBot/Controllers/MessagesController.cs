@@ -19,10 +19,8 @@ namespace FlowBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        private ILifetimeScope _iocRequestLifetimeScope;
         public MessagesController(  )
         {
-            _iocRequestLifetimeScope = WebApiApplication.IOCRequestLifetimeScope;
         }
         /// <summary>
         /// POST: api/Messages
@@ -36,9 +34,9 @@ namespace FlowBot
 
                 Dictionary<string, object> inputs = new Dictionary<string, object>();
 
-                var connectorService = _iocRequestLifetimeScope.Resolve<IConnectorService>( new NamedParameter("activity",activity));
+                //var connectorService = _iocRequestLifetimeScope.Resolve<IConnectorService>( new NamedParameter("activity",activity));
 
-                WorkflowServiceHost.Instance.RunNewWorkflow(_iocRequestLifetimeScope, startWorkflow, inputs);
+                //WorkflowServiceHost.Instance.RunNewWorkflow(null, startWorkflow, inputs);
             }
             else
             {

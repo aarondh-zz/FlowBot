@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Integration.WebApi;
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Services;
 using System;
@@ -12,49 +13,45 @@ namespace FlowBot
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
-        public static IContainer IOCContainer;
-        public static ILifetimeScope IOCApplicationLifetimeScope;
-        [ThreadStatic]
-        public static ILifetimeScope IOCRequestLifetimeScope;
         protected void Application_Start()
         {
-#if NEVER
             var builder = new ContainerBuilder();
+
+            // Get your HttpConfiguration.
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+
+            var config = GlobalConfiguration.Configuration;
+
+            // Register your Web API controllers.
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
+            // OPTIONAL: Register the Autofac filter provider.
+            builder.RegisterWebApiFilterProvider(config);
 
             //RegisterServices(builder);
 
-            IOCContainer = builder.Build();
+            // Set the dependency resolver to be Autofac.
+            var container = builder.Build();
 
-            IOCApplicationLifetimeScope = IOCContainer.BeginLifetimeScope();
-#endif
-            GlobalConfiguration.Configure(WebApiConfig.Register);
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
         }
-#if NEVER
-        protected void Application_BeginRequest()
-        {
-            //IOCRequestLifetimeScope = IOCApplicationLifetimeScope.BeginLifetimeScope();
-        }
-
-        protected void Application_EndRequest()
-        {
-            //IOCRequestLifetimeScope.Dispose();
-        }
-#endif
         protected void RegisterServices( ContainerBuilder builder )
         {
             builder.RegisterType<IOCService>().As<IIOCService>();
 
             builder.RegisterType<DataService>().As<IDataService>();
 
-            builder.RegisterInstance(new LuisService("386327ee-db6e-4042-a3db-3804724d980c","cb244805c4144637bfadde5d4da230ec")).As<ILuisService>();
+            builder.Register<LuisService>((context) =>
+            {
+                return new LuisService("386327ee-db6e-4042-a3db-3804724d980c", "cb244805c4144637bfadde5d4da230ec");
+            }).As<ILuisService>().SingleInstance();
 
             builder.RegisterType<ConnectorService>().As<IConnectorService>();
         }
 
         protected void Application_End()
         {
-            IOCApplicationLifetimeScope.Dispose();
         }
     }
 }

@@ -114,7 +114,6 @@
   <ItemGroup>
     <Compile Include="ConnectorService.cs" />
     <Compile Include="DataService.cs" />
-    <Compile Include="DocumentDbInstanceStore.cs" />
     <Compile Include="IOCService.cs" />
     <Compile Include="LuisService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
