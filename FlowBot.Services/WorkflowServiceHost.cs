@@ -30,6 +30,7 @@ namespace FlowBot.Services
         {
             _lifetimeScopeProvider = lifetimeScopeProvider;
             _instanceStore = new SqlWorkflowInstanceStore(workflowInstanceStoreConnectionString);
+            _dataService = dataService;
         }
         public IWorkflowHandle LookupWorkflow(string externalId)
         {
@@ -39,15 +40,17 @@ namespace FlowBot.Services
         {
             Debug.WriteLine(message);
         }
-        private void ConfigureWorkflow( WorkflowApplication workflowApplication, WorkflowHandle workflowHandle, object connectorActivity)
+        private void ConfigureWorkflow( WorkflowApplication workflowApplication, WorkflowHandle workflowHandle)
         {
             var workflowScope = _lifetimeScopeProvider.BeginNewLifetimeScope<ILifetimeScope>("workflow");
             var iocService = new IOCService(workflowScope);
-            var connectorService = iocService.Resolve<IConnectorService>();
-            connectorService.BindActivity(connectorActivity);
             workflowApplication.Extensions.Add<IIOCService>(() => { return iocService; });
 
             workflowApplication.InstanceStore = _instanceStore;
+
+            workflowHandle.Bind(workflowApplication, iocService);
+
+
             workflowApplication.Completed = delegate (WorkflowApplicationCompletedEventArgs e)
             {
                 if (e.CompletionState == ActivityInstanceState.Faulted)
@@ -94,28 +97,25 @@ namespace FlowBot.Services
                 return PersistableIdleAction.Unload;
             };
         }
-
-        public Activity LoadWorkflow(string workflowPath)
+        public Activity LoadWorkflow(string workflowName)
         {
             ActivityXamlServicesSettings settings = new ActivityXamlServicesSettings
             {
                 CompileExpressions = true
             };
 
-            using (var streamReader = File.OpenText(workflowPath))
+            using (var streamReader = File.OpenText(workflowName))
             {
                 return ActivityXamlServices.Load(new XamlXmlReader(streamReader), settings);
             }
         }
-        public IWorkflowHandle RunNewWorkflow(string workflowPath, IDictionary<string, object> inputs, object connectorActivity)
+        public IWorkflowHandle NewWorkflow(string workflowName, string externalId, IDictionary<string, object> inputs)
         {
-            var workflowDefinition = LoadWorkflow(workflowPath);
-            var workflowIdentity = new WorkflowIdentity(System.IO.Path.GetFileNameWithoutExtension(workflowPath), new Version(1, 0, 0, 0), "Flowbot");
-            var workflowHandle = new WorkflowHandle(workflowIdentity, null, null);
+            var workflowDefinition = LoadWorkflow(workflowName);
+            var workflowIdentity = new WorkflowIdentity(System.IO.Path.GetFileNameWithoutExtension(workflowName), new Version(1, 0, 0, 0), "Flowbot");
+            var workflowHandle = new WorkflowHandle(workflowIdentity);
             WorkflowApplication workflowApplication = new WorkflowApplication(workflowDefinition, inputs, workflowIdentity);
-            ConfigureWorkflow(workflowApplication, workflowHandle, connectorActivity);
-            
-            workflowApplication.Run();
+            ConfigureWorkflow(workflowApplication, workflowHandle);
             return workflowHandle;
         }
     }

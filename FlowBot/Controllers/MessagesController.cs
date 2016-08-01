@@ -36,8 +36,19 @@ namespace FlowBot
                 if (activity.Type == ActivityTypes.Message)
                 {
                     workflowPath = HttpRuntime.AppDomainAppPath + "Workflow\\Start.xaml";
-                    Dictionary<string, object> inputs = new Dictionary<string, object>();
-                    _workflowServiceHost.RunNewWorkflow(workflowPath, inputs, activity);
+                    var existingWorkflow = _workflowServiceHost.LookupWorkflow(activity.Conversation.Id);
+                    if ( existingWorkflow == null)
+                    {
+                        Dictionary<string, object> inputs = new Dictionary<string, object>();
+                        var newWorkflow = _workflowServiceHost.NewWorkflow(workflowPath, activity.Conversation.Id, inputs);
+                        newWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(activity);
+                        newWorkflow.Run();
+                    }
+                    else
+                    {
+                        existingWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(activity);
+                        existingWorkflow.Resume("Message");
+                    }
                 }
                 else
                 {

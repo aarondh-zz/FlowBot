@@ -10,6 +10,6 @@ namespace FlowBot.Common.Interfaces.Services
     public interface IWorkflowServiceHost
     {
         IWorkflowHandle LookupWorkflow(string externalId);
-        IWorkflowHandle RunNewWorkflow(string workflowPath,IDictionary<string, object> inputs, object connectorActivity);
+        IWorkflowHandle NewWorkflow(string workflowName, string externalId, IDictionary<string, object> inputs);
     }
 }

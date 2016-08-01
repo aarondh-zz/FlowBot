@@ -6,28 +6,52 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Activities;
 using FlowBot.Common.Interfaces.Models;
+using FlowBot.Common.Interfaces.Services;
 
 namespace FlowBot.Services
 {
     internal class WorkflowHandle : IWorkflowHandle
     {
-        private Action<WorkflowApplicationCompletedEventArgs> _completed;
-        private Action<string> _terminated;
         public WorkflowIdentity Identity { get; private set; }
-        public WorkflowHandle(WorkflowIdentity identity, Action<WorkflowApplicationCompletedEventArgs> completed, Action<string> terminated)
+
+        private WorkflowApplication _application;
+        private IIOCService _iocService;
+        public WorkflowHandle(WorkflowIdentity identity)
         {
             this.Identity = identity;
-            _completed = completed;
-            _terminated = terminated;
         }
 
+        public void Bind( WorkflowApplication application, IIOCService iocService)
+        {
+            _application = application;
+            _iocService = iocService;
+        }
+
+        public void Run()
+        {
+            _application.Run();
+        }
+        public void Resume<T>(string bookmarkName, T bookmarkData)
+        {
+            throw new NotImplementedException();
+        }
+        public void Resume(string bookmarkName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IIOCService IOCService
+        {
+            get
+            {
+                return _iocService;
+            }
+        }
         public void Completed(WorkflowApplicationCompletedEventArgs args)
         {
-            _completed?.Invoke(args);
         }
         public void Terminated(string reason)
         {
-            _terminated?.Invoke(reason);
         }
     }
 }
