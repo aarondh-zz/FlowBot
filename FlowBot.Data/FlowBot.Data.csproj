@@ -87,6 +87,7 @@
     <Compile Include="Message.cs">
       <DependentUpon>FlowBotModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Workflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs">
       <DependentUpon>FlowBotModel.tt</DependentUpon>
@@ -109,9 +110,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\FlowBot.Common\FlowBot.Common.csproj">
       <Project>{7a99f2a4-b4f5-4c49-a118-1e3cc823ef12}</Project>

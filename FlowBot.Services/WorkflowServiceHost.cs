@@ -23,11 +23,13 @@ namespace FlowBot.Services
     public class WorkflowServiceHost : IWorkflowServiceHost
     {
         private static string workflowInstanceStoreConnectionString = ConfigurationManager.AppSettings["WorkflowInstanceStore"];
-        private static InstanceStore s_instanceStore = null;
         private ILifetimeScopeProvider _lifetimeScopeProvider;
-        public WorkflowServiceHost(ILifetimeScopeProvider lifetimeScopeProvider)
+        private IDataService _dataService;
+        private InstanceStore _instanceStore = null;
+        public WorkflowServiceHost(ILifetimeScopeProvider lifetimeScopeProvider, IDataService dataService)
         {
             _lifetimeScopeProvider = lifetimeScopeProvider;
+            _instanceStore = new SqlWorkflowInstanceStore(workflowInstanceStoreConnectionString);
         }
         public IWorkflowHandle LookupWorkflow(string externalId)
         {
@@ -41,15 +43,11 @@ namespace FlowBot.Services
         {
             var workflowScope = _lifetimeScopeProvider.BeginNewLifetimeScope<ILifetimeScope>("workflow");
             var iocService = new IOCService(workflowScope);
-            if ( s_instanceStore == null)
-            {
-                s_instanceStore =new SqlWorkflowInstanceStore(workflowInstanceStoreConnectionString);
-            }
             var connectorService = iocService.Resolve<IConnectorService>();
             connectorService.BindActivity(connectorActivity);
             workflowApplication.Extensions.Add<IIOCService>(() => { return iocService; });
 
-            workflowApplication.InstanceStore = s_instanceStore;
+            workflowApplication.InstanceStore = _instanceStore;
             workflowApplication.Completed = delegate (WorkflowApplicationCompletedEventArgs e)
             {
                 if (e.CompletionState == ActivityInstanceState.Faulted)
@@ -116,6 +114,7 @@ namespace FlowBot.Services
             var workflowHandle = new WorkflowHandle(workflowIdentity, null, null);
             WorkflowApplication workflowApplication = new WorkflowApplication(workflowDefinition, inputs, workflowIdentity);
             ConfigureWorkflow(workflowApplication, workflowHandle, connectorActivity);
+            
             workflowApplication.Run();
             return workflowHandle;
         }

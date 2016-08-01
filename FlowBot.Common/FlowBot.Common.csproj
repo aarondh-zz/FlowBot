@@ -42,9 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\Models\IConversation.cs" />
+    <Compile Include="Interfaces\Providers\IConversationDataProvider.cs" />
+    <Compile Include="Interfaces\Providers\IDataProvider.cs" />
     <Compile Include="Interfaces\Providers\ILifetimeScopeProvider.cs" />
     <Compile Include="Interfaces\Models\IEntity.cs" />
     <Compile Include="Interfaces\Models\IIntent.cs" />
+    <Compile Include="Interfaces\Providers\IUserDataProvider.cs" />
+    <Compile Include="Interfaces\Providers\IWorkflowDataProvider.cs" />
     <Compile Include="Interfaces\Services\IConnectorService.cs" />
     <Compile Include="Interfaces\Services\IDataService.cs" />
     <Compile Include="Interfaces\Services\IIOCService.cs" />
