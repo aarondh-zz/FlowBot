@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace FlowBot.Common.Interfaces.Models
 {
-    public interface IUser : IRecord
+    public interface IRecord
     {
+        Guid Id { get; }
+        DateTime CreateDate{ get;}
     }
 }

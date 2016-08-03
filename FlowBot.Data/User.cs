@@ -20,9 +20,11 @@ namespace FlowBot.Data
             this.UserGroups = new HashSet<UserGroup>();
             this.Messages = new HashSet<Message>();
             this.MessagesTo = new HashSet<Message>();
+            this.ExternalTasks = new HashSet<ExternalTask>();
         }
     
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
+        public System.DateTime CreateDate { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
     
@@ -32,5 +34,7 @@ namespace FlowBot.Data
         public virtual ICollection<Message> Messages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Message> MessagesTo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ExternalTask> ExternalTasks { get; set; }
     }
 }

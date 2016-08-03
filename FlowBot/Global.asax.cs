@@ -50,7 +50,7 @@ namespace FlowBot
 
             builder.RegisterType<DataService>().As<IDataService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<WorkflowServiceHost>().As<IWorkflowServiceHost>();
+            builder.RegisterType<WorkflowService>().As<IWorkflowService>().SingleInstance();
 
             builder.RegisterType<ConnectorService>().As<IConnectorService>().InstancePerLifetimeScope();
 

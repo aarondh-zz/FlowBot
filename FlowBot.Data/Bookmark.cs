@@ -12,14 +12,14 @@ namespace FlowBot.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class ExternalTask
+    public partial class Bookmark
     {
         public System.Guid Id { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public Nullable<System.DateTime> ClaimDate { get; set; }
+        public string Name { get; set; }
+        public string OwnerDisplayName { get; set; }
         public Nullable<System.DateTime> CompletionDate { get; set; }
     
-        public virtual UserGroup UserGroup { get; set; }
-        public virtual User Worker { get; set; }
+        public virtual WorkflowInstance WorkflowInstance { get; set; }
     }
 }

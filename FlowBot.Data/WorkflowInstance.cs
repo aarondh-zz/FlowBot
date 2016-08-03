@@ -12,25 +12,23 @@ namespace FlowBot.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Workflow
+    public partial class WorkflowInstance
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Workflow()
+        public WorkflowInstance()
         {
-            this.WorkflowInstances = new HashSet<WorkflowInstance>();
+            this.Bookmarks = new HashSet<Bookmark>();
         }
     
         public System.Guid Id { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public string Package { get; set; }
-        public string Name { get; set; }
-        public string Body { get; set; }
-        public int Major { get; set; }
-        public int Minor { get; set; }
-        public int Build { get; set; }
-        public int Revision { get; set; }
+        public System.Guid InstanceId { get; set; }
+        public string ExternalId { get; set; }
+        public Nullable<System.DateTime> CompletionDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WorkflowInstance> WorkflowInstances { get; set; }
+        public virtual ICollection<Bookmark> Bookmarks { get; set; }
+        public virtual Workflow Workflow { get; set; }
+        public virtual Conversation Conversation { get; set; }
     }
 }

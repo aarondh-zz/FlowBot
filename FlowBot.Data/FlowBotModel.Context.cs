@@ -31,5 +31,7 @@ namespace FlowBot.Data
         public virtual DbSet<UserGroup> UserGroups { get; set; }
         public virtual DbSet<Conversation> Conversations { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
+        public virtual DbSet<Bookmark> Bookmarks { get; set; }
+        public virtual DbSet<WorkflowInstance> WorkflowInstances { get; set; }
     }
 }

@@ -24,6 +24,7 @@
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
       <AssemblyReference>Autofac</AssemblyReference>
+      <AssemblyReference>Autofac.Integration.WebApi</AssemblyReference>
       <AssemblyReference>Chronic</AssemblyReference>
       <AssemblyReference>Microsoft.Azure.Documents.Client</AssemblyReference>
       <AssemblyReference>Microsoft.Bot.Builder</AssemblyReference>
@@ -127,7 +128,31 @@
         </InArgument>
       </If.Condition>
       <If.Then>
-        <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_1" Text="Well hi there right back at you!" />
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_1" Text="Well hi there right back at you!" />
+          <While sap2010:WorkflowViewState.IdRef="While_1">
+            <While.Condition>
+              <mca:CSharpValue x:TypeArguments="x:Boolean">message != "exit"</mca:CSharpValue>
+            </While.Condition>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+              <f:BotReceiveActivity ChannelId="{x:Null}" ConversationId="{x:Null}" ConversationName="{x:Null}" From="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReceiveActivity_1">
+                <f:BotReceiveActivity.Message>
+                  <OutArgument x:TypeArguments="x:String">
+                    <mca:CSharpReference x:TypeArguments="x:String">message</mca:CSharpReference>
+                  </OutArgument>
+                </f:BotReceiveActivity.Message>
+              </f:BotReceiveActivity>
+              <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_3">
+                <f:BotReplyActivity.Text>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">"You said: " + message</mca:CSharpValue>
+                  </InArgument>
+                </f:BotReplyActivity.Text>
+              </f:BotReplyActivity>
+            </Sequence>
+          </While>
+          <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_4" Text="Goodbye" />
+        </Sequence>
       </If.Then>
       <If.Else>
         <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_2">
@@ -139,23 +164,41 @@
         </f:BotReplyActivity>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1lDOlxVc2Vyc1x2LWFkYWlcRG9jdW1lbnRzXFZpc3VhbCBTdHVkaW8gMjAxNVxQcm9qZWN0c1xGbG93Qm90XEZsb3dCb3RcV29ya2Zsb3dcU3RhcnQueGFtbBFLA48BDgIBAVQFaRMCAStqBXoWAgEUewWNAQoCAQJcC1xhAgFBZgtmWAIBOlcLV18CATNhC2FYAgEsbQttZwIBJGpPalUCASN3C3dQAgEccgtyZgIBFX4LfokBAgEDggEJggF8AgEShQEJiwEeAgEKggFXggF5AgETiAEPiAFtAgEL</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1lDOlxVc2Vyc1x2LWFkYWlcRG9jdW1lbnRzXFZpc3VhbCBTdHVkaW8gMjAxNVxQcm9qZWN0c1xGbG93Qm90XEZsb3dCb3RcV29ya2Zsb3dcU3RhcnQueGFtbBtMA6gBDgIBAVUFahMCAUdrBXsWAgEwfAWmAQoCAQJdC11hAgFdZwtnWAIBVlgLWF8CAU9iC2JYAgFIbgtuZwIBQGtPa1UCAT94C3hQAgE4cwtzZgIBMX8Lf4kBAgEDgwEJmwEUAgESngEJpAEeAgEKhAELhAF+AgEuhQELmQETAgEVmgELmgFlAgEToQEPoQFtAgELhAFZhAF7AgEviQENmAEYAgEdhwEPhwFfAgEWmgFZmgFiAgEUigEPkAEmAgEmkQEPlwEkAgEejQEVjQFiAgEnlAEVlAFpAgEf</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="BotDialog_1" sap:VirtualizedContainerService.HintSize="714,22" />
-      <sap2010:ViewStateData Id="LuisActivity_2" sap:VirtualizedContainerService.HintSize="714,22" />
-      <sap2010:ViewStateData Id="BotReplyActivity_1" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
-      <sap2010:ViewStateData Id="BotReplyActivity_2" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="714,227.333333333333" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="736,475.333333333333">
+      <sap2010:ViewStateData Id="BotDialog_1" sap:VirtualizedContainerService.HintSize="856,22" />
+      <sap2010:ViewStateData Id="LuisActivity_2" sap:VirtualizedContainerService.HintSize="856,22" />
+      <sap2010:ViewStateData Id="BotReplyActivity_1" sap:VirtualizedContainerService.HintSize="464,72.6666666666667" />
+      <sap2010:ViewStateData Id="BotReceiveActivity_1" sap:VirtualizedContainerService.HintSize="344,22" />
+      <sap2010:ViewStateData Id="BotReplyActivity_3" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="366,258.666666666667">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="FlowBot.Workflow.Activity1_1" sap:VirtualizedContainerService.HintSize="776,555.333333333333" />
+      <sap2010:ViewStateData Id="While_1" sap:VirtualizedContainerService.HintSize="464,423.333333333333" />
+      <sap2010:ViewStateData Id="BotReplyActivity_4" sap:VirtualizedContainerService.HintSize="464,72.6666666666667" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="486,772.666666666667">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="BotReplyActivity_2" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="856,616" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="878,864">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowBot.Workflow.Activity1_1" sap:VirtualizedContainerService.HintSize="918,944" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -4,6 +4,7 @@ using FlowBot.Common.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,11 +14,18 @@ namespace FlowBot.Services
     {
         private Microsoft.Bot.Builder.Luis.ILuisService _luisService;
 
-        private class Intent : IIntent
+        [DataContract]
+        public class Intent : IIntent
         {
-            public double? Score { get; }
+            [DataMember]
+            public double? Score { get; set; }
 
-            public string Text { get; }
+            [DataMember]
+            public string Text { get; set; }
+            public Intent()
+            {
+
+            }
 
             public Intent(string text, double? score)
             {
@@ -26,12 +34,19 @@ namespace FlowBot.Services
             }
         }
 
-        private class Entity : IEntity
+        [DataContract]
+        public class Entity : IEntity
         {
-            public double? Score { get; }
+            [DataMember]
+            public double? Score { get; set; }
 
-            public string Text { get; }
+            [DataMember]
+            public string Text { get; set; }
 
+            public Entity()
+            {
+
+            }
             public Entity(string text, double? score)
             {
                 this.Text = text;

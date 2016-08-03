@@ -93,6 +93,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotReceiveActivity.cs" />
     <Compile Include="BotDialog.cs" />
     <Compile Include="BotReplyActivity.cs" />
     <Compile Include="LuisActivity.cs" />

@@ -14,7 +14,8 @@ namespace FlowBot.Data
     
     public partial class Message
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
+        public System.DateTime CreateDate { get; set; }
         public string Body { get; set; }
     
         public virtual Conversation Conversation { get; set; }

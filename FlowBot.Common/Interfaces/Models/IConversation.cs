@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FlowBot.Common.Interfaces.Models
 {
-    public interface IConversation
+    public interface IConversation : IRecord
     {
     }
 }

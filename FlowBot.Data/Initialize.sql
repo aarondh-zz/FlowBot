@@ -1,0 +1,1 @@
+﻿insert into workflows (Id, CreateDate, package, Name, body, major, minor, build, revision) values( NEWID(), GETDATE(),'FlowBot', 'Start','TBD',1,0,0,0)

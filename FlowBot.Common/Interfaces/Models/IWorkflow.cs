@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace FlowBot.Common.Interfaces.Models
 {
-    public interface IWorkflow
+    public interface IWorkflow : IRecord
     {
         string Name { get; }
-        string Version { get; }
+        string Package { get; }
+        int Major { get; }
+        int Minor { get; }
+        int Build { get; }
+        int Revision { get; }
         string Body { get; }
     }
 }

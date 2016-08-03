@@ -17,5 +17,11 @@ namespace FlowBot.Common.Interfaces.Services
 
         string GetConversationId();
         string GetConversationName();
+        Account GetFrom(object activity);
+        string GetMessage(object activity);
+        string GetChannelId(object activity);
+
+        string GetConversationId(object activity);
+        string GetConversationName(object activity);
     }
 }

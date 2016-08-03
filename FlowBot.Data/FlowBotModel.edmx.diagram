@@ -16,6 +16,12 @@
         <AssociationConnector Association="FlowBot.Data.Models.ConversationMessage" />
         <AssociationConnector Association="FlowBot.Data.Models.UserMessageFrom" />
         <AssociationConnector Association="FlowBot.Data.Models.UserMessageTo" />
+        <EntityTypeShape EntityType="FlowBot.Data.Models.Bookmark" Width="1.5" PointX="6.875" PointY="7.375" />
+        <EntityTypeShape EntityType="FlowBot.Data.Models.WorkflowInstance" Width="1.5" PointX="3.75" PointY="5.625" />
+        <AssociationConnector Association="FlowBot.Data.Models.WorkflowInstanceBookmark" />
+        <AssociationConnector Association="FlowBot.Data.Models.WorkflowWorkflowInstance" />
+        <AssociationConnector Association="FlowBot.Data.Models.WorkflowInstanceConversation" />
+        <AssociationConnector Association="FlowBot.Data.Models.UserExternalTask" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

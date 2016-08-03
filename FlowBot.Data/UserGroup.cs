@@ -21,7 +21,8 @@ namespace FlowBot.Data
             this.ExternalTasks = new HashSet<ExternalTask>();
         }
     
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
+        public System.DateTime CreateDate { get; set; }
         public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

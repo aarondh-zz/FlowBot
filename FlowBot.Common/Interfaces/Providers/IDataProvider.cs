@@ -9,9 +9,9 @@ namespace FlowBot.Common.Interfaces.Providers
     public interface IDataProvider<T>
     {
         T Create(T obj);
-        T Read(string id);
+        T Read(Guid id);
         void Update(T obj);
         void Delete(T obj);
-        IEnumerable<T> List();
+        IQueryable<T> List();
     }
 }

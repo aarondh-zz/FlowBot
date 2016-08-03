@@ -63,6 +63,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bookmark.cs">
+      <DependentUpon>FlowBotModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Conversation.cs">
       <DependentUpon>FlowBotModel.tt</DependentUpon>
     </Compile>
@@ -87,7 +90,12 @@
     <Compile Include="Message.cs">
       <DependentUpon>FlowBotModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Bookmark.cs" />
+    <Compile Include="Models\Conversation.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\Workflow.cs" />
+    <Compile Include="Models\WorkflowInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs">
       <DependentUpon>FlowBotModel.tt</DependentUpon>
@@ -96,6 +104,9 @@
       <DependentUpon>FlowBotModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Workflow.cs">
+      <DependentUpon>FlowBotModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WorkflowInstance.cs">
       <DependentUpon>FlowBotModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

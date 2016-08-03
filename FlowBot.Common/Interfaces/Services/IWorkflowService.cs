@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace FlowBot.Common.Interfaces.Services
 {
-    public interface IWorkflowServiceHost
+    public interface IWorkflowService
     {
+        void SetWorkflowRootDirectory(string workflowRootDirectory);
         IWorkflowHandle LookupWorkflow(string externalId);
-        IWorkflowHandle NewWorkflow(string workflowName, string externalId, IDictionary<string, object> inputs);
+        IWorkflowHandle NewWorkflow(string package, string workflowName, string externalId, IDictionary<string, object> inputs);
     }
 }

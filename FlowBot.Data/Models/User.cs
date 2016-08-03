@@ -1,12 +1,13 @@
-﻿using System;
+﻿using FlowBot.Common.Interfaces.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowBot.Common.Interfaces.Models
+namespace FlowBot.Data
 {
-    public interface IUser : IRecord
+    public partial class User : IUser
     {
     }
 }

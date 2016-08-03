@@ -10,6 +10,7 @@ namespace FlowBot.Common.Interfaces.Models
 {
     public interface IWorkflowHandle
     {
+        string ExternalId { get; }
         WorkflowIdentity Identity { get; }
         IIOCService IOCService { get; }
         void Resume<T>(string bookmarkName, T bookmarkData);

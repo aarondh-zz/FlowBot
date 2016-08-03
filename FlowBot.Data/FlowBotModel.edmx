@@ -12,6 +12,8 @@
     <EntitySet Name="UserGroups" EntityType="FlowBot.Data.Models.Store.UserGroups" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Conversations" EntityType="FlowBot.Data.Models.Store.Conversations" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Messages" EntityType="FlowBot.Data.Models.Store.Messages" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Bookmarks" EntityType="FlowBot.Data.Models.Store.Bookmarks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="WorkflowInstances" EntityType="FlowBot.Data.Models.Store.WorkflowInstances" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserGroupUser" EntityType="FlowBot.Data.Models.Store.UserGroupUser" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_UserGroupUser_UserGroup" Association="FlowBot.Data.Models.Store.FK_UserGroupUser_UserGroup">
       <End Role="UserGroup" EntitySet="UserGroups" />
@@ -37,63 +39,114 @@
       <End Role="User" EntitySet="Users" />
       <End Role="Message" EntitySet="Messages" />
     </AssociationSet>
+    <AssociationSet Name="WorkflowInstanceBookmark" Association="FlowBot.Data.Models.Store.WorkflowInstanceBookmark">
+      <End Role="WorkflowInstance" EntitySet="WorkflowInstances" />
+      <End Role="Bookmark" EntitySet="Bookmarks" />
+    </AssociationSet>
+    <AssociationSet Name="WorkflowWorkflowInstance" Association="FlowBot.Data.Models.Store.WorkflowWorkflowInstance">
+      <End Role="Workflow" EntitySet="Workflows" />
+      <End Role="WorkflowInstance" EntitySet="WorkflowInstances" />
+    </AssociationSet>
+    <AssociationSet Name="WorkflowInstanceConversation" Association="FlowBot.Data.Models.Store.WorkflowInstanceConversation">
+      <End Role="WorkflowInstance" EntitySet="WorkflowInstances" />
+      <End Role="Conversation" EntitySet="Conversations" />
+    </AssociationSet>
+    <AssociationSet Name="UserExternalTask" Association="FlowBot.Data.Models.Store.UserExternalTask">
+      <End Role="User" EntitySet="Users" />
+      <End Role="ExternalTask" EntitySet="ExternalTasks" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="ExternalTasks">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UserGroup_Id" Type="int" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="ClaimDate" Type="datetime" Nullable="true" />
+    <Property Name="CompletionDate" Type="datetime" Nullable="true" />
+    <Property Name="UserGroup_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Worker_Id" Type="uniqueidentifier" Nullable="true" />
   </EntityType>
   <EntityType Name="Workflows">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Version" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="Package" Type="nvarchar" Nullable="false" MaxLength="64" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="64" />
     <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Major" Type="int" Nullable="false" />
+    <Property Name="Minor" Type="int" Nullable="false" />
+    <Property Name="Build" Type="int" Nullable="false" />
+    <Property Name="Revision" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Users">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="64" />
+    <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="64" />
   </EntityType>
   <EntityType Name="UserGroups">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="64" />
   </EntityType>
   <EntityType Name="Conversations">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="StartDate" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="EndDate" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="ExternalId" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="WorkflowInstance_Id" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="Messages">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
     <Property Name="Body" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Conversation_Id" Type="int" Nullable="false" />
-    <Property Name="From_Id" Type="int" Nullable="false" />
-    <Property Name="To_Id" Type="int" Nullable="false" />
+    <Property Name="Conversation_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="From_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="To_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Bookmarks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="64" />
+    <Property Name="OwnerDisplayName" Type="nvarchar" Nullable="false" MaxLength="64" />
+    <Property Name="CompletionDate" Type="datetime" Nullable="true" />
+    <Property Name="WorkflowInstance_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WorkflowInstances">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="InstanceId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ExternalId" Type="nvarchar" Nullable="true" MaxLength="64" />
+    <Property Name="CompletionDate" Type="datetime" Nullable="true" />
+    <Property Name="Workflow_Id" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserGroupUser">
     <Key>
       <PropertyRef Name="UserGroups_Id" />
       <PropertyRef Name="Users_Id" />
     </Key>
-    <Property Name="UserGroups_Id" Type="int" Nullable="false" />
-    <Property Name="Users_Id" Type="int" Nullable="false" />
+    <Property Name="UserGroups_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Users_Id" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <Association Name="UserGroupExternalTask">
     <End Role="UserGroup" Type="FlowBot.Data.Models.Store.UserGroups" Multiplicity="1" />
@@ -140,6 +193,54 @@
       </Principal>
       <Dependent Role="Message">
         <PropertyRef Name="To_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="WorkflowInstanceBookmark">
+    <End Role="WorkflowInstance" Type="FlowBot.Data.Models.Store.WorkflowInstances" Multiplicity="1" />
+    <End Role="Bookmark" Type="FlowBot.Data.Models.Store.Bookmarks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WorkflowInstance">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Bookmark">
+        <PropertyRef Name="WorkflowInstance_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="WorkflowWorkflowInstance">
+    <End Role="Workflow" Type="FlowBot.Data.Models.Store.Workflows" Multiplicity="1" />
+    <End Role="WorkflowInstance" Type="FlowBot.Data.Models.Store.WorkflowInstances" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Workflow">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="WorkflowInstance">
+        <PropertyRef Name="Workflow_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="WorkflowInstanceConversation">
+    <End Role="WorkflowInstance" Type="FlowBot.Data.Models.Store.WorkflowInstances" Multiplicity="1" />
+    <End Role="Conversation" Type="FlowBot.Data.Models.Store.Conversations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WorkflowInstance">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Conversation">
+        <PropertyRef Name="WorkflowInstance_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserExternalTask">
+    <End Role="User" Type="FlowBot.Data.Models.Store.Users" Multiplicity="0..1" />
+    <End Role="ExternalTask" Type="FlowBot.Data.Models.Store.ExternalTasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExternalTask">
+        <PropertyRef Name="Worker_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -198,41 +299,72 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Message" EntitySet="Messages" />
           </AssociationSet>
+          <EntitySet Name="Bookmarks" EntityType="FlowBot.Data.Models.Bookmark" />
+          <EntitySet Name="WorkflowInstances" EntityType="FlowBot.Data.Models.WorkflowInstance" />
+          <AssociationSet Name="WorkflowInstanceBookmark" Association="FlowBot.Data.Models.WorkflowInstanceBookmark">
+            <End Role="WorkflowInstance" EntitySet="WorkflowInstances" />
+            <End Role="Bookmark" EntitySet="Bookmarks" />
+          </AssociationSet>
+          <AssociationSet Name="WorkflowWorkflowInstance" Association="FlowBot.Data.Models.WorkflowWorkflowInstance">
+            <End Role="Workflow" EntitySet="Workflows" />
+            <End Role="WorkflowInstance" EntitySet="WorkflowInstances" />
+          </AssociationSet>
+          <AssociationSet Name="WorkflowInstanceConversation" Association="FlowBot.Data.Models.WorkflowInstanceConversation">
+            <End Role="WorkflowInstance" EntitySet="WorkflowInstances" />
+            <End Role="Conversation" EntitySet="Conversations" />
+          </AssociationSet>
+          <AssociationSet Name="UserExternalTask" Association="FlowBot.Data.Models.UserExternalTask">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ExternalTask" EntitySet="ExternalTasks" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ExternalTask">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
           <NavigationProperty Name="UserGroup" Relationship="FlowBot.Data.Models.UserGroupExternalTask" FromRole="ExternalTask" ToRole="UserGroup" />
+          <Property Name="CreateDate" Nullable="false" Type="DateTime" Precision="3" />
+          <Property Name="ClaimDate" Type="DateTime" Nullable="true" Precision="3" />
+          <NavigationProperty Name="Worker" Relationship="FlowBot.Data.Models.UserExternalTask" FromRole="ExternalTask" ToRole="User" />
+          <Property Name="CompletionDate" Type="DateTime" Nullable="true" Precision="3" />
         </EntityType>
         <EntityType Name="Workflow">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" />
-          <Property Name="Version" Type="String" Nullable="false" />
-          <Property Name="Body" Type="String" Nullable="false" />
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Package" Type="String" Nullable="false" MaxLength="64" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" Unicode="true" FixedLength="false" />
+          <Property Name="Body" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Major" Type="Int32" Nullable="false" />
+          <Property Name="Minor" Type="Int32" Nullable="false" />
+          <Property Name="Build" Type="Int32" Nullable="false" />
+          <Property Name="Revision" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WorkflowInstances" Relationship="FlowBot.Data.Models.WorkflowWorkflowInstance" FromRole="Workflow" ToRole="WorkflowInstance" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
           <NavigationProperty Name="UserGroups" Relationship="FlowBot.Data.Models.UserGroupUser" FromRole="User" ToRole="UserGroup" />
-          <Property Name="FirstName" Type="String" Nullable="false" />
-          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Nullable="false" Type="DateTime" Precision="3" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="64" Unicode="true" FixedLength="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="64" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Messages" Relationship="FlowBot.Data.Models.UserMessageFrom" FromRole="User" ToRole="Message" />
           <NavigationProperty Name="MessagesTo" Relationship="FlowBot.Data.Models.UserMessageTo" FromRole="User" ToRole="Message" />
+          <NavigationProperty Name="ExternalTasks" Relationship="FlowBot.Data.Models.UserExternalTask" FromRole="User" ToRole="ExternalTask" />
         </EntityType>
         <EntityType Name="UserGroup">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
           <NavigationProperty Name="Users" Relationship="FlowBot.Data.Models.UserGroupUser" FromRole="UserGroup" ToRole="User" />
-          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="ExternalTasks" Relationship="FlowBot.Data.Models.UserGroupExternalTask" FromRole="UserGroup" ToRole="ExternalTask" />
         </EntityType>
         <Association Name="UserGroupUser">
@@ -247,20 +379,22 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StartDate" Type="String" Nullable="false" />
-          <Property Name="EndDate" Type="String" Nullable="true" />
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
           <NavigationProperty Name="Messages" Relationship="FlowBot.Data.Models.ConversationMessage" FromRole="Conversation" ToRole="Message" />
+          <NavigationProperty Name="WorkflowInstance" Relationship="FlowBot.Data.Models.WorkflowInstanceConversation" FromRole="Conversation" ToRole="WorkflowInstance" />
+          <Property Name="CreateDate" Nullable="false" Type="DateTime" Precision="3" />
+          <Property Name="ExternalId" Type="String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="Message">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
           <NavigationProperty Name="Conversation" Relationship="FlowBot.Data.Models.ConversationMessage" FromRole="Message" ToRole="Conversation" />
           <NavigationProperty Name="From" Relationship="FlowBot.Data.Models.UserMessageFrom" FromRole="Message" ToRole="User" />
           <NavigationProperty Name="To" Relationship="FlowBot.Data.Models.UserMessageTo" FromRole="Message" ToRole="User" />
-          <Property Name="Body" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Body" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
         </EntityType>
         <Association Name="ConversationMessage">
           <End Type="FlowBot.Data.Models.Conversation" Role="Conversation" Multiplicity="1" />
@@ -274,6 +408,46 @@
           <End Type="FlowBot.Data.Models.User" Role="User" Multiplicity="1" />
           <End Type="FlowBot.Data.Models.Message" Role="Message" Multiplicity="*" />
         </Association>
+        <EntityType Name="Bookmark">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
+          <Property Name="CreateDate" Nullable="false" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="WorkflowInstance" Relationship="FlowBot.Data.Models.WorkflowInstanceBookmark" FromRole="Bookmark" ToRole="WorkflowInstance" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" Unicode="true" FixedLength="false" />
+          <Property Name="OwnerDisplayName" Type="String" Nullable="false" MaxLength="64" />
+          <Property Name="CompletionDate" Type="DateTime" Nullable="true" Precision="3" />
+        </EntityType>
+        <EntityType Name="WorkflowInstance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" Type="Guid" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Bookmarks" Relationship="FlowBot.Data.Models.WorkflowInstanceBookmark" FromRole="WorkflowInstance" ToRole="Bookmark" />
+          <NavigationProperty Name="Workflow" Relationship="FlowBot.Data.Models.WorkflowWorkflowInstance" FromRole="WorkflowInstance" ToRole="Workflow" />
+          <NavigationProperty Name="Conversation" Relationship="FlowBot.Data.Models.WorkflowInstanceConversation" FromRole="WorkflowInstance" ToRole="Conversation" />
+          <Property Name="InstanceId" Type="Guid" Nullable="false" />
+          <Property Name="ExternalId" Type="String" Nullable="true" MaxLength="64" Unicode="true" FixedLength="false" />
+          <Property Name="CompletionDate" Type="DateTime" Nullable="true" Precision="3" />
+        </EntityType>
+        <Association Name="WorkflowInstanceBookmark">
+          <End Type="FlowBot.Data.Models.WorkflowInstance" Role="WorkflowInstance" Multiplicity="1" />
+          <End Type="FlowBot.Data.Models.Bookmark" Role="Bookmark" Multiplicity="*" />
+        </Association>
+        <Association Name="WorkflowWorkflowInstance">
+          <End Type="FlowBot.Data.Models.Workflow" Role="Workflow" Multiplicity="1" />
+          <End Type="FlowBot.Data.Models.WorkflowInstance" Role="WorkflowInstance" Multiplicity="*" />
+        </Association>
+        <Association Name="WorkflowInstanceConversation">
+          <End Type="FlowBot.Data.Models.WorkflowInstance" Role="WorkflowInstance" Multiplicity="1" />
+          <End Type="FlowBot.Data.Models.Conversation" Role="Conversation" Multiplicity="0..1" />
+        </Association>
+        <Association Name="UserExternalTask">
+          <End Type="FlowBot.Data.Models.User" Role="User" Multiplicity="0..1" />
+          <End Type="FlowBot.Data.Models.ExternalTask" Role="ExternalTask" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -284,6 +458,9 @@
       <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.ExternalTask)">
         <MappingFragment StoreEntitySet="ExternalTasks">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="ClaimDate" ColumnName="ClaimDate" />
+          <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -291,9 +468,14 @@
       <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.Workflow)">
         <MappingFragment StoreEntitySet="Workflows">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="Package" ColumnName="Package" />
           <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Version" ColumnName="Version" />
           <ScalarProperty Name="Body" ColumnName="Body" />
+          <ScalarProperty Name="Major" ColumnName="Major" />
+          <ScalarProperty Name="Minor" ColumnName="Minor" />
+          <ScalarProperty Name="Build" ColumnName="Build" />
+          <ScalarProperty Name="Revision" ColumnName="Revision" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -301,6 +483,7 @@
       <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.User)">
         <MappingFragment StoreEntitySet="Users">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />
         </MappingFragment>
@@ -310,6 +493,7 @@
       <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.UserGroup)">
         <MappingFragment StoreEntitySet="UserGroups">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
           <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -318,8 +502,8 @@
       <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.Conversation)">
         <MappingFragment StoreEntitySet="Conversations">
           <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="ExternalId" ColumnName="ExternalId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -327,7 +511,30 @@
       <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.Message)">
         <MappingFragment StoreEntitySet="Messages">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
           <ScalarProperty Name="Body" ColumnName="Body" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Bookmarks">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.Bookmark)">
+        <MappingFragment StoreEntitySet="Bookmarks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="OwnerDisplayName" ColumnName="OwnerDisplayName" />
+          <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WorkflowInstances">
+      <EntityTypeMapping TypeName="IsTypeOf(FlowBot.Data.Models.WorkflowInstance)">
+        <MappingFragment StoreEntitySet="WorkflowInstances">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="InstanceId" ColumnName="InstanceId" />
+          <ScalarProperty Name="ExternalId" ColumnName="ExternalId" />
+          <ScalarProperty Name="CompletionDate" ColumnName="CompletionDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -371,6 +578,39 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
+    <AssociationSetMapping Name="WorkflowInstanceBookmark" TypeName="FlowBot.Data.Models.WorkflowInstanceBookmark" StoreEntitySet="Bookmarks">
+      <EndProperty Name="WorkflowInstance">
+        <ScalarProperty Name="Id" ColumnName="WorkflowInstance_Id" />
+      </EndProperty>
+      <EndProperty Name="Bookmark">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="WorkflowWorkflowInstance" TypeName="FlowBot.Data.Models.WorkflowWorkflowInstance" StoreEntitySet="WorkflowInstances">
+      <EndProperty Name="Workflow">
+        <ScalarProperty Name="Id" ColumnName="Workflow_Id" />
+      </EndProperty>
+      <EndProperty Name="WorkflowInstance">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="WorkflowInstanceConversation" TypeName="FlowBot.Data.Models.WorkflowInstanceConversation" StoreEntitySet="Conversations">
+      <EndProperty Name="WorkflowInstance">
+        <ScalarProperty Name="Id" ColumnName="WorkflowInstance_Id" />
+      </EndProperty>
+      <EndProperty Name="Conversation">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserExternalTask" TypeName="FlowBot.Data.Models.UserExternalTask" StoreEntitySet="ExternalTasks">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Worker_Id" />
+      </EndProperty>
+      <EndProperty Name="ExternalTask">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="Worker_Id" IsNull="false" />
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
@@ -387,6 +627,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

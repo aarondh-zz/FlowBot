@@ -51,5 +51,26 @@ namespace FlowBot.Services
         {
             return _activity.Conversation.Name;
         }
+        public string GetMessage(object activity)
+        {
+            return ((Activity)activity).Text;
+        }
+        public Account GetFrom(object activity)
+        {
+            return new Account() { Name = ((Activity)activity).From.Name, Id = ((Activity)activity).From.Id };
+        }
+        public string GetChannelId(object activity)
+        {
+            return ((Activity)activity).ChannelId;
+        }
+
+        public string GetConversationId(object activity)
+        {
+            return ((Activity)activity).Conversation.Id;
+        }
+        public string GetConversationName(object activity)
+        {
+            return ((Activity)activity).Conversation.Name;
+        }
     }
 }

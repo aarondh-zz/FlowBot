@@ -10,8 +10,11 @@ namespace FlowBot.Common.Interfaces.Services
 {
     public interface IDataService
     {
-        IWorkflowDataProvider Workflows { get; }
-        IUserDataProvider Users { get; }
+        IBookmarkDataProvider Bookmarks { get; }
         IConversationDataProvider Conversations { get; }
+        IMessageDataProvider Messages { get; }
+        IUserDataProvider Users { get; }
+        IWorkflowDataProvider Workflows { get; }
+        IWorkflowInstanceDataProvider WorkflowInstances { get; }
     }
 }

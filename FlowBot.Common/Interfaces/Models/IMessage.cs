@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace FlowBot.Common.Interfaces.Models
 {
-    public interface IUser : IRecord
+    public interface IMessage : IRecord
     {
+        IUser From { get; }
+        IUser To { get; }
+        string Body { get; }
+        IConversation Conversation { get; }
     }
 }

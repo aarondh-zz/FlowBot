@@ -19,10 +19,11 @@ namespace FlowBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        public IWorkflowServiceHost _workflowServiceHost;
-        public MessagesController(IWorkflowServiceHost workflowServiceHost)
+        public IWorkflowService _workflowService;
+        public MessagesController(IWorkflowService workflowService)
         {
-            _workflowServiceHost = workflowServiceHost;
+            _workflowService = workflowService;
+            _workflowService.SetWorkflowRootDirectory(HttpRuntime.AppDomainAppPath + "Workflow\\");
         }
         /// <summary>
         /// POST: api/Messages
@@ -35,19 +36,19 @@ namespace FlowBot
             {
                 if (activity.Type == ActivityTypes.Message)
                 {
-                    workflowPath = HttpRuntime.AppDomainAppPath + "Workflow\\Start.xaml";
-                    var existingWorkflow = _workflowServiceHost.LookupWorkflow(activity.Conversation.Id);
+                    var existingWorkflow = _workflowService.LookupWorkflow(activity.Conversation.Id);
                     if ( existingWorkflow == null)
                     {
                         Dictionary<string, object> inputs = new Dictionary<string, object>();
-                        var newWorkflow = _workflowServiceHost.NewWorkflow(workflowPath, activity.Conversation.Id, inputs);
+                        var newWorkflow = _workflowService.NewWorkflow("FlowBot","Start", activity.Conversation.Id, inputs);
                         newWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(activity);
                         newWorkflow.Run();
                     }
                     else
                     {
                         existingWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(activity);
-                        existingWorkflow.Resume("Message");
+                        //existingWorkflow.Run();
+                        existingWorkflow.Resume<Activity>("message", activity);
                     }
                 }
                 else

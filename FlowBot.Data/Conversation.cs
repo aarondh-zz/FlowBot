@@ -20,11 +20,12 @@ namespace FlowBot.Data
             this.Messages = new HashSet<Message>();
         }
     
-        public int Id { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public System.Guid Id { get; set; }
+        public System.DateTime CreateDate { get; set; }
+        public string ExternalId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Message> Messages { get; set; }
+        public virtual WorkflowInstance WorkflowInstance { get; set; }
     }
 }
