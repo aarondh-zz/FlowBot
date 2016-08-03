@@ -9,5 +9,6 @@ namespace FlowBot.Common.Interfaces.Providers
 {
     public interface IUserGroupDataProvider : IDataProvider<IUserGroup>
     {
+        IUserGroup Read(string userGroupName);
     }
 }

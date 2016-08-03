@@ -9,5 +9,12 @@ namespace FlowBot.Data
 {
     public partial class Conversation : IConversation
     {
+        IWorkflowInstance IConversation.WorkflowInstance
+        {
+            get
+            {
+                return this.WorkflowInstance;
+            }
+        }
     }
 }

@@ -72,6 +72,7 @@
     <Compile Include="Interfaces\Models\IWorkflowHandle.cs" />
     <Compile Include="Interfaces\Services\IWorkflowService.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\ExternalTaskStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WorkflowEventArgs.cs" />
   </ItemGroup>

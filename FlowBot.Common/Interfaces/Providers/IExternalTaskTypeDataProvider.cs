@@ -9,5 +9,6 @@ namespace FlowBot.Common.Interfaces.Providers
 {
     public interface IExternalTaskTypeDataProvider : IDataProvider<IExternalTaskType>
     {
+        IExternalTaskType Read(string externalTaskTypeName);
     }
 }

@@ -76,12 +76,22 @@ namespace FlowBot.Services
 
             public IConversation Create(IConversation obj)
             {
-                throw new NotImplementedException();
+                var newConversation = new Conversation()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    ExternalId = obj.ExternalId,
+                    WorkflowInstance = (WorkflowInstance)obj.WorkflowInstance
+                };
+                _dataService._container.Conversations.Add(newConversation);
+                _dataService._container.SaveChanges();
+                return newConversation;
             }
 
             public void Delete(IConversation obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.Conversations.Add((Conversation)obj);
+                _dataService._container.SaveChanges();
             }
 
             public IQueryable<IConversation> List()
@@ -91,7 +101,7 @@ namespace FlowBot.Services
 
             public IConversation Read(Guid id)
             {
-                throw new NotImplementedException();
+                return _dataService._container.Conversations.Where(c=>c.Id == id).FirstOrDefault();
             }
 
             public void Update(IConversation obj)
@@ -108,27 +118,68 @@ namespace FlowBot.Services
             }
             public IExternalTask Create(IExternalTask obj)
             {
-                throw new NotImplementedException();
+                var newExternalTask = new ExternalTask()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    ExternalTaskType = (ExternalTaskType)obj.ExternalTaskType,
+                    ClaimDate = obj.ClaimDate,
+                    CompletionDate = obj.CompletionDate,
+                    InputData = obj.InputData,
+                    OutputData = obj.OutputData,
+                    UserGroup = (UserGroup)obj.UserGroup,
+                    Worker = (User)obj.Worker
+
+                };
+                _dataService._container.ExternalTasks.Add(newExternalTask);
+                _dataService._container.SaveChanges();
+                return newExternalTask;
+            }
+
+            public IExternalTask Create(string externalTaskTypeName, string externalId, string userGroupName, object inputData)
+            {
+                var externalTaskType = _dataService.ExternalTaskTypes.Read(externalTaskTypeName);
+                if (externalTaskType == null)
+                {
+                    throw new InvalidOperationException($"\"{externalTaskTypeName}\" is not a valid external task type");
+                }
+                var userGroup = _dataService.UserGroups.Read(userGroupName);
+                if (userGroup == null)
+                {
+                    throw new InvalidOperationException($"\"{userGroupName}\" is not a valid user group name");
+                }
+                var newExternalTask = new ExternalTask()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    ExternalTaskType = (ExternalTaskType)externalTaskType,
+                    InputData = null,
+                    UserGroup = (UserGroup)userGroup
+                };
+                _dataService._container.ExternalTasks.Add(newExternalTask);
+                _dataService._container.SaveChanges();
+                return newExternalTask;
             }
 
             public void Delete(IExternalTask obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.ExternalTasks.Remove((ExternalTask)obj);
+                _dataService._container.SaveChanges();
             }
 
             public IQueryable<IExternalTask> List()
             {
-                throw new NotImplementedException();
+                return _dataService._container.ExternalTasks;
             }
 
             public IExternalTask Read(Guid id)
             {
-                throw new NotImplementedException();
+                return _dataService._container.ExternalTasks.Where(et => et.Id == id).FirstOrDefault();
             }
 
             public void Update(IExternalTask obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.SaveChanges();
             }
         }
         private class ExternalTaskTypeDataProvider : IExternalTaskTypeDataProvider
@@ -145,22 +196,27 @@ namespace FlowBot.Services
 
             public void Delete(IExternalTaskType obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.ExternalTaskTypes.Remove((ExternalTaskType)obj);
+                _dataService._container.SaveChanges();
             }
 
             public IQueryable<IExternalTaskType> List()
             {
-                throw new NotImplementedException();
+                return _dataService._container.ExternalTaskTypes;
             }
 
             public IExternalTaskType Read(Guid id)
             {
-                throw new NotImplementedException();
+                return _dataService._container.ExternalTaskTypes.Where(ett => ett.Id == id).FirstOrDefault();
+            }
+            public IExternalTaskType Read( string externalTaskTypeName)
+            {
+                return _dataService._container.ExternalTaskTypes.Where(ett => ett.Name.Equals(externalTaskTypeName, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
             }
 
             public void Update(IExternalTaskType obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.SaveChanges();
             }
         }
         private class MessageDataProvider : IMessageDataProvider
@@ -248,27 +304,40 @@ namespace FlowBot.Services
             }
             public IUserGroup Create(IUserGroup obj)
             {
-                throw new NotImplementedException();
+                var newUserGroup = new UserGroup()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    Name = obj.Name
+                };
+                _dataService._container.UserGroups.Add(newUserGroup);
+                _dataService._container.SaveChanges();
+                return newUserGroup;
             }
 
             public void Delete(IUserGroup obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.UserGroups.Remove((UserGroup)obj);
+                _dataService._container.SaveChanges();
             }
 
             public IQueryable<IUserGroup> List()
             {
-                throw new NotImplementedException();
+                return _dataService._container.UserGroups;
             }
 
             public IUserGroup Read(Guid id)
             {
-                throw new NotImplementedException();
+                return _dataService._container.UserGroups.Where(ug => ug.Id == id).FirstOrDefault();
+            }
+            public IUserGroup Read(string name)
+            {
+                return _dataService._container.UserGroups.Where(ug => ug.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
             }
 
             public void Update(IUserGroup obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.SaveChanges();
             }
         }
         private class WorkflowDataProvider : IWorkflowDataProvider

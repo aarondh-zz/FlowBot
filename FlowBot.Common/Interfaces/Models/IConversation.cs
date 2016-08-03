@@ -8,5 +8,7 @@ namespace FlowBot.Common.Interfaces.Models
 {
     public interface IConversation : IRecord
     {
+        string ExternalId { get; }
+        IWorkflowInstance WorkflowInstance { get; }
     }
 }
