@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="f015956e043b44de9b55b024c0d96ebd" Name="Diagram1" >
         <EntityTypeShape EntityType="FlowBot.Data.Models.ExternalTask" Width="1.5" PointX="7.75" PointY="0.875" />
-        <EntityTypeShape EntityType="FlowBot.Data.Models.Workflow" Width="1.5" PointX="1" PointY="5" />
+        <EntityTypeShape EntityType="FlowBot.Data.Models.Workflow" Width="1.5" PointX="1.125" PointY="4.125" />
         <EntityTypeShape EntityType="FlowBot.Data.Models.User" Width="1.5" PointX="1.375" PointY="0.875" />
         <EntityTypeShape EntityType="FlowBot.Data.Models.UserGroup" Width="1.5" PointX="4.625" PointY="3.25" />
         <AssociationConnector Association="FlowBot.Data.Models.UserGroupUser" />
@@ -22,6 +22,8 @@
         <AssociationConnector Association="FlowBot.Data.Models.WorkflowWorkflowInstance" />
         <AssociationConnector Association="FlowBot.Data.Models.WorkflowInstanceConversation" />
         <AssociationConnector Association="FlowBot.Data.Models.UserExternalTask" />
+        <EntityTypeShape EntityType="FlowBot.Data.Models.ExternalTaskType" Width="1.5" PointX="10.75" PointY="0.75" />
+        <AssociationConnector Association="FlowBot.Data.Models.ExternalTaskTypeExternalTask" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

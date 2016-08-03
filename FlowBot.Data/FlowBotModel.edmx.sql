@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/02/2016 11:32:40
+-- Date Created: 08/03/2016 11:01:55
 -- Generated from EDMX file: C:\Users\v-adai\Documents\Visual Studio 2015\Projects\FlowBot\FlowBot.Data\FlowBotModel.edmx
 -- --------------------------------------------------
 
@@ -90,8 +90,11 @@ CREATE TABLE [dbo].[ExternalTasks] (
     [CreateDate] datetime  NOT NULL,
     [ClaimDate] datetime  NULL,
     [CompletionDate] datetime  NULL,
+    [InputData] nvarchar(max)  NOT NULL,
+    [OutputData] nvarchar(max)  NOT NULL,
     [UserGroup_Id] uniqueidentifier  NOT NULL,
-    [Worker_Id] uniqueidentifier  NULL
+    [Worker_Id] uniqueidentifier  NULL,
+    [ExternalTaskType_Id] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -168,6 +171,15 @@ CREATE TABLE [dbo].[WorkflowInstances] (
 );
 GO
 
+-- Creating table 'ExternalTaskTypes'
+CREATE TABLE [dbo].[ExternalTaskTypes] (
+    [Id] uniqueidentifier  NOT NULL,
+    [CreateDate] nvarchar(max)  NOT NULL,
+    [Name] nvarchar(64)  NOT NULL,
+    [View] nvarchar(max)  NOT NULL
+);
+GO
+
 -- Creating table 'UserGroupUser'
 CREATE TABLE [dbo].[UserGroupUser] (
     [UserGroups_Id] uniqueidentifier  NOT NULL,
@@ -224,6 +236,12 @@ GO
 -- Creating primary key on [Id] in table 'WorkflowInstances'
 ALTER TABLE [dbo].[WorkflowInstances]
 ADD CONSTRAINT [PK_WorkflowInstances]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'ExternalTaskTypes'
+ALTER TABLE [dbo].[ExternalTaskTypes]
+ADD CONSTRAINT [PK_ExternalTaskTypes]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -379,6 +397,21 @@ GO
 CREATE INDEX [IX_FK_UserExternalTask]
 ON [dbo].[ExternalTasks]
     ([Worker_Id]);
+GO
+
+-- Creating foreign key on [ExternalTaskType_Id] in table 'ExternalTasks'
+ALTER TABLE [dbo].[ExternalTasks]
+ADD CONSTRAINT [FK_ExternalTaskTypeExternalTask]
+    FOREIGN KEY ([ExternalTaskType_Id])
+    REFERENCES [dbo].[ExternalTaskTypes]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ExternalTaskTypeExternalTask'
+CREATE INDEX [IX_FK_ExternalTaskTypeExternalTask]
+ON [dbo].[ExternalTasks]
+    ([ExternalTaskType_Id]);
 GO
 
 -- --------------------------------------------------

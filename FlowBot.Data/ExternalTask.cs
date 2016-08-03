@@ -18,8 +18,11 @@ namespace FlowBot.Data
         public System.DateTime CreateDate { get; set; }
         public Nullable<System.DateTime> ClaimDate { get; set; }
         public Nullable<System.DateTime> CompletionDate { get; set; }
+        public string InputData { get; set; }
+        public string OutputData { get; set; }
     
         public virtual UserGroup UserGroup { get; set; }
         public virtual User Worker { get; set; }
+        public virtual ExternalTaskType ExternalTaskType { get; set; }
     }
 }

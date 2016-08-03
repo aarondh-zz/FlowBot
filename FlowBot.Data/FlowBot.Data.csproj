@@ -72,6 +72,9 @@
     <Compile Include="ExternalTask.cs">
       <DependentUpon>FlowBotModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExternalTaskType.cs">
+      <DependentUpon>FlowBotModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="FlowBotModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,6 +143,7 @@
       <LastGenOutput>FlowBotModel.cs</LastGenOutput>
       <DependentUpon>FlowBotModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Initialize.sql" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

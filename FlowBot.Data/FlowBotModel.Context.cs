@@ -33,5 +33,6 @@ namespace FlowBot.Data
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Bookmark> Bookmarks { get; set; }
         public virtual DbSet<WorkflowInstance> WorkflowInstances { get; set; }
+        public virtual DbSet<ExternalTaskType> ExternalTaskTypes { get; set; }
     }
 }
