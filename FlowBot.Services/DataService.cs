@@ -101,6 +101,11 @@ namespace FlowBot.Services
         }
         private class ExternalTaskDataProvider : IExternalTaskDataProvider
         {
+            private DataService _dataService;
+            public ExternalTaskDataProvider(DataService dataService)
+            {
+                _dataService = dataService;
+            }
             public IExternalTask Create(IExternalTask obj)
             {
                 throw new NotImplementedException();
@@ -128,6 +133,11 @@ namespace FlowBot.Services
         }
         private class ExternalTaskTypeDataProvider : IExternalTaskTypeDataProvider
         {
+            private DataService _dataService;
+            public ExternalTaskTypeDataProvider(DataService dataService)
+            {
+                _dataService = dataService;
+            }
             public IExternalTaskType Create(IExternalTaskType obj)
             {
                 throw new NotImplementedException();
@@ -231,6 +241,11 @@ namespace FlowBot.Services
         }
         private class UserGroupDataProvider : IUserGroupDataProvider
         {
+            private DataService _dataService;
+            public UserGroupDataProvider(DataService dataService)
+            {
+                _dataService = dataService;
+            }
             public IUserGroup Create(IUserGroup obj)
             {
                 throw new NotImplementedException();
@@ -358,8 +373,11 @@ namespace FlowBot.Services
             _container = new FlowBotModelContainer();
             this.Bookmarks = new BookmarkDataProvider(this);
             this.Conversations = new ConversationDataProvider(this);
+            this.ExternalTasks = new ExternalTaskDataProvider(this);
+            this.ExternalTaskTypes = new ExternalTaskTypeDataProvider(this);
             this.Messages = new MessageDataProvider(this);
             this.Users = new UserDataProvider(this);
+            this.UserGroups = new UserGroupDataProvider(this);
             this.Workflows = new WorkflowDataProvider(this);
             this.WorkflowInstances = new WorkflowInstanceDataProvider(this);
         }
