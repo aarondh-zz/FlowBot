@@ -153,7 +153,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="CreateDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
     <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="64" />
     <Property Name="View" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
@@ -490,7 +490,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-          <Property Name="CreateDate" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="64" />
           <Property Name="View" Type="String" Nullable="false" />
           <NavigationProperty Name="ExternalTasks" Relationship="FlowBot.Data.Models.ExternalTaskTypeExternalTask" FromRole="ExternalTaskType" ToRole="ExternalTask" />

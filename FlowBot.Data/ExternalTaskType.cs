@@ -21,7 +21,7 @@ namespace FlowBot.Data
         }
     
         public System.Guid Id { get; set; }
-        public string CreateDate { get; set; }
+        public System.DateTime CreateDate { get; set; }
         public string Name { get; set; }
         public string View { get; set; }
     

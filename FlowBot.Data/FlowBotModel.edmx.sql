@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/03/2016 11:01:55
+-- Date Created: 08/03/2016 11:19:22
 -- Generated from EDMX file: C:\Users\v-adai\Documents\Visual Studio 2015\Projects\FlowBot\FlowBot.Data\FlowBotModel.edmx
 -- --------------------------------------------------
 
@@ -47,6 +47,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_UserExternalTask]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ExternalTasks] DROP CONSTRAINT [FK_UserExternalTask];
 GO
+IF OBJECT_ID(N'[dbo].[FK_ExternalTaskTypeExternalTask]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExternalTasks] DROP CONSTRAINT [FK_ExternalTaskTypeExternalTask];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -75,6 +78,9 @@ IF OBJECT_ID(N'[dbo].[Bookmarks]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[WorkflowInstances]', 'U') IS NOT NULL
     DROP TABLE [dbo].[WorkflowInstances];
+GO
+IF OBJECT_ID(N'[dbo].[ExternalTaskTypes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ExternalTaskTypes];
 GO
 IF OBJECT_ID(N'[dbo].[UserGroupUser]', 'U') IS NOT NULL
     DROP TABLE [dbo].[UserGroupUser];
@@ -174,7 +180,7 @@ GO
 -- Creating table 'ExternalTaskTypes'
 CREATE TABLE [dbo].[ExternalTaskTypes] (
     [Id] uniqueidentifier  NOT NULL,
-    [CreateDate] nvarchar(max)  NOT NULL,
+    [CreateDate] datetime  NOT NULL,
     [Name] nvarchar(64)  NOT NULL,
     [View] nvarchar(max)  NOT NULL
 );

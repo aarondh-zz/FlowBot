@@ -95,8 +95,11 @@
     </Compile>
     <Compile Include="Models\Bookmark.cs" />
     <Compile Include="Models\Conversation.cs" />
+    <Compile Include="Models\ExternalTask.cs" />
+    <Compile Include="Models\ExternalTaskType.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserGroup.cs" />
     <Compile Include="Models\Workflow.cs" />
     <Compile Include="Models\WorkflowInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

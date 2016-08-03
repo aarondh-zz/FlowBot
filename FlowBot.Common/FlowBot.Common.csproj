@@ -44,10 +44,15 @@
   <ItemGroup>
     <Compile Include="Interfaces\Models\IBookmark.cs" />
     <Compile Include="Interfaces\Models\IConversation.cs" />
+    <Compile Include="Interfaces\Models\IExternalTask.cs" />
+    <Compile Include="Interfaces\Models\IExternalTaskType.cs" />
     <Compile Include="Interfaces\Models\IMessage.cs" />
     <Compile Include="Interfaces\Models\IRecord.cs" />
+    <Compile Include="Interfaces\Models\IUserGroup.cs" />
     <Compile Include="Interfaces\Models\IWorkflowInstance.cs" />
     <Compile Include="Interfaces\Providers\IBookmarkDataProvider.cs" />
+    <Compile Include="Interfaces\Providers\IExternalTaskDataProvider.cs" />
+    <Compile Include="Interfaces\Providers\IExternalTaskTypeDataProvider.cs" />
     <Compile Include="Interfaces\Providers\IMessageDataProvider.cs" />
     <Compile Include="Interfaces\Providers\IConversationDataProvider.cs" />
     <Compile Include="Interfaces\Providers\IDataProvider.cs" />
@@ -55,6 +60,7 @@
     <Compile Include="Interfaces\Models\IEntity.cs" />
     <Compile Include="Interfaces\Models\IIntent.cs" />
     <Compile Include="Interfaces\Providers\IUserDataProvider.cs" />
+    <Compile Include="Interfaces\Providers\IUserGroupDataProvider.cs" />
     <Compile Include="Interfaces\Providers\IWorkflowDataProvider.cs" />
     <Compile Include="Interfaces\Providers\IWorkflowInstanceDataProvider.cs" />
     <Compile Include="Interfaces\Services\IConnectorService.cs" />

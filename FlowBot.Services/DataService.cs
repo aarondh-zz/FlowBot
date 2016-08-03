@@ -99,6 +99,60 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
         }
+        private class ExternalTaskDataProvider : IExternalTaskDataProvider
+        {
+            public IExternalTask Create(IExternalTask obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Delete(IExternalTask obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IQueryable<IExternalTask> List()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IExternalTask Read(Guid id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Update(IExternalTask obj)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        private class ExternalTaskTypeDataProvider : IExternalTaskTypeDataProvider
+        {
+            public IExternalTaskType Create(IExternalTaskType obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Delete(IExternalTaskType obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IQueryable<IExternalTaskType> List()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IExternalTaskType Read(Guid id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Update(IExternalTaskType obj)
+            {
+                throw new NotImplementedException();
+            }
+        }
         private class MessageDataProvider : IMessageDataProvider
         {
             private DataService _dataService;
@@ -173,6 +227,33 @@ namespace FlowBot.Services
             public void Update(IUser obj)
             {
                 _dataService._container.SaveChanges();
+            }
+        }
+        private class UserGroupDataProvider : IUserGroupDataProvider
+        {
+            public IUserGroup Create(IUserGroup obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Delete(IUserGroup obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IQueryable<IUserGroup> List()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IUserGroup Read(Guid id)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Update(IUserGroup obj)
+            {
+                throw new NotImplementedException();
             }
         }
         private class WorkflowDataProvider : IWorkflowDataProvider
@@ -285,8 +366,11 @@ namespace FlowBot.Services
 
         public IBookmarkDataProvider Bookmarks { get; }
         public IConversationDataProvider Conversations { get; }
+        public IExternalTaskDataProvider ExternalTasks { get; }
+        public IExternalTaskTypeDataProvider ExternalTaskTypes { get; }
         public IMessageDataProvider Messages { get; }
         public IUserDataProvider Users { get; }
+        public IUserGroupDataProvider UserGroups { get; }
         public IWorkflowDataProvider Workflows { get; }
         public IWorkflowInstanceDataProvider WorkflowInstances { get; }
     }
