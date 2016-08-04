@@ -155,10 +155,6 @@
       <Project>{7a99f2a4-b4f5-4c49-a118-1e3cc823ef12}</Project>
       <Name>FlowBot.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FlowBot.Data\FlowBot.Data.csproj">
-      <Project>{e772d011-6079-4c29-9d32-5fd8a11ad295}</Project>
-      <Name>FlowBot.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FlowBot.Services\FlowBot.Services.csproj">
       <Project>{a50b1c2b-830b-4942-8aec-1d6e96f89330}</Project>
       <Name>FlowBot.Services</Name>

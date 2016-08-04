@@ -3,13 +3,8 @@ using Autofac.Integration.WebApi;
 using FlowBot.Common.Interfaces.Providers;
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Http;
-using System.Web.Routing;
 namespace FlowBot
 {
     public class WebApiApplication : System.Web.HttpApplication, ILifetimeScopeProvider
