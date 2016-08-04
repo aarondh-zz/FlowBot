@@ -15,6 +15,7 @@ namespace FlowBot.Common.Interfaces.Services
         IExternalTaskDataProvider ExternalTasks { get; }
         IExternalTaskTypeDataProvider ExternalTaskTypes { get; }
         IMessageDataProvider Messages { get; }
+        IUserDataProvider Users { get; }
         IUserGroupDataProvider UserGroups { get; }
         IWorkflowDataProvider Workflows { get; }
         IWorkflowInstanceDataProvider WorkflowInstances { get; }

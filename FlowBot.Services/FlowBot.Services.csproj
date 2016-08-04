@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="ConnectorService.cs" />
     <Compile Include="DataService.cs" />
+    <Compile Include="Extensions\IWorkflowDataProviderExtensions.cs" />
     <Compile Include="Extensions\IWorkflowExtensions.cs" />
     <Compile Include="IOCService.cs" />
     <Compile Include="LuisService.cs" />

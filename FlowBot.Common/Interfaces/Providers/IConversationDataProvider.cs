@@ -9,5 +9,8 @@ namespace FlowBot.Common.Interfaces.Providers
 {
     public interface IConversationDataProvider : IDataProvider<IConversation>
     {
+        IConversation Create(IWorkflowHandle workflowHandle, string externalId);
+        IConversation Read(IWorkflowHandle workflowHandle, string externalId);
+        IConversation ReadOrCreate(IWorkflowHandle workflowHandle, string externalId);
     }
 }

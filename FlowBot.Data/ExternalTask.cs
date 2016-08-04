@@ -20,9 +20,11 @@ namespace FlowBot.Data
         public Nullable<System.DateTime> CompletionDate { get; set; }
         public string InputData { get; set; }
         public string OutputData { get; set; }
+        public string ExternalId { get; set; }
     
         public virtual UserGroup UserGroup { get; set; }
         public virtual User Worker { get; set; }
         public virtual ExternalTaskType ExternalTaskType { get; set; }
+        public virtual WorkflowInstance WorkflowInstance { get; set; }
     }
 }

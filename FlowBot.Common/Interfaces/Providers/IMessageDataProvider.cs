@@ -9,5 +9,6 @@ namespace FlowBot.Common.Interfaces.Providers
 {
     public interface IMessageDataProvider : IDataProvider<IMessage>
     {
+        IMessage Create(IConversation conversation, IUser from, IUser to, string topic, string body, string locale);
     }
 }

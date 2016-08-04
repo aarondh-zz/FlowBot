@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/03/2016 11:19:22
+-- Date Created: 08/04/2016 13:12:35
 -- Generated from EDMX file: C:\Users\v-adai\Documents\Visual Studio 2015\Projects\FlowBot\FlowBot.Data\FlowBotModel.edmx
 -- --------------------------------------------------
 
@@ -49,6 +49,9 @@ IF OBJECT_ID(N'[dbo].[FK_UserExternalTask]', 'F') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[FK_ExternalTaskTypeExternalTask]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ExternalTasks] DROP CONSTRAINT [FK_ExternalTaskTypeExternalTask];
+GO
+IF OBJECT_ID(N'[dbo].[FK_WorkflowInstanceExternalTask]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ExternalTasks] DROP CONSTRAINT [FK_WorkflowInstanceExternalTask];
 GO
 
 -- --------------------------------------------------
@@ -98,9 +101,11 @@ CREATE TABLE [dbo].[ExternalTasks] (
     [CompletionDate] datetime  NULL,
     [InputData] nvarchar(max)  NOT NULL,
     [OutputData] nvarchar(max)  NOT NULL,
+    [ExternalId] nvarchar(max)  NOT NULL,
     [UserGroup_Id] uniqueidentifier  NOT NULL,
     [Worker_Id] uniqueidentifier  NULL,
-    [ExternalTaskType_Id] uniqueidentifier  NOT NULL
+    [ExternalTaskType_Id] uniqueidentifier  NOT NULL,
+    [WorkflowInstance_Id] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -123,7 +128,8 @@ CREATE TABLE [dbo].[Users] (
     [Id] uniqueidentifier  NOT NULL,
     [CreateDate] datetime  NOT NULL,
     [FirstName] nvarchar(64)  NOT NULL,
-    [LastName] nvarchar(64)  NOT NULL
+    [LastName] nvarchar(64)  NOT NULL,
+    [ExternalId] nvarchar(64)  NOT NULL
 );
 GO
 
@@ -148,7 +154,9 @@ GO
 CREATE TABLE [dbo].[Messages] (
     [Id] uniqueidentifier  NOT NULL,
     [CreateDate] datetime  NOT NULL,
+    [Topic] nvarchar(255)  NULL,
     [Body] nvarchar(max)  NOT NULL,
+    [Locale] nvarchar(64)  NULL,
     [Conversation_Id] uniqueidentifier  NOT NULL,
     [From_Id] uniqueidentifier  NOT NULL,
     [To_Id] uniqueidentifier  NOT NULL
@@ -162,6 +170,7 @@ CREATE TABLE [dbo].[Bookmarks] (
     [Name] nvarchar(64)  NOT NULL,
     [OwnerDisplayName] nvarchar(64)  NOT NULL,
     [CompletionDate] datetime  NULL,
+    [State] int  NOT NULL,
     [WorkflowInstance_Id] uniqueidentifier  NOT NULL
 );
 GO
@@ -173,6 +182,7 @@ CREATE TABLE [dbo].[WorkflowInstances] (
     [InstanceId] uniqueidentifier  NOT NULL,
     [ExternalId] nvarchar(64)  NULL,
     [CompletionDate] datetime  NULL,
+    [State] int  NOT NULL,
     [Workflow_Id] uniqueidentifier  NOT NULL
 );
 GO
@@ -418,6 +428,21 @@ GO
 CREATE INDEX [IX_FK_ExternalTaskTypeExternalTask]
 ON [dbo].[ExternalTasks]
     ([ExternalTaskType_Id]);
+GO
+
+-- Creating foreign key on [WorkflowInstance_Id] in table 'ExternalTasks'
+ALTER TABLE [dbo].[ExternalTasks]
+ADD CONSTRAINT [FK_WorkflowInstanceExternalTask]
+    FOREIGN KEY ([WorkflowInstance_Id])
+    REFERENCES [dbo].[WorkflowInstances]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_WorkflowInstanceExternalTask'
+CREATE INDEX [IX_FK_WorkflowInstanceExternalTask]
+ON [dbo].[ExternalTasks]
+    ([WorkflowInstance_Id]);
 GO
 
 -- --------------------------------------------------

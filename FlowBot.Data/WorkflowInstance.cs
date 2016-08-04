@@ -18,6 +18,7 @@ namespace FlowBot.Data
         public WorkflowInstance()
         {
             this.Bookmarks = new HashSet<Bookmark>();
+            this.ExternalTasks = new HashSet<ExternalTask>();
         }
     
         public System.Guid Id { get; set; }
@@ -25,10 +26,13 @@ namespace FlowBot.Data
         public System.Guid InstanceId { get; set; }
         public string ExternalId { get; set; }
         public Nullable<System.DateTime> CompletionDate { get; set; }
+        public FlowBot.Common.Models.WorkflowInstanceStates State { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Bookmark> Bookmarks { get; set; }
         public virtual Workflow Workflow { get; set; }
         public virtual Conversation Conversation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ExternalTask> ExternalTasks { get; set; }
     }
 }

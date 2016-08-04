@@ -14,6 +14,8 @@ namespace FlowBotActivityLibrary
     {
         // Define an activity input argument of type string
         public OutArgument<string> Message { get; set; }
+        public OutArgument<string> Topic { get; set; }
+        public OutArgument<string> Locale { get; set; }
         public OutArgument<string> ConversationId { get; set; }
         public OutArgument<string> ConversationName { get; set; }
         public OutArgument<string> ChannelId { get; set; }
@@ -32,6 +34,8 @@ namespace FlowBotActivityLibrary
             }
             var message = connectorService.GetMessage();
             context.SetValue<string>(this.Message, message);
+            context.SetValue<string>(this.Topic, connectorService.GetTopic());
+            context.SetValue<string>(this.Locale, connectorService.GetLocale());
             context.SetValue<string>(this.ConversationId, connectorService.GetConversationId());
             context.SetValue<string>(this.ConversationName, connectorService.GetConversationName());
             context.SetValue<string>(this.ChannelId, connectorService.GetChannelId());

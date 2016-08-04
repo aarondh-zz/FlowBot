@@ -24,6 +24,7 @@
         <AssociationConnector Association="FlowBot.Data.Models.UserExternalTask" />
         <EntityTypeShape EntityType="FlowBot.Data.Models.ExternalTaskType" Width="1.5" PointX="10.75" PointY="0.75" />
         <AssociationConnector Association="FlowBot.Data.Models.ExternalTaskTypeExternalTask" />
+        <AssociationConnector Association="FlowBot.Data.Models.WorkflowInstanceExternalTask" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

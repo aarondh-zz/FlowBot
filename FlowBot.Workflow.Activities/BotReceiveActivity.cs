@@ -13,6 +13,8 @@ namespace FlowBotActivityLibrary
     public sealed class BotReceiveActivity : NativeActivity<string>
     {
         public OutArgument<string> Message { get; set; }
+        public OutArgument<string> Locale { get; set; }
+        public OutArgument<string> Topic { get; set; }
         public OutArgument<string> ConversationId { get; set; }
         public OutArgument<string> ConversationName { get; set; }
         public OutArgument<string> ChannelId { get; set; }
@@ -33,6 +35,8 @@ namespace FlowBotActivityLibrary
             var connectorService = iocService.Resolve<IConnectorService>();
             var message = connectorService.GetMessage(connectorActivity);
             context.SetValue<string>(this.Message, message);
+            context.SetValue<string>(this.Locale, connectorService.GetLocale(connectorActivity));
+            context.SetValue<string>(this.Topic, connectorService.GetTopic(connectorActivity));
             context.SetValue<string>(this.ConversationId, connectorService.GetConversationId(connectorActivity));
             context.SetValue<string>(this.ConversationName, connectorService.GetConversationName(connectorActivity));
             context.SetValue<string>(this.ChannelId, connectorService.GetChannelId(connectorActivity));

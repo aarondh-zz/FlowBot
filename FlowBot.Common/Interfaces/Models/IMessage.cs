@@ -10,7 +10,9 @@ namespace FlowBot.Common.Interfaces.Models
     {
         IUser From { get; }
         IUser To { get; }
+        string Topic { get; }
         string Body { get; }
+        string Locale { get; }
         IConversation Conversation { get; }
     }
 }

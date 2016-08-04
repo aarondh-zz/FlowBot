@@ -50,7 +50,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -135,6 +134,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DropSqlWorkflowInstanceStoreLogic.sql" />
+    <Content Include="DropSqlWorkflowInstanceStoreSchema.sql" />
     <Content Include="FlowBotModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FlowBotModel.Context.cs</LastGenOutput>
@@ -147,6 +148,8 @@
       <DependentUpon>FlowBotModel.edmx</DependentUpon>
     </Content>
     <Content Include="Initialize.sql" />
+    <Content Include="SqlWorkflowInstanceStoreLogic.sql" />
+    <Content Include="SqlWorkflowInstanceStoreSchema.sql" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

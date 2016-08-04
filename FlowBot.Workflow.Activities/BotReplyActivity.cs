@@ -14,6 +14,7 @@ namespace FlowBotActivityLibrary
     {
         [DefaultValue(null)]
         public InArgument<string> Text { get; set; }
+        public InArgument<string> Locale { get; set; }
 
         protected override void Execute(NativeActivityContext context)
         {
@@ -23,7 +24,7 @@ namespace FlowBotActivityLibrary
             {
                 throw new NotSupportedException(typeof(IConnectorService).FullName + " extension was not found");
             }
-            connectorService.Reply(context.GetValue<string>(this.Text));
+            connectorService.Reply(context.GetValue<string>(this.Text), context.GetValue<string>(this.Locale));
         }
     }
 }

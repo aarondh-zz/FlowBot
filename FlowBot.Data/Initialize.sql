@@ -1,1 +1,6 @@
 ﻿insert into workflows (Id, CreateDate, package, Name, body, major, minor, build, revision) values( NEWID(), GETDATE(),'FlowBot', 'Start','TBD',1,0,0,0)
+insert into externaltasktypes (Id, CreateDate, Name, [View]) values( NEWID(), GETDATE(),'GetMessageIntent', 'TBD')
+insert into UserGroups(Id, CreateDate, Name) values( NEWID(), GETDATE(),'User')
+insert into UserGroups(Id, CreateDate, Name) values( NEWID(), GETDATE(),'Worker')
+insert into UserGroups(Id, CreateDate, Name) values( NEWID(), GETDATE(),'Admin')
+insert into UserGroups(Id, CreateDate, Name) values( NEWID(), GETDATE(),'Bot')

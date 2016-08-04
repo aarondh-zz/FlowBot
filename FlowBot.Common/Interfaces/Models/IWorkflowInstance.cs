@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowBot.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,9 @@ namespace FlowBot.Common.Interfaces.Models
     {
         Guid InstanceId { get; }
         string ExternalId { get; }
-        DateTime CreateDate { get; }
         Nullable<DateTime> CompletionDate { get; }
         IConversation Conversation { get; }
         IWorkflow Workflow { get; }
+        WorkflowInstanceStates State { get; }
     }
 }

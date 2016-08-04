@@ -19,6 +19,7 @@ namespace FlowBot.Data
         public string Name { get; set; }
         public string OwnerDisplayName { get; set; }
         public Nullable<System.DateTime> CompletionDate { get; set; }
+        public FlowBot.Common.Models.BookmarkStates State { get; set; }
     
         public virtual WorkflowInstance WorkflowInstance { get; set; }
     }

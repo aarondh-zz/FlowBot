@@ -16,7 +16,9 @@ namespace FlowBot.Data
     {
         public System.Guid Id { get; set; }
         public System.DateTime CreateDate { get; set; }
+        public string Topic { get; set; }
         public string Body { get; set; }
+        public string Locale { get; set; }
     
         public virtual Conversation Conversation { get; set; }
         public virtual User From { get; set; }

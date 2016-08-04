@@ -8,5 +8,9 @@ namespace FlowBot.Common.Interfaces.Models
 {
     public interface IUser : IRecord
     {
+        string FirstName { get; }
+        string LastName { get; }
+        string ExternalId { get; }
+        ICollection<IUserGroup> UserGroups { get; }
     }
 }

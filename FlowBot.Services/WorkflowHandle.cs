@@ -15,13 +15,39 @@ namespace FlowBot.Services
     {
         public event EventHandler<BookMarkResumedEventArgs> BookMarkResumed;
         public string ExternalId { get; private set; }
-        public WorkflowIdentity Identity { get; private set; }
+        public Guid InstanceId
+        {
+            get
+            {
+                return _application.Id;
+            }
+        }
+        private class WorkflowIdentityWrapper : IWorkflowIdentity
+        {
+            private WorkflowIdentity _identity;
+            public int Build { get { return _identity.Version.Build; } }
+            public int Major { get { return _identity.Version.Major; } }
+            public int Minor { get { return _identity.Version.Minor; } }
+            public string Name { get { return _identity.Name; } }
+            public string Package { get { return _identity.Package; } }
+            public int Revision { get { return _identity.Version.Revision; } }
+            public WorkflowIdentityWrapper( WorkflowIdentity identity)
+            {
+                _identity = identity;
+            }
+
+            public override string ToString()
+            {
+                return _identity.ToString();
+            }
+        }
+        public IWorkflowIdentity Identity { get; private set; }
 
         private WorkflowApplication _application;
         private IIOCService _iocService;
         public WorkflowHandle(WorkflowIdentity identity, string externalId)
         {
-            this.Identity = identity;
+            this.Identity = new WorkflowIdentityWrapper(identity);
             this.ExternalId = externalId;
         }
 

@@ -9,5 +9,12 @@ namespace FlowBot.Data
 {
     public partial class User : IUser
     {
+        ICollection<IUserGroup> IUser.UserGroups
+        {
+            get
+            {
+                return this.UserGroups.Cast<IUserGroup>().ToArray();
+            }
+        }
     }
 }

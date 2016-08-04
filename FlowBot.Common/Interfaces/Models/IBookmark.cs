@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowBot.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace FlowBot.Common.Interfaces.Models
     {
         string Name { get; }
         string OwnerDisplayName { get; }
-        DateTime CreateDate { get; }
+        BookmarkStates State { get; }
         Nullable<DateTime> CompletionDate { get; }
         IWorkflowInstance WorkflowInstance { get; }
     }

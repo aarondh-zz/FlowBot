@@ -1,9 +1,8 @@
 ﻿using Autofac;
-using FlowBot.Common.Interfaces;
 using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Interfaces.Providers;
 using FlowBot.Common.Interfaces.Services;
-using FlowBot.Data;
+using FlowBot.Common.Models;
 using FlowBot.Services.Extensions;
 using System;
 using System.Activities;
@@ -78,10 +77,12 @@ namespace FlowBot.Services
                 else if (e.CompletionState == ActivityInstanceState.Canceled)
                 {
                     workflowHandle.Terminated("Canceled");
+                    _dataService.WorkflowInstances.SetState(workflowHandle, WorkflowInstanceStates.Canceled);
                 }
                 else
                 {
                     workflowHandle.Completed(e);
+                    _dataService.WorkflowInstances.SetState(workflowHandle, WorkflowInstanceStates.Completed);
                 }
                 iocService.Dispose();
                 workflowScope.Dispose();
@@ -95,6 +96,7 @@ namespace FlowBot.Services
                 }
                 Trace.WriteLine(message);
                 workflowHandle.Terminated(message);
+                _dataService.WorkflowInstances.SetState(workflowHandle, WorkflowInstanceStates.Aborted);
                 iocService.Dispose();
                 workflowScope.Dispose();
             };
@@ -108,38 +110,20 @@ namespace FlowBot.Services
                 }
                 Trace.WriteLine(message);
                workflowHandle.Terminated(message);
+                _dataService.WorkflowInstances.SetState(workflowHandle, WorkflowInstanceStates.Faulted);
                 iocService.Dispose();
                 workflowScope.Dispose();
                 return UnhandledExceptionAction.Terminate;
             };
             workflowApplication.PersistableIdle = delegate (WorkflowApplicationIdleEventArgs e)
             {
-                var identity = workflowHandle.Identity;
-                var workflow = _dataService.Workflows.Read(identity.Package, identity.Name, identity.Version.Major, identity.Version.Minor, identity.Version.Build, identity.Version.Revision);
                 var bookmarks = new List<IBookmark>();
-                var workflowInstance = new WorkflowInstance()
+                var workflowInstance = _dataService.WorkflowInstances.Read(workflowHandle);
+                foreach (var bookmark in e.Bookmarks)
                 {
-                    InstanceId = e.InstanceId,
-                    ExternalId = workflowHandle.ExternalId,
-                    Workflow = (Workflow)workflow
-                };
-                workflowInstance = (WorkflowInstance)_dataService.WorkflowInstances.Create(workflowInstance);
-                foreach (var wfBookmark in e.Bookmarks)
-                {
-                    var bookmark = new Data.Bookmark()
-                    {
-                        Name = wfBookmark.BookmarkName,
-                        OwnerDisplayName = wfBookmark.OwnerDisplayName,
-                        WorkflowInstance = workflowInstance
-                    };
-                    _dataService.Bookmarks.Create(bookmark);
+                    _dataService.Bookmarks.Create(workflowInstance, bookmark.BookmarkName, bookmark.OwnerDisplayName);
                 }
-                // Send the current WriteLine outputs to the status window.
-                var writers = e.GetInstanceExtensions<StringWriter>();
-                foreach (var writer in writers)
-                {
-                    UpdateStatus(writer.ToString());
-                }
+                _dataService.WorkflowInstances.SetState(workflowInstance, WorkflowInstanceStates.Idle);
                 iocService.Dispose();
                 workflowScope.Dispose();
                 return PersistableIdleAction.Unload;
@@ -164,23 +148,10 @@ namespace FlowBot.Services
             var workflowDefinition = LoadWorkflow(workflowName);
             var workflowIdentity = workflow.GetWorkflowIdentity();
             var workflowHandle = new WorkflowHandle(workflowIdentity, externalId);
-            workflowHandle.BookMarkResumed += (sender,args)=>
-            {
-                var bookmark = (Data.Bookmark)_dataService.Bookmarks.Read(externalId, args.BookmarkName);
-                if ( bookmark != null)
-                {
-                    bookmark.CompletionDate = DateTime.UtcNow;
-                    _dataService.Bookmarks.Update(bookmark);
-                }
-            };
             WorkflowApplication workflowApplication = new WorkflowApplication(workflowDefinition, inputs, workflowIdentity);
             ConfigureWorkflow(workflowApplication, workflowHandle);
+            _dataService.WorkflowInstances.Create(workflowHandle, WorkflowInstanceStates.Runnable);
             return workflowHandle;
-        }
-
-        private void WorkflowHandle_BookMarkResumed(object sender, Models.BookMarkResumedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         public IWorkflowHandle LookupWorkflow(string externalId)
@@ -197,6 +168,18 @@ namespace FlowBot.Services
             WorkflowApplication workflowApplication = new WorkflowApplication(workflowDefinition, workflowIdentity);
             ConfigureWorkflow(workflowApplication, workflowHandle);
             workflowApplication.Load(workflowInstance.InstanceId);
+            workflowHandle.BookMarkResumed += (sender, args) =>
+            {
+                var bookmark = _dataService.Bookmarks.Read(externalId, args.BookmarkName);
+                if (bookmark == null)
+                {
+                    Trace.WriteLine($"Bookmark {args.BookmarkName} caused {workflowHandle} to resume by bookmark was not found in db");
+                }
+                else
+                {
+                    _dataService.Bookmarks.SetState(bookmark, BookmarkStates.Completed);
+                }
+            };
             return workflowHandle;
         }
     }

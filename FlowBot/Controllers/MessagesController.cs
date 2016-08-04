@@ -13,6 +13,7 @@ using System.Web;
 using FlowBot.Common.Interfaces.Services;
 using System.Diagnostics;
 using Autofac;
+using FlowBot.Common.Interfaces.Models;
 
 namespace FlowBot
 {
@@ -20,9 +21,11 @@ namespace FlowBot
     public class MessagesController : ApiController
     {
         public IWorkflowService _workflowService;
-        public MessagesController(IWorkflowService workflowService)
+        public IDataService _dataService;
+        public MessagesController(IWorkflowService workflowService, IDataService dataService)
         {
             _workflowService = workflowService;
+            _dataService = dataService;
             _workflowService.SetWorkflowRootDirectory(HttpRuntime.AppDomainAppPath + "Workflow\\");
         }
         /// <summary>
@@ -41,13 +44,12 @@ namespace FlowBot
                     {
                         Dictionary<string, object> inputs = new Dictionary<string, object>();
                         var newWorkflow = _workflowService.NewWorkflow("FlowBot","Start", activity.Conversation.Id, inputs);
-                        newWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(activity);
+                        newWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(newWorkflow, activity);
                         newWorkflow.Run();
                     }
                     else
                     {
-                        existingWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(activity);
-                        //existingWorkflow.Run();
+                        existingWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(existingWorkflow, activity);
                         existingWorkflow.Resume<Activity>("message", activity);
                     }
                 }

@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,6 +48,8 @@
     <Compile Include="Interfaces\Models\IMessage.cs" />
     <Compile Include="Interfaces\Models\IRecord.cs" />
     <Compile Include="Interfaces\Models\IUserGroup.cs" />
+    <Compile Include="Interfaces\Models\IWorkflowVersion.cs" />
+    <Compile Include="Interfaces\Models\IWorkflowIdentity.cs" />
     <Compile Include="Interfaces\Models\IWorkflowInstance.cs" />
     <Compile Include="Interfaces\Providers\IBookmarkDataProvider.cs" />
     <Compile Include="Interfaces\Providers\IExternalTaskDataProvider.cs" />
@@ -72,7 +73,9 @@
     <Compile Include="Interfaces\Models\IWorkflowHandle.cs" />
     <Compile Include="Interfaces\Services\IWorkflowService.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\BookmarkStates.cs" />
     <Compile Include="Models\ExternalTaskStates.cs" />
+    <Compile Include="Models\WorkflowInstanceStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WorkflowEventArgs.cs" />
   </ItemGroup>

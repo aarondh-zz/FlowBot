@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace FlowBot.Common.Interfaces.Models
 {
-    public interface IWorkflow : IWorkflowIdentity, IRecord
+    public interface IWorkflowIdentity : IWorkflowVersion
     {
-        string Body { get; }
+        string Name { get; }
+        string Package { get; }
     }
 }

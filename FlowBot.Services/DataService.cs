@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlowBot.Common.Models;
 
 namespace FlowBot.Services
 {
@@ -30,6 +31,7 @@ namespace FlowBot.Services
                     CreateDate = DateTime.UtcNow,
                     Name = obj.Name,
                     OwnerDisplayName = obj.OwnerDisplayName,
+                    State = obj.State,
                     WorkflowInstance = (WorkflowInstance)obj.WorkflowInstance
                 };
 
@@ -40,12 +42,30 @@ namespace FlowBot.Services
                 return newBookmark;
             }
 
+            public IBookmark Create(IWorkflowInstance workflowInstance, string bookmarkName, string ownerDisplayName, BookmarkStates state = BookmarkStates.Waiting, Nullable<DateTime> completionDate = null)
+            {
+                var newBookmark = new Bookmark()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    Name = bookmarkName,
+                    OwnerDisplayName = ownerDisplayName,
+                    State = state,
+                    CompletionDate = completionDate,
+                    WorkflowInstance = (WorkflowInstance)workflowInstance
+                };
+
+
+                _dataService._container.Bookmarks.Add(newBookmark);
+                _dataService._container.SaveChanges();
+
+                return newBookmark;
+            }
             public void Delete(IBookmark obj)
             {
                 _dataService._container.Bookmarks.Remove((Bookmark)obj);
                 _dataService._container.SaveChanges();
             }
-
             public IQueryable<IBookmark> List()
             {
                 return _dataService._container.Bookmarks;
@@ -61,6 +81,22 @@ namespace FlowBot.Services
                 return _dataService._container.Bookmarks.FirstOrDefault(bm => bm.WorkflowInstance.ExternalId == externalId && bm.Name == bookmarkName);
             }
 
+            public void SetState(IBookmark bookmark, BookmarkStates state)
+            {
+                var dbBookmark = (Bookmark)bookmark;
+                dbBookmark.State = state;
+                switch(state)
+                {
+                    case BookmarkStates.Undefined:
+                    case BookmarkStates.Waiting:
+                        dbBookmark.CompletionDate = null;
+                        break;
+                    case BookmarkStates.Completed:
+                        dbBookmark.CompletionDate = DateTime.UtcNow;
+                        break;
+                }
+                Update(dbBookmark);
+            }
             public void Update(IBookmark obj)
             {
                 _dataService._container.SaveChanges();
@@ -88,6 +124,25 @@ namespace FlowBot.Services
                 return newConversation;
             }
 
+            public IConversation Create(IWorkflowHandle workflowHandle, string externalId)
+            {
+                var workflowInstance = _dataService.WorkflowInstances.Read(workflowHandle);
+                if ( workflowInstance == null)
+                {
+                    throw new ArgumentException($"The workflow handle {workflowHandle} does not have a corresponding workflow instance in the db", "workflowHandle");
+                }
+                var newConversation = new Conversation()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    ExternalId = externalId,
+                    WorkflowInstance = (WorkflowInstance)workflowInstance
+                };
+                _dataService._container.Conversations.Add(newConversation);
+                _dataService._container.SaveChanges();
+                return newConversation;
+            }
+
             public void Delete(IConversation obj)
             {
                 _dataService._container.Conversations.Add((Conversation)obj);
@@ -101,9 +156,22 @@ namespace FlowBot.Services
 
             public IConversation Read(Guid id)
             {
-                return _dataService._container.Conversations.Where(c=>c.Id == id).FirstOrDefault();
+                return _dataService._container.Conversations.Where(c => c.Id == id).FirstOrDefault();
             }
 
+            public IConversation Read(IWorkflowHandle workflowHandle, string externalId)
+            {
+                return _dataService._container.Conversations.Where(c => c.WorkflowInstance.InstanceId == workflowHandle.InstanceId && c.ExternalId == externalId).FirstOrDefault();
+            }
+            public IConversation ReadOrCreate(IWorkflowHandle workflowHandle, string externalId)
+            {
+                var conversation = Read(workflowHandle, externalId);
+                if ( conversation == null)
+                {
+                    conversation = Create(workflowHandle, externalId);
+                }
+                return conversation;
+            }
             public void Update(IConversation obj)
             {
                 _dataService._container.SaveChanges();
@@ -234,7 +302,27 @@ namespace FlowBot.Services
                     CreateDate = DateTime.UtcNow,
                     From = (User)obj.From,
                     To = (User)obj.To,
+                    Topic = obj.Topic,
                     Body = obj.Body,
+                    Locale = obj.Locale,
+                };
+                _dataService._container.Messages.Add(newMessage);
+                _dataService._container.SaveChanges();
+                return newMessage;
+            }
+
+            public IMessage Create( IConversation conversation, IUser from, IUser to, string topic, string body, string locale)
+            {
+                var newMessage = new Message()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    Conversation = (Conversation)conversation,
+                    From = (User)from,
+                    To = (User)to,
+                    Topic = topic,
+                    Body = body,
+                    Locale = locale
                 };
                 _dataService._container.Messages.Add(newMessage);
                 _dataService._container.SaveChanges();
@@ -269,15 +357,80 @@ namespace FlowBot.Services
             {
                 _dataService = dataService;
             }
+            private void SplitName(string name, out string firstName, out string lastName)
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    firstName = "";
+                    lastName = "";
+                    return;
+                }
+                var components = name.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (components.Length == 1)
+                {
+                    firstName = "";
+                    lastName = name;
+                    return;
+                }
+                else
+                {
+                    firstName = components[0];
+                    lastName = components[components.Length-1];
+                }
+            }
 
             public IUser Create(IUser obj)
             {
-                throw new NotImplementedException();
+                var newUser = new User()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    ExternalId = obj.ExternalId,
+                    FirstName = obj.FirstName,
+                    LastName = obj.LastName,
+                };
+                _dataService._container.Users.Add(newUser);
+                _dataService._container.SaveChanges();
+                return newUser;
+            }
+
+            public IUser Create(string userGroupName, string externalId, string name)
+            {
+                string firstName;
+                string lastName;
+                SplitName(name, out firstName, out lastName);
+                var userGroup = _dataService.UserGroups.Read(userGroupName);
+                if (userGroup == null)
+                {
+                    throw new InvalidOperationException($"\"{userGroupName}\" is not a valid user group name");
+                }
+                var newUser = new User()
+                {
+                    Id = Guid.NewGuid(),
+                    ExternalId = externalId,
+                    CreateDate = DateTime.UtcNow,
+                    FirstName = firstName,
+                    LastName = lastName
+                };
+                newUser.UserGroups.Add((UserGroup)userGroup);
+                _dataService._container.Users.Add(newUser);
+                _dataService._container.SaveChanges();
+                return newUser;
+            }
+            public IUser ReadOrCreate(string userGroupName, string externalId, string name)
+            {
+                var user = Read(externalId, name );
+                if ( user == null)
+                {
+                    user = Create(userGroupName, externalId, name);
+                }
+                return user;
             }
 
             public void Delete(IUser obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.Users.Remove((User)obj);
+                _dataService._container.SaveChanges();
             }
 
             public IQueryable<IUser> List()
@@ -287,12 +440,32 @@ namespace FlowBot.Services
 
             public IUser Read(Guid id)
             {
-                throw new NotImplementedException();
+                return _dataService._container.Users.Where(u=>u.Id==id).FirstOrDefault();
             }
 
             public void Update(IUser obj)
             {
                 _dataService._container.SaveChanges();
+            }
+
+            public IUser ReadByName(string name)
+            {
+                string firstName;
+                string lastName;
+                SplitName(name, out firstName, out lastName);
+                return _dataService._container.Users.Where(u => u.FirstName == firstName && u.LastName == lastName).FirstOrDefault();
+            }
+
+            public IUser ReadByExternalId(string externalId)
+            {
+                return _dataService._container.Users.Where(u => u.ExternalId == externalId).FirstOrDefault();
+            }
+            public IUser Read(string externalId, string name)
+            {
+                string firstName;
+                string lastName;
+                SplitName(name, out firstName, out lastName);
+                return _dataService._container.Users.Where(u => u.ExternalId == externalId && u.FirstName == firstName && u.LastName == lastName).FirstOrDefault();
             }
         }
         private class UserGroupDataProvider : IUserGroupDataProvider
@@ -376,6 +549,10 @@ namespace FlowBot.Services
                                 select w;
                 return workflows.FirstOrDefault();
             }
+            public IWorkflow Read(IWorkflowIdentity workflowIdentity)
+            {
+                return Read(workflowIdentity.Package, workflowIdentity.Name, workflowIdentity.Major, workflowIdentity.Minor, workflowIdentity.Build, workflowIdentity.Revision);
+            }
 
             public IWorkflow Read(Guid id)
             {
@@ -410,6 +587,28 @@ namespace FlowBot.Services
                 return newWorkflowInstance;
             }
 
+            public IWorkflowInstance Create(IWorkflowHandle workflowHandle, WorkflowInstanceStates state = WorkflowInstanceStates.Runnable, Nullable<DateTime> completionDate = null)
+            {
+                var workflow = _dataService.Workflows.Read(workflowHandle.Identity);
+                if ( workflow == null)
+                {
+                    throw new ArgumentException($"Workflow not found for identity {workflowHandle.Identity}", "workflowHandle");
+                }
+                var newWorkflowInstance = new WorkflowInstance()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    InstanceId = workflowHandle.InstanceId,
+                    ExternalId = workflowHandle.ExternalId,
+                    State = state,
+                    CompletionDate = completionDate,
+                    Workflow = (Workflow)workflow
+                };
+                _dataService._container.WorkflowInstances.Add(newWorkflowInstance);
+                _dataService._container.SaveChanges();
+                return newWorkflowInstance;
+            }
+
             public void Delete(IWorkflowInstance obj)
             {
                 _dataService._container.WorkflowInstances.Remove((WorkflowInstance)obj);
@@ -426,9 +625,43 @@ namespace FlowBot.Services
                 return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.Id == id);
             }
 
+            public IWorkflowInstance Read(IWorkflowHandle workflowHandle)
+            {
+                return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.InstanceId == workflowHandle.InstanceId);
+            }
+
             public IWorkflowInstance Read(string externalId)
             {
                 return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.ExternalId == externalId);
+            }
+
+            public void SetState(IWorkflowInstance workflowInstance, WorkflowInstanceStates state)
+            {
+                var dbWorkflowInstance = (WorkflowInstance)workflowInstance;
+                dbWorkflowInstance.State = state;
+                switch(state)
+                {
+                    case WorkflowInstanceStates.Undefined:
+                    case WorkflowInstanceStates.Runnable:
+                    case WorkflowInstanceStates.Idle:
+                        dbWorkflowInstance.CompletionDate = null;
+                        break;
+                    case WorkflowInstanceStates.Aborted:
+                    case WorkflowInstanceStates.Faulted:
+                    case WorkflowInstanceStates.Completed:
+                        dbWorkflowInstance.CompletionDate = DateTime.UtcNow;
+                        break;
+                }
+                Update(dbWorkflowInstance);
+            }
+            public void SetState(IWorkflowHandle workflowHandle, WorkflowInstanceStates state)
+            {
+                var workflowInstance = Read(workflowHandle);
+                if ( workflowInstance == null)
+                {
+                    throw new ArgumentException("Workflow {workflowHandle} not found in SetState", "workflowHandle");
+                }
+                SetState(workflowInstance, state);
             }
 
             public void Update(IWorkflowInstance obj)

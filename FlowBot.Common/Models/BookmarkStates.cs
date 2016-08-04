@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowBot.Common.Interfaces.Models
+namespace FlowBot.Common.Models
 {
-    public interface IWorkflow : IWorkflowIdentity, IRecord
+    public enum BookmarkStates
     {
-        string Body { get; }
+        Undefined = 0,
+        Waiting = 1,
+        Completed = 2
     }
 }
