@@ -13,12 +13,15 @@ using FlowBot.Common.Interfaces.Services;
 using System.Diagnostics;
 using Autofac;
 using FlowBot.Common.Interfaces.Models;
+using FlowBot.Common.Exceptions;
 
 namespace FlowBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        private const string DefaultPackageName = "FlowBot";
+        private const string DefaultWorkflowName = "Start";
         public IWorkflowService _workflowService;
         public IDataService _dataService;
         public MessagesController(IWorkflowService workflowService, IDataService dataService)
@@ -27,22 +30,58 @@ namespace FlowBot
             _dataService = dataService;
             _workflowService.SetWorkflowRootDirectory(HttpRuntime.AppDomainAppPath + "Workflow\\");
         }
+        private bool ParsePath(string path, out string packageName, out string workflowName)
+        {
+            packageName = null;
+            workflowName = DefaultWorkflowName;
+            if ( string.IsNullOrWhiteSpace(path))
+            {
+                return false;
+            }
+            else
+            {
+                string[] components = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                switch( components.Length)
+                {
+                    case 0:
+                        return false;
+                    case 1:
+                        packageName = components[0];
+                        workflowName = DefaultWorkflowName;
+                        return true;
+                    case 2:
+                        packageName = components[0];
+                        workflowName = components[1];
+                        return true;
+                    default:
+                        return false; 
+                }
+            }
+        }
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
-        public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
+        public async Task<HttpResponseMessage> Post([FromUri]string packageName, [FromUri]string workflowName,[FromBody]Activity activity)
         {
             string workflowPath = null;
             try
             {
+                if (packageName == null)
+                {
+                    packageName = DefaultPackageName;
+                }
+                if (workflowName == null)
+                {
+                    workflowName = DefaultWorkflowName;
+                }
                 if (activity.Type == ActivityTypes.Message)
                 {
                     var existingWorkflow = _workflowService.LookupWorkflow(activity.Conversation.Id);
-                    if ( existingWorkflow == null)
+                    if (existingWorkflow == null)
                     {
                         Dictionary<string, object> inputs = new Dictionary<string, object>();
-                        var newWorkflow = _workflowService.NewWorkflow("FlowBot","Start", activity.Conversation.Id, inputs);
+                        var newWorkflow = _workflowService.NewWorkflow(packageName, workflowName, activity.Conversation.Id, inputs);
                         newWorkflow.IOCService.Resolve<IConnectorService>().BindActivity(newWorkflow, activity);
                         newWorkflow.Run();
                     }
@@ -54,16 +93,23 @@ namespace FlowBot
                 }
                 else
                 {
-                    workflowPath = "Handle-System-Message";
+                    workflowName = "Handle-System-Message";
                     HandleSystemMessage(activity);
                 }
                 var response = Request.CreateResponse(HttpStatusCode.OK);
                 return response;
             }
-            catch(Exception e)
+            catch(WorkflowNotFoundException e)
             {
                 Debug.WriteLine(e);
-                var apiResponse = new APIResponse($"Workflow {workflowPath} reported {e.Message}");
+                var apiResponse = new APIResponse(e.Message);
+                var response = Request.CreateResponse<APIResponse>(HttpStatusCode.NotFound, apiResponse);
+                return response;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                var apiResponse = new APIResponse($"Package {packageName} Workflow {workflowName} reported {e.Message}");
                 var response = Request.CreateResponse<APIResponse>(HttpStatusCode.InternalServerError, apiResponse);
                 return response;
             }

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using FlowBot.Common.Exceptions;
 using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Interfaces.Providers;
 using FlowBot.Common.Interfaces.Services;
@@ -142,10 +143,18 @@ namespace FlowBot.Services
                 return ActivityXamlServices.Load(new XamlXmlReader(streamReader), settings);
             }
         }
-        public IWorkflowHandle NewWorkflow(string package, string workflowName, string externalId, IDictionary<string, object> inputs)
+        public IWorkflowHandle NewWorkflow(string packageName, string workflowName, string externalId, IDictionary<string, object> inputs)
         {
-            var workflow = _dataService.Workflows.Read(package, workflowName);
+            var workflow = _dataService.Workflows.Read(packageName, workflowName);
+            if ( workflow == null)
+            {
+                throw new WorkflowNotFoundException(packageName, workflowName);
+            }
             var workflowDefinition = LoadWorkflow(workflowName);
+            if (workflowDefinition == null)
+            {
+                throw new WorkflowNotFoundException(packageName, workflowName);
+            }
             var workflowIdentity = workflow.GetWorkflowIdentity();
             var workflowHandle = new WorkflowHandle(workflowIdentity, externalId);
             WorkflowApplication workflowApplication = new WorkflowApplication(workflowDefinition, inputs, workflowIdentity);

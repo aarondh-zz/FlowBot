@@ -26,6 +26,11 @@ namespace FlowBot
 
             // Web API routes
             config.MapHttpAttributeRoutes();
+            config.Routes.MapHttpRoute(
+                name: "Messages",
+                routeTemplate: "api/messages/{packageName}/{workflowName}",
+                defaults: new { controller ="Messages" }
+            );
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

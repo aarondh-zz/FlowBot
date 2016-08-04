@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\WorkflowNotFoundException.cs" />
     <Compile Include="Interfaces\Models\IBookmark.cs" />
     <Compile Include="Interfaces\Models\IConversation.cs" />
     <Compile Include="Interfaces\Models\IExternalTask.cs" />
