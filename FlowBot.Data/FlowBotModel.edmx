@@ -73,9 +73,10 @@
     <Property Name="CreateDate" Type="datetime" Nullable="false" />
     <Property Name="ClaimDate" Type="datetime" Nullable="true" />
     <Property Name="CompletionDate" Type="datetime" Nullable="true" />
-    <Property Name="InputData" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="OutputData" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ExternalId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="InputData" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="OutputData" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ExternalId" Type="nvarchar" Nullable="true" MaxLength="64" />
+    <Property Name="BookmarkName" Type="nvarchar" Nullable="false" MaxLength="64" />
     <Property Name="UserGroup_Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Worker_Id" Type="uniqueidentifier" Nullable="true" />
     <Property Name="ExternalTaskType_Id" Type="uniqueidentifier" Nullable="false" />
@@ -389,11 +390,12 @@
           <Property Name="ClaimDate" Type="DateTime" Nullable="true" Precision="3" />
           <NavigationProperty Name="Worker" Relationship="FlowBot.Data.Models.UserExternalTask" FromRole="ExternalTask" ToRole="User" />
           <Property Name="CompletionDate" Type="DateTime" Nullable="true" Precision="3" />
-          <Property Name="InputData" Type="String" Nullable="false" />
-          <Property Name="OutputData" Type="String" Nullable="false" />
+          <Property Name="InputData" Type="String" Nullable="true" />
+          <Property Name="OutputData" Type="String" Nullable="true" />
           <NavigationProperty Name="ExternalTaskType" Relationship="FlowBot.Data.Models.ExternalTaskTypeExternalTask" FromRole="ExternalTask" ToRole="ExternalTaskType" />
           <NavigationProperty Name="WorkflowInstance" Relationship="FlowBot.Data.Models.WorkflowInstanceExternalTask" FromRole="ExternalTask" ToRole="WorkflowInstance" />
-          <Property Name="ExternalId" Type="String" Nullable="false" />
+          <Property Name="ExternalId" Type="String" Nullable="true" MaxLength="64" />
+          <Property Name="BookmarkName" Type="String" Nullable="false" MaxLength="64" />
         </EntityType>
         <EntityType Name="Workflow">
           <Key>
@@ -556,6 +558,7 @@
           <ScalarProperty Name="InputData" ColumnName="InputData" />
           <ScalarProperty Name="OutputData" ColumnName="OutputData" />
           <ScalarProperty Name="ExternalId" ColumnName="ExternalId" />
+          <ScalarProperty Name="BookmarkName" ColumnName="BookmarkName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

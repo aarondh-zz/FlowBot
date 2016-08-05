@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FlowBot.Common.Models;
+using Newtonsoft.Json;
 
 namespace FlowBot.Services
 {
@@ -204,7 +205,7 @@ namespace FlowBot.Services
                 return newExternalTask;
             }
 
-            public IExternalTask Create(string externalTaskTypeName, string externalId, string userGroupName, object inputData)
+            public IExternalTask Create(IWorkflowInstance workflowInstance, string externalTaskTypeName, string externalId, string userGroupName, object inputData, string bookmarkName)
             {
                 var externalTaskType = _dataService.ExternalTaskTypes.Read(externalTaskTypeName);
                 if (externalTaskType == null)
@@ -220,10 +221,17 @@ namespace FlowBot.Services
                 {
                     Id = Guid.NewGuid(),
                     CreateDate = DateTime.UtcNow,
+                    ExternalId = externalId,
                     ExternalTaskType = (ExternalTaskType)externalTaskType,
                     InputData = null,
-                    UserGroup = (UserGroup)userGroup
+                    BookmarkName = bookmarkName,
+                    UserGroup = (UserGroup)userGroup,
+                    WorkflowInstance = (WorkflowInstance)workflowInstance
                 };
+                if (inputData != null)
+                {
+                    newExternalTask.InputData = JsonConvert.SerializeObject(inputData);
+                }
                 _dataService._container.ExternalTasks.Add(newExternalTask);
                 _dataService._container.SaveChanges();
                 return newExternalTask;
@@ -624,10 +632,13 @@ namespace FlowBot.Services
             {
                 return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.Id == id);
             }
-
+            public IWorkflowInstance ReadByInstanceId(Guid instanceId)
+            {
+                return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.InstanceId == instanceId);
+            }
             public IWorkflowInstance Read(IWorkflowHandle workflowHandle)
             {
-                return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.InstanceId == workflowHandle.InstanceId);
+                return ReadByInstanceId(workflowHandle.InstanceId);
             }
 
             public IWorkflowInstance Read(string externalId)

@@ -21,6 +21,7 @@ namespace FlowBotActivityLibrary
         public OutArgument<Account> From { get; set; }
         protected override void Execute(NativeActivityContext context)
         {
+            BookmarkScope x;
             context.CreateBookmark("message",
                        new BookmarkCallback(OnResumeBookmark));
         }

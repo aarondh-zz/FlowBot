@@ -13,6 +13,7 @@ namespace FlowBot.Common.Interfaces.Providers
 
         IWorkflowInstance Read(string externalId);
         IWorkflowInstance Read(IWorkflowHandle workflowHandle);
+        IWorkflowInstance ReadByInstanceId(Guid instanceId);
         IWorkflowInstance Create(IWorkflowHandle workflowHandle, WorkflowInstanceStates state = WorkflowInstanceStates.Runnable, Nullable<DateTime> completionDate = null);
         void SetState(IWorkflowInstance workflowInstance, WorkflowInstanceStates state);
         void SetState(IWorkflowHandle workflowHandle, WorkflowInstanceStates state);

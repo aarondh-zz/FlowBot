@@ -64,7 +64,6 @@ namespace FlowBot
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromUri]string packageName, [FromUri]string workflowName,[FromBody]Activity activity)
         {
-            string workflowPath = null;
             try
             {
                 if (packageName == null)

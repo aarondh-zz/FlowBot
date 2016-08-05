@@ -32,5 +32,12 @@ namespace FlowBot.Data
                 return this.Worker;
             }
         }
+        IWorkflowInstance IExternalTask.WorkflowInstance
+        {
+            get
+            {
+                return this.WorkflowInstance;
+            }
+        }
     }
 }

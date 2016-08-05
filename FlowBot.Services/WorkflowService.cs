@@ -19,32 +19,61 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xaml;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace FlowBot.Services
 {
     public class WorkflowService : IWorkflowService
     {
-        private static string workflowInstanceStoreConnectionString = ConfigurationManager.ConnectionStrings["WorkflowInstanceStore"].ConnectionString;
+        private static readonly XName WorkflowHostTypePropertyName = XNamespace.Get("urn:schemas-microsoft-com:System.Activities/4.0/properties").GetName("WorkflowHostType");
+        private static string s_workflowInstanceStoreConnectionString = ConfigurationManager.ConnectionStrings["WorkflowInstanceStore"].ConnectionString;
+        private const string WorkflowFileExtension = ".xaml";
         private ILifetimeScopeProvider _lifetimeScopeProvider;
         private IDataService _dataService;
         private InstanceStore _instanceStore = null;
         private InstanceView _instanceView = null;
         private string _workflowRootDirectory;
-        private const string WorkflowFileExtension = ".xaml";
         public WorkflowService(ILifetimeScopeProvider lifetimeScopeProvider, IDataService dataService)
         {
             _lifetimeScopeProvider = lifetimeScopeProvider;
             _dataService = dataService;
         }
-        public void SetWorkflowRootDirectory( string workflowRootDirectory )
+        public void SetWorkflowRootDirectory(string workflowRootDirectory)
         {
             _workflowRootDirectory = workflowRootDirectory;
         }
+        private static XName CreateHostTypeName(WorkflowIdentity workflowIdentity)
+        {
+            return XName.Get(workflowIdentity.Package + ":" + workflowIdentity.Name + ":" + workflowIdentity.Version, typeof(WorkflowService).FullName);
+        }
+
+        private static InstanceHandle CreateInstanceStoreOwnerHandle(InstanceStore store, XName wfHostTypeName)
+        {
+
+            InstanceHandle ownerHandle = store.CreateInstanceHandle();
+
+            CreateWorkflowOwnerCommand ownerCommand = new CreateWorkflowOwnerCommand()
+            {
+
+                InstanceOwnerMetadata = {
+
+                { WorkflowHostTypePropertyName, new InstanceValue(wfHostTypeName) }
+
+            }
+
+            };
+
+            store.DefaultInstanceOwner = store.Execute(ownerHandle, ownerCommand, TimeSpan.FromSeconds(30)).InstanceOwner;
+
+            return ownerHandle;
+
+        }
+
         protected InstanceStore GetInstanceStore()
         {
-            if ( _instanceStore == null)
+            if (_instanceStore == null)
             {
-                SqlWorkflowInstanceStore instanceStore = new SqlWorkflowInstanceStore(workflowInstanceStoreConnectionString);
+                SqlWorkflowInstanceStore instanceStore = new SqlWorkflowInstanceStore(s_workflowInstanceStoreConnectionString);
                 instanceStore.InstanceCompletionAction = InstanceCompletionAction.DeleteAll;
                 var instanceHandle = instanceStore.CreateInstanceHandle();
                 _instanceView = instanceStore.Execute(instanceHandle, new CreateWorkflowOwnerCommand(), TimeSpan.FromSeconds(5));
@@ -54,11 +83,23 @@ namespace FlowBot.Services
             }
             return _instanceStore;
         }
+        public bool WaitForRunnableInstance(InstanceHandle instanceHandle)
+        {
+            var instancePersistenceEvents = _instanceStore.WaitForEvents(instanceHandle, TimeSpan.FromHours(6));
+            foreach (var instancePersistenceEvent in instancePersistenceEvents)
+            {
+                if (instancePersistenceEvent.Equals(HasRunnableWorkflowEvent.Value))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         protected void UpdateStatus(string message)
         {
             Debug.WriteLine(message);
         }
-        private void ConfigureWorkflow( WorkflowApplication workflowApplication, WorkflowHandle workflowHandle)
+        private void ConfigureWorkflow(WorkflowApplication workflowApplication, WorkflowHandle workflowHandle)
         {
             var workflowScope = _lifetimeScopeProvider.BeginNewLifetimeScope<ILifetimeScope>("workflow");
             var iocService = new IOCService(workflowScope);
@@ -105,12 +146,12 @@ namespace FlowBot.Services
             workflowApplication.OnUnhandledException = delegate (WorkflowApplicationUnhandledExceptionEventArgs e)
             {
                 var message = $"Unhandled Exception in workflow {workflowHandle}: {e.UnhandledException.GetType().FullName}\r\n{e.UnhandledException.Message}";
-                if ( e.UnhandledException.InnerException != null && e.UnhandledException.InnerException != e.UnhandledException)
+                if (e.UnhandledException.InnerException != null && e.UnhandledException.InnerException != e.UnhandledException)
                 {
                     message += $"\r\n{e.UnhandledException.InnerException.Message}";
                 }
                 Trace.WriteLine(message);
-               workflowHandle.Terminated(message);
+                workflowHandle.Terminated(message);
                 _dataService.WorkflowInstances.SetState(workflowHandle, WorkflowInstanceStates.Faulted);
                 iocService.Dispose();
                 workflowScope.Dispose();
@@ -146,7 +187,7 @@ namespace FlowBot.Services
         public IWorkflowHandle NewWorkflow(string packageName, string workflowName, string externalId, IDictionary<string, object> inputs)
         {
             var workflow = _dataService.Workflows.Read(packageName, workflowName);
-            if ( workflow == null)
+            if (workflow == null)
             {
                 throw new WorkflowNotFoundException(packageName, workflowName);
             }

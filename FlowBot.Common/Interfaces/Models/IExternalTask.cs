@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace FlowBot.Common.Interfaces.Models
 {
-    public interface IExternalTask
+    public interface IExternalTask : IRecord
     {
         IExternalTaskType ExternalTaskType { get; }
+        IWorkflowInstance WorkflowInstance { get; }
         IUser Worker { get; }
         IUserGroup UserGroup { get; }
         Nullable<DateTime> ClaimDate { get; }
         Nullable<DateTime> CompletionDate { get; }
+        string ExternalId { get; }
         string InputData { get; }
         string OutputData { get; }
+        string BookmarkName { get; }
     }
 }

@@ -9,6 +9,6 @@ namespace FlowBot.Common.Interfaces.Providers
 {
     public interface IExternalTaskDataProvider : IDataProvider<IExternalTask>
     {
-        IExternalTask Create(string externalTaskTypeName, string externalId, string userGroupName, object inputData);
+        IExternalTask Create(IWorkflowInstance workflowInstance, string externalTaskTypeName, string externalId, string userGroupName, object inputData, string bookmarkName);
     }
 }

@@ -65,7 +65,6 @@
       <AssemblyReference>System.EnterpriseServices</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
       <AssemblyReference>FlowBot.Common</AssemblyReference>
-      <AssemblyReference>FlowBot.Data</AssemblyReference>
       <AssemblyReference>FlowBot.Services</AssemblyReference>
       <AssemblyReference>FlowBotActivityLibrary</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
@@ -82,7 +81,7 @@
       <Variable x:TypeArguments="scg:List(fcim:IIntent)" Name="intents" />
       <Variable x:TypeArguments="scg:List(fcim:IEntity)" Name="entities" />
     </Sequence.Variables>
-    <f:BotDialog ChannelId="{x:Null}" sap2010:WorkflowViewState.IdRef="BotDialog_1">
+    <f:BotDialog ChannelId="{x:Null}" Locale="{x:Null}" Topic="{x:Null}" sap2010:WorkflowViewState.IdRef="BotDialog_1">
       <f:BotDialog.ConversationId>
         <OutArgument x:TypeArguments="x:String">
           <mca:CSharpReference x:TypeArguments="x:String">conversationId</mca:CSharpReference>
@@ -129,20 +128,20 @@
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-          <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_1" Text="Well hi there right back at you!" />
+          <f:BotReplyActivity Locale="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReplyActivity_1" Text="Well hi there right back at you!" />
           <While sap2010:WorkflowViewState.IdRef="While_1">
             <While.Condition>
               <mca:CSharpValue x:TypeArguments="x:Boolean">message != "exit"</mca:CSharpValue>
             </While.Condition>
             <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
-              <f:BotReceiveActivity ChannelId="{x:Null}" ConversationId="{x:Null}" ConversationName="{x:Null}" From="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReceiveActivity_1">
+              <f:BotReceiveActivity ChannelId="{x:Null}" ConversationId="{x:Null}" ConversationName="{x:Null}" From="{x:Null}" Locale="{x:Null}" Topic="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReceiveActivity_1">
                 <f:BotReceiveActivity.Message>
                   <OutArgument x:TypeArguments="x:String">
                     <mca:CSharpReference x:TypeArguments="x:String">message</mca:CSharpReference>
                   </OutArgument>
                 </f:BotReceiveActivity.Message>
               </f:BotReceiveActivity>
-              <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_3">
+              <f:BotReplyActivity Locale="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReplyActivity_3">
                 <f:BotReplyActivity.Text>
                   <InArgument x:TypeArguments="x:String">
                     <mca:CSharpValue x:TypeArguments="x:String">"You said: " + message</mca:CSharpValue>
@@ -151,25 +150,42 @@
               </f:BotReplyActivity>
             </Sequence>
           </While>
-          <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_4" Text="Goodbye" />
+          <f:BotReplyActivity Locale="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReplyActivity_4" Text="Goodbye" />
         </Sequence>
       </If.Then>
       <If.Else>
-        <f:BotReplyActivity sap2010:WorkflowViewState.IdRef="BotReplyActivity_2">
-          <f:BotReplyActivity.Text>
-            <InArgument x:TypeArguments="x:String">
-              <mca:CSharpValue x:TypeArguments="x:String">"I don't understand: " + message</mca:CSharpValue>
-            </InArgument>
-          </f:BotReplyActivity.Text>
-        </f:BotReplyActivity>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="scg:Dictionary(x:String, x:Object)" Name="getMessageIntentResult" />
+          </Sequence.Variables>
+          <f:ExternalTaskActivity ExternalId="{x:Null}" ExternalTaskType="GetMessageIntent" sap2010:WorkflowViewState.IdRef="ExternalTaskActivity_2" UserGroup="Worker">
+            <f:ExternalTaskActivity.InputData>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)">new Dictionary&lt;string, object&gt;() { { "Message", message }, { "ConversationId", conversationId }}</mca:CSharpValue>
+              </InArgument>
+            </f:ExternalTaskActivity.InputData>
+            <f:ExternalTaskActivity.OutputData>
+              <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)">
+                <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:String, x:Object)">getMessageIntentResult</mca:CSharpReference>
+              </OutArgument>
+            </f:ExternalTaskActivity.OutputData>
+          </f:ExternalTaskActivity>
+          <f:BotReplyActivity Locale="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReplyActivity_2">
+            <f:BotReplyActivity.Text>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">"I don't understand: " + message</mca:CSharpValue>
+              </InArgument>
+            </f:BotReplyActivity.Text>
+          </f:BotReplyActivity>
+        </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1lDOlxVc2Vyc1x2LWFkYWlcRG9jdW1lbnRzXFZpc3VhbCBTdHVkaW8gMjAxNVxQcm9qZWN0c1xGbG93Qm90XEZsb3dCb3RcV29ya2Zsb3dcU3RhcnQueGFtbBtMA6gBDgIBAVUFahMCAUdrBXsWAgEwfAWmAQoCAQJdC11hAgFdZwtnWAIBVlgLWF8CAU9iC2JYAgFIbgtuZwIBQGtPa1UCAT94C3hQAgE4cwtzZgIBMX8Lf4kBAgEDgwEJmwEUAgESngEJpAEeAgEKhAELhAF+AgEuhQELmQETAgEVmgELmgFlAgEToQEPoQFtAgELhAFZhAF7AgEviQENmAEYAgEdhwEPhwFfAgEWmgFZmgFiAgEUigEPkAEmAgEmkQEPlwEkAgEejQEVjQFiAgEnlAEVlAFpAgEf</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1lDOlxVc2Vyc1x2LWFkYWlcRG9jdW1lbnRzXFZpc3VhbCBTdHVkaW8gMjAxNVxQcm9qZWN0c1xGbG93Qm90XEZsb3dCb3RcV29ya2Zsb3dcU3RhcnQueGFtbCFLA7gBDgIBAVQFaRMCAVxqBXoWAgFFewW2AQoCAQJcC1xhAgFyZgtmWAIBa1cLV18CAWRhC2FYAgFdbQttZwIBVWpPalUCAVR3C3dQAgFNcgtyZgIBRn4LfokBAgEDggEJmgEUAgEnnQEJtAEUAgEKgwELgwGQAQIBQ4QBC5gBEwIBKpkBC5kBdwIBKKEBC6wBJAIBFK0BC7MBIAIBC4MBa4MBjQECAUSIAQ2XARgCATKGAQ+GAV8CASuZAWuZAXQCASmkARGkAc8BAgEfoQFKoQFcAgEeqQERqQGHAQIBFqEBoAGhAagBAgEVsAERsAFvAgEMiQEPjwEmAgE7kAEPlgEkAgEzjAEVjAFiAgE8kwEVkwFpAgE0</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="BotDialog_1" sap:VirtualizedContainerService.HintSize="856,22" />
-      <sap2010:ViewStateData Id="LuisActivity_2" sap:VirtualizedContainerService.HintSize="856,22" />
+      <sap2010:ViewStateData Id="BotDialog_1" sap:VirtualizedContainerService.HintSize="878,22" />
+      <sap2010:ViewStateData Id="LuisActivity_2" sap:VirtualizedContainerService.HintSize="878,22" />
       <sap2010:ViewStateData Id="BotReplyActivity_1" sap:VirtualizedContainerService.HintSize="464,72.6666666666667" />
       <sap2010:ViewStateData Id="BotReceiveActivity_1" sap:VirtualizedContainerService.HintSize="344,22" />
       <sap2010:ViewStateData Id="BotReplyActivity_3" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
@@ -189,16 +205,24 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ExternalTaskActivity_2" sap:VirtualizedContainerService.HintSize="344,22" />
       <sap2010:ViewStateData Id="BotReplyActivity_2" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="856,616" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="878,864">
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="366,258.666666666667">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="FlowBot.Workflow.Activity1_1" sap:VirtualizedContainerService.HintSize="918,944" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="878,927.333333333333" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="900,1175.33333333333">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowBot.Workflow.Activity1_1" sap:VirtualizedContainerService.HintSize="940,1255.33333333333" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
