@@ -9,5 +9,6 @@ namespace FlowBot.Common.Interfaces.Providers
     public interface ILifetimeScopeProvider
     {
         T BeginNewLifetimeScope<T>(object tag);
+        T BeginNewLifetimeScope<T,B>(object tag, Action<B> builder);
     }
 }

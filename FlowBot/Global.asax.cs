@@ -3,6 +3,9 @@ using Autofac.Integration.WebApi;
 using FlowBot.Common.Interfaces.Providers;
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Services;
+using FlowBot.Utils;
+using Newtonsoft.Json;
+using System;
 using System.Reflection;
 using System.Web.Http;
 namespace FlowBot
@@ -14,6 +17,13 @@ namespace FlowBot
         {
             return (T)_iocContainer.BeginLifetimeScope(tag);
         }
+        public T BeginNewLifetimeScope<T,B>(object tag, Action<B> configurationAction)
+        {
+            return (T)_iocContainer.BeginLifetimeScope(tag, (containerBuilder)=>
+            {
+                configurationAction((B)(object)containerBuilder);
+            });
+        }
         protected void Application_Start()
         {
             var builder = new ContainerBuilder();
@@ -22,7 +32,8 @@ namespace FlowBot
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             var config = GlobalConfiguration.Configuration;
-
+            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
+            config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
 
             // Register your Web API controllers.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
@@ -36,6 +47,9 @@ namespace FlowBot
             _iocContainer = builder.Build();
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(_iocContainer);
+
+            JsonUtils.SetGlobalJsonNetSettings();
+
 
         }
         protected void RegisterServices(ContainerBuilder builder)

@@ -67,7 +67,7 @@ namespace FlowBot.Services
                 _dataService._container.Bookmarks.Remove((Bookmark)obj);
                 _dataService._container.SaveChanges();
             }
-            public IQueryable<IBookmark> List()
+            public IOrderedQueryable<IBookmark> List(OrderBy orderBy)
             {
                 return _dataService._container.Bookmarks;
             }
@@ -150,7 +150,7 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
 
-            public IQueryable<IConversation> List()
+            public IOrderedQueryable<IConversation> List(OrderBy orderBy)
             {
                 return _dataService._container.Conversations;
             }
@@ -243,9 +243,22 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
 
-            public IQueryable<IExternalTask> List()
+            public IOrderedQueryable<IExternalTask> List(OrderBy orderBy)
             {
-                return _dataService._container.ExternalTasks;
+                switch (orderBy)
+                {
+                    case OrderBy.NewestToOldest:
+                        return _dataService._container.ExternalTasks.OrderBy(wi => wi.CreateDate);
+                    case OrderBy.OldestToNewest:
+                        return _dataService._container.ExternalTasks.OrderByDescending(wi => wi.CreateDate);
+                    case OrderBy.ByNameAssending:
+                        return _dataService._container.ExternalTasks.OrderBy(wi => wi.BookmarkName);
+                    case OrderBy.ByNameDescending:
+                        return _dataService._container.ExternalTasks.OrderByDescending(wi => wi.BookmarkName);
+                    case OrderBy.Unordered:
+                    default:
+                        return _dataService._container.ExternalTasks;
+                }
             }
 
             public IExternalTask Read(Guid id)
@@ -276,7 +289,7 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
 
-            public IQueryable<IExternalTaskType> List()
+            public IOrderedQueryable<IExternalTaskType> List(OrderBy orderBy)
             {
                 return _dataService._container.ExternalTaskTypes;
             }
@@ -343,7 +356,7 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
 
-            public IQueryable<IMessage> List()
+            public IOrderedQueryable<IMessage> List(OrderBy orderBy)
             {
                 return _dataService._container.Messages;
             }
@@ -441,7 +454,7 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
 
-            public IQueryable<IUser> List()
+            public IOrderedQueryable<IUser> List(OrderBy orderBy)
             {
                 return _dataService._container.Users;
             }
@@ -502,7 +515,7 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
 
-            public IQueryable<IUserGroup> List()
+            public IOrderedQueryable<IUserGroup> List(OrderBy orderBy)
             {
                 return _dataService._container.UserGroups;
             }
@@ -539,9 +552,22 @@ namespace FlowBot.Services
                 throw new NotImplementedException();
             }
 
-            public IQueryable<IWorkflow> List()
+            public IOrderedQueryable<IWorkflow> List(OrderBy orderBy)
             {
-                return _dataService._container.Workflows;
+                switch (orderBy)
+                {
+                    case OrderBy.NewestToOldest:
+                        return _dataService._container.Workflows.OrderBy(w => w.CreateDate);
+                    case OrderBy.OldestToNewest:
+                        return _dataService._container.Workflows.OrderByDescending(w => w.CreateDate);
+                    case OrderBy.ByNameAssending:
+                        return _dataService._container.Workflows.OrderBy(w => w.Package).ThenBy(w => w.Name).ThenBy(w => w.Major).ThenBy(w => w.Minor).ThenBy(w => w.Revision).ThenBy(w => w.Build);
+                    case OrderBy.ByNameDescending:
+                        return _dataService._container.Workflows.OrderBy(w => w.Package).ThenBy(w => w.Name).ThenBy(w => w.Major).ThenBy(w => w.Minor).ThenBy(w => w.Revision).ThenBy(w => w.Build);
+                    case OrderBy.Unordered:
+                    default:
+                        return _dataService._container.Workflows;
+                }
             }
 
             public IWorkflow Read(string package, string name, Nullable<int> major = null, Nullable<int> minor = null, Nullable<int> build = null, Nullable<int> revision = null)
@@ -623,9 +649,20 @@ namespace FlowBot.Services
                 _dataService._container.SaveChanges();
             }
 
-            public IQueryable<IWorkflowInstance> List()
+            public IOrderedQueryable<IWorkflowInstance> List(OrderBy orderBy)
             {
-                return _dataService._container.WorkflowInstances;
+                switch( orderBy )
+                {
+                    case OrderBy.NewestToOldest:
+                        return _dataService._container.WorkflowInstances.OrderBy(wi => wi.CreateDate);
+                    case OrderBy.OldestToNewest:
+                        return _dataService._container.WorkflowInstances.OrderByDescending(wi => wi.CreateDate);
+                    case OrderBy.ByNameAssending:
+                    case OrderBy.ByNameDescending:
+                    case OrderBy.Unordered:
+                    default:
+                        return _dataService._container.WorkflowInstances;
+                }
             }
 
             public IWorkflowInstance Read(Guid id)

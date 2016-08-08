@@ -15,7 +15,7 @@ namespace FlowBot.Services
         private ILifetimeScope _lifetimeScope;
         public IOCService(ILifetimeScope lifetimeScope)
         {
-            _lifetimeScope = lifetimeScope.BeginLifetimeScope();
+            _lifetimeScope = lifetimeScope;
         }
         protected void Dispose(bool disposing)
         {

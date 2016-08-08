@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.Common", "FlowBot.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.Storage", "FlowBot.Storage\FlowBot.Storage.csproj", "{EF49035E-E7F8-4084-A467-BECCD3E251D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.WorkerPortal", "FlowBot.WorkerPortal\FlowBot.WorkerPortal.csproj", "{093916FC-0A75-4B54-9D66-0871EDD54124}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{EF49035E-E7F8-4084-A467-BECCD3E251D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF49035E-E7F8-4084-A467-BECCD3E251D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF49035E-E7F8-4084-A467-BECCD3E251D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{093916FC-0A75-4B54-9D66-0871EDD54124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{093916FC-0A75-4B54-9D66-0871EDD54124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{093916FC-0A75-4B54-9D66-0871EDD54124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{093916FC-0A75-4B54-9D66-0871EDD54124}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlowBot.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,6 @@ namespace FlowBot.Common.Interfaces.Providers
         T Read(Guid id);
         void Update(T obj);
         void Delete(T obj);
-        IQueryable<T> List();
+        IOrderedQueryable<T> List(OrderBy orderBY);
     }
 }

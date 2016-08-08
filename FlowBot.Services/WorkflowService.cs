@@ -101,7 +101,9 @@ namespace FlowBot.Services
         }
         private void ConfigureWorkflow(WorkflowApplication workflowApplication, WorkflowHandle workflowHandle)
         {
-            var workflowScope = _lifetimeScopeProvider.BeginNewLifetimeScope<ILifetimeScope>("workflow");
+            var workflowScope = _lifetimeScopeProvider.BeginNewLifetimeScope<ILifetimeScope,ContainerBuilder>("workflow",(builder)=>{
+                builder.RegisterInstance<WorkflowHandle>(workflowHandle).As<IWorkflowHandle>();
+            });
             var iocService = new IOCService(workflowScope);
             workflowApplication.Extensions.Add<IIOCService>(() => { return iocService; });
 

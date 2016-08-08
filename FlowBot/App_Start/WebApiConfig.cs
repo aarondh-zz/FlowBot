@@ -29,7 +29,7 @@ namespace FlowBot
             config.Routes.MapHttpRoute(
                 name: "Messages",
                 routeTemplate: "api/messages/{packageName}/{workflowName}",
-                defaults: new { controller ="Messages" }
+                defaults: new { controller = "Messages" }
             );
 
             config.Routes.MapHttpRoute(
