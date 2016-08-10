@@ -2,6 +2,7 @@
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Common.Models;
 using FlowBot.ViewModels;
+using JsonPatch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,9 @@ namespace FlowBot.Controllers
             _dataService = dataService;
         }
         // GET: api/ExternalTask
-        public IEnumerable<IExternalTask> Get(int skip = 0, int take = 50)
+        public IEnumerable<IExternalTask> Get(string userGroupName = null, Guid? workerId = null, OrderBy orderBy = OrderBy.OldestToNewest, int skip = 0, int take = 50)
         {
-            var query = _dataService.ExternalTasks.List(OrderBy.OldestToNewest).Skip(skip).Take(take);
+            var query = _dataService.ExternalTasks.List(userGroupName, workerId, orderBy).Skip(skip).Take(take);
             List<IExternalTask> results = new List<IExternalTask>();
             foreach( var externalTask in query)
             {
@@ -36,22 +37,19 @@ namespace FlowBot.Controllers
             return _dataService.ExternalTasks.Read(id);
         }
 
-        // POST: api/ExternalTask
-        public void Post([FromBody]ExternalTaskViewModel value)
+        // PATCH: api/ExternalTask
+        public IHttpActionResult Patch(Guid id, JsonPatchDocument<ExternalTaskViewModel> deltaExternalTask)
         {
-            throw new NotSupportedException();
-        }
-
-        // PUT: api/ExternalTask/{guid}
-        public void Put(Guid id, [FromBody]ExternalTaskViewModel value)
-        {
-            throw new NotSupportedException();
-        }
-
-        // DELETE: api/ExternalTask/{guid}
-        public void Delete(Guid id)
-        {
-            throw new NotSupportedException();
+            var originalExternalTask = _dataService.ExternalTasks.Read(id);
+            if (originalExternalTask == null)
+            {
+                return NotFound();
+            }
+            var originalExternalTaskViewModel = new ExternalTaskViewModel(originalExternalTask);
+            deltaExternalTask.ApplyUpdatesTo(originalExternalTaskViewModel);
+            originalExternalTaskViewModel.Set(originalExternalTask);
+            return Ok();
+            
         }
     }
 }

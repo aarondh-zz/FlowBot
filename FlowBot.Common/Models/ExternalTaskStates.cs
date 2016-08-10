@@ -9,9 +9,10 @@ namespace FlowBot.Common.Models
     public enum ExternalTaskStates
     {
         Undefined = 0,
-        Open = 1,
-        Completed = 2,
-        Failed = 3,
-        Error = 4
+        Queued = 1,
+        Claimed = 2,
+        Completed = 3,
+        Failed = 4,
+        Error = 5
     }
 }

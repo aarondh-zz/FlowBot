@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 08/05/2016 09:28:55
+-- Date Created: 08/09/2016 12:16:34
 -- Generated from EDMX file: C:\Users\v-adai\Documents\Visual Studio 2015\Projects\FlowBot\FlowBot.Data\FlowBotModel.edmx
 -- --------------------------------------------------
 
@@ -103,6 +103,7 @@ CREATE TABLE [dbo].[ExternalTasks] (
     [OutputData] nvarchar(max)  NULL,
     [ExternalId] nvarchar(64)  NULL,
     [BookmarkName] nvarchar(64)  NOT NULL,
+    [State] int  NOT NULL,
     [UserGroup_Id] uniqueidentifier  NOT NULL,
     [Worker_Id] uniqueidentifier  NULL,
     [ExternalTaskType_Id] uniqueidentifier  NOT NULL,

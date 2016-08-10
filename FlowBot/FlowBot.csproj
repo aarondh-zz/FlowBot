@@ -54,6 +54,10 @@
       <HintPath>..\packages\Chronic.Signed.0.3.2\lib\net40\Chronic.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="JsonPatch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JsonPatch.1.0.2\lib\net45\JsonPatch.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Azure.Documents.Client, Version=1.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.DocumentDB.1.9.2\lib\net45\Microsoft.Azure.Documents.Client.dll</HintPath>
       <Private>True</Private>
@@ -141,7 +145,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\JsonUtils.cs" />
     <Compile Include="ViewModels\ExternalTaskViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +160,10 @@
     <ProjectReference Include="..\FlowBot.Common\FlowBot.Common.csproj">
       <Project>{7a99f2a4-b4f5-4c49-a118-1e3cc823ef12}</Project>
       <Name>FlowBot.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlowBot.Json\FlowBot.Json.csproj">
+      <Project>{7f3e9a80-79bb-4d70-9d01-3b642ae5884e}</Project>
+      <Name>FlowBot.Json</Name>
     </ProjectReference>
     <ProjectReference Include="..\FlowBot.Services\FlowBot.Services.csproj">
       <Project>{a50b1c2b-830b-4942-8aec-1d6e96f89330}</Project>

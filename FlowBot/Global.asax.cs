@@ -3,7 +3,7 @@ using Autofac.Integration.WebApi;
 using FlowBot.Common.Interfaces.Providers;
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Services;
-using FlowBot.Utils;
+using FlowBot.Json;
 using Newtonsoft.Json;
 using System;
 using System.Reflection;
@@ -32,9 +32,7 @@ namespace FlowBot
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             var config = GlobalConfiguration.Configuration;
-            config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
-            config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-
+            Json.JsonUtils.Configure(config.Formatters.JsonFormatter.SerializerSettings);
             // Register your Web API controllers.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 

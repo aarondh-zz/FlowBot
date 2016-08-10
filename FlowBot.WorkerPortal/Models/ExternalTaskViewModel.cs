@@ -1,14 +1,12 @@
 ﻿using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Models;
-using FlowBot.Json;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Web;
 
-namespace FlowBot.ViewModels
+namespace FlowBot.WorkerPortal.Models
 {
     public class ExternalTaskViewModel : IExternalTask
     {
@@ -34,11 +32,9 @@ namespace FlowBot.ViewModels
 
         public ExternalTaskStates State { get; set; }
 
-        [JsonConverter(typeof(PassthroughStringConverter))]
-        public string InputData { get; set; }
+        public dynamic InputData { get; set; }
 
-        [JsonConverter(typeof(PassthroughStringConverter))]
-        public string OutputData { get; set; }
+        public dynamic OutputData { get; set; }
 
         IUserGroup IExternalTask.UserGroup
         {
@@ -69,6 +65,22 @@ namespace FlowBot.ViewModels
 
         public Guid WorkflowInstanceId { get; set; }
 
+        string IExternalTask.InputData
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        string IExternalTask.OutputData
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public ExternalTaskViewModel(IExternalTask externalTask)
         {
             this.BookmarkName = externalTask.BookmarkName;
@@ -79,21 +91,11 @@ namespace FlowBot.ViewModels
             this.ExternalTaskTypeName = externalTask.ExternalTaskType.Name;
             this.State = externalTask.State;
             this.Id = externalTask.Id;
-            this.InputData = externalTask.InputData;
-            this.OutputData = externalTask.OutputData;
+            this.InputData = externalTask.InputData == null ? null : JsonConvert.DeserializeObject(externalTask.InputData);
+            this.OutputData = externalTask.OutputData == null ? null :JsonConvert.DeserializeObject(externalTask.OutputData);
             this.UserGroupName = externalTask.UserGroup.Name;
             this.WorkerId = externalTask.Worker?.ExternalId;
             this.WorkflowInstanceId = externalTask.WorkflowInstance.InstanceId;
-        }
-        public void Set(IExternalTask externalTask)
-        {
-            var type = externalTask.GetType();
-            var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
-            foreach (var property in properties)
-            {
-                object value = property.GetValue(this);
-                property.SetValue(externalTask, value);
-            }
         }
         public ExternalTaskViewModel()
         {

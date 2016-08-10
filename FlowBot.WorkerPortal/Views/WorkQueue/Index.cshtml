@@ -1,0 +1,19 @@
+﻿@using FlowBot.WorkerPortal.Extensions
+@using FlowBot.Common.Interfaces.Models
+@model List<IExternalTask>
+
+@{
+    ViewBag.Title = "Work Queue";
+}
+
+<h2>Work Queue</h2>
+<ul>
+@foreach (var externalTask in Model)
+{
+    <li>
+        @Html.ActionLink(externalTask.ExternalTaskType.Name.ToLabel(), "Index", new { controller = "Task", id = externalTask.Id })
+        <span> queued </span><span>@externalTask.CreateDate</span>
+    </li>
+}
+</ul>
+

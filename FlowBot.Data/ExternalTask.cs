@@ -22,6 +22,7 @@ namespace FlowBot.Data
         public string OutputData { get; set; }
         public string ExternalId { get; set; }
         public string BookmarkName { get; set; }
+        public FlowBot.Common.Models.ExternalTaskStates State { get; set; }
     
         public virtual UserGroup UserGroup { get; set; }
         public virtual User Worker { get; set; }

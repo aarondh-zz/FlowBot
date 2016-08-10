@@ -1,0 +1,80 @@
+﻿@using FlowBot.WorkerPortal.Extensions
+@using FlowBot.WorkerPortal.Models
+@model ExternalTaskViewModel
+
+@{
+    ViewBag.Title = "Task: " + @Model.ExternalTaskTypeName.ToLabel();
+}
+<style type="text/css">
+    boyd {
+        font-size: 12px;
+    }
+    .instructions {
+        margin-top: 20px;
+        padding: 10px 10px 10px 10px;
+        background-color:antiquewhite;
+        border-radius: 10px;
+        border: 1px solid antiquewhite;
+    }
+    .instructions .content {
+        padding: 10px 10px 10px 10px;
+    }
+    .message {
+        margin-top: 20px;
+        padding: 10px 10px 10px 10px;
+        background-color: #adeafe;
+        border-radius: 10px;
+        border: 1px solid #adeafe;
+    }
+    .message .content {
+        margin: 20px 20px 20px 20px;
+    }
+    .todo {
+        margin-top: 20px;
+        padding: 10px 10px 10px 10px;
+        border-radius: 10px;
+        border: 1px solid #808080;
+    }
+    .todo .content {
+        padding: 10px 10px 10px 10px;
+    }
+    .todo li{
+        list-style-type: none;
+    }
+    .todo .button-panel {
+        margin: 20px 20px 20px 20px;
+    }
+    .todo .button-panel button {
+        border-radius: 10px;
+        padding: 10px 10px 10px 10px;
+        border:   1px solid #808080;
+        min-width: 200px;
+        font-weight: 900;
+        font-size: 16pt;
+        margin-right: 20px;
+    }
+</style>
+<h2>Task: @(Model.ExternalTaskTypeName?.ToLabel())</h2>
+<form method="post" action="/Task/Done">
+    @Html.Hidden("id",Model.Id)
+    <div class="instructions"><label>Instructions:</label> <div class="content">Please look at the following message and determine it's indent</div></div>
+
+    <div class="message"><label>Message from user:</label> <div class="content">@Model.InputData.message</div> </div>
+
+    <div class="todo">
+        <label>What is the intent of this message?</label>
+        <div class="content">
+            <ul class="options">
+                <li><input type="radio" name="intent" value="salutation" /> Salutation </li>
+                <li><input type="radio" name="intent" value="thanks" /> Thanks </li>
+                <li><input type="radio" name="intent" value="goodbye" /> Goodbye </li>
+                <li><input type="radio" name="intent" value="unknown" /> I cannot determine the intent of this message </li>
+            </ul>
+            <div class="button-panel">
+                <button type="submit" name="action" value="completed">Done</button>
+                <button type="submit" name="action" value="escalate">Escalate</button>
+            </div>
+        </div>
+    </div>
+</form>
+

@@ -13,6 +13,6 @@ namespace FlowBot.Common.Interfaces.Providers
         T Read(Guid id);
         void Update(T obj);
         void Delete(T obj);
-        IOrderedQueryable<T> List(OrderBy orderBY);
+        IOrderedQueryable<T> List(OrderBy orderBy = OrderBy.Unordered);
     }
 }

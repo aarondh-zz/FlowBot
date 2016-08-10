@@ -77,6 +77,7 @@
     <Property Name="OutputData" Type="nvarchar(max)" Nullable="true" />
     <Property Name="ExternalId" Type="nvarchar" Nullable="true" MaxLength="64" />
     <Property Name="BookmarkName" Type="nvarchar" Nullable="false" MaxLength="64" />
+    <Property Name="State" Type="int" Nullable="false" />
     <Property Name="UserGroup_Id" Type="uniqueidentifier" Nullable="false" />
     <Property Name="Worker_Id" Type="uniqueidentifier" Nullable="true" />
     <Property Name="ExternalTaskType_Id" Type="uniqueidentifier" Nullable="false" />
@@ -396,6 +397,7 @@
           <NavigationProperty Name="WorkflowInstance" Relationship="FlowBot.Data.Models.WorkflowInstanceExternalTask" FromRole="ExternalTask" ToRole="WorkflowInstance" />
           <Property Name="ExternalId" Type="String" Nullable="true" MaxLength="64" />
           <Property Name="BookmarkName" Type="String" Nullable="false" MaxLength="64" />
+          <Property Name="State" Type="FlowBot.Data.Models.ExternalTaskStates" Nullable="false" />
         </EntityType>
         <EntityType Name="Workflow">
           <Key>
@@ -542,6 +544,7 @@
         </Association>
         <EnumType Name="WorkflowInstanceStates" cg:ExternalTypeName="FlowBot.Common.Models.WorkflowInstanceStates" />
         <EnumType Name="BookmarkStates" cg:ExternalTypeName="FlowBot.Common.Models.BookmarkStates" />
+        <EnumType Name="ExternalTaskStates" cg:ExternalTypeName="FlowBot.Common.Models.ExternalTaskStates" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -559,6 +562,7 @@
           <ScalarProperty Name="OutputData" ColumnName="OutputData" />
           <ScalarProperty Name="ExternalId" ColumnName="ExternalId" />
           <ScalarProperty Name="BookmarkName" ColumnName="BookmarkName" />
+          <ScalarProperty Name="State" ColumnName="State" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

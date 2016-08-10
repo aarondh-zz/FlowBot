@@ -1,4 +1,5 @@
 ﻿using FlowBot.Common.Interfaces.Models;
+using FlowBot.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace FlowBot.Common.Interfaces.Providers
     public interface IExternalTaskDataProvider : IDataProvider<IExternalTask>
     {
         IExternalTask Create(IWorkflowInstance workflowInstance, string externalTaskTypeName, string externalId, string userGroupName, object inputData, string bookmarkName);
+        IOrderedQueryable<IExternalTask> List(string groupName = null, Guid? workerId = null, OrderBy orderBy = OrderBy.Unordered);
     }
 }

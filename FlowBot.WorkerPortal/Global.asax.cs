@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Autofac;
+using Autofac.Integration.Mvc;
+using FlowBot.Common.Interfaces.Services;
+using FlowBot.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,10 +16,29 @@ namespace FlowBot.WorkerPortal
     {
         protected void Application_Start()
         {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            builder.RegisterModelBinderProvider();
+            builder.RegisterModule<AutofacWebTypesModule>();
+            builder.RegisterSource(new ViewRegistrationSource());
+            builder.RegisterFilterProvider();
+            RegisterServices(builder);
+            var container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
         }
+        protected void RegisterServices(ContainerBuilder builder)
+        {
+
+            builder.RegisterType<DataService>().As<IDataService>().InstancePerLifetimeScope();
+
+        }
+
     }
 }
