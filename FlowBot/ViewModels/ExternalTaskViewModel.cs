@@ -85,16 +85,6 @@ namespace FlowBot.ViewModels
             this.WorkerId = externalTask.Worker?.ExternalId;
             this.WorkflowInstanceId = externalTask.WorkflowInstance.InstanceId;
         }
-        public void Set(IExternalTask externalTask)
-        {
-            var type = externalTask.GetType();
-            var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
-            foreach (var property in properties)
-            {
-                object value = property.GetValue(this);
-                property.SetValue(externalTask, value);
-            }
-        }
         public ExternalTaskViewModel()
         {
         }

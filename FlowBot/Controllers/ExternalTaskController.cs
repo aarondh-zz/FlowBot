@@ -1,6 +1,8 @@
 ﻿using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Common.Models;
+using FlowBot.Common.Utils;
+using FlowBot.Extensions;
 using FlowBot.ViewModels;
 using JsonPatch;
 using System;
@@ -20,9 +22,9 @@ namespace FlowBot.Controllers
             _dataService = dataService;
         }
         // GET: api/ExternalTask
-        public IEnumerable<IExternalTask> Get(string userGroupName = null, Guid? workerId = null, OrderBy orderBy = OrderBy.OldestToNewest, int skip = 0, int take = 50)
+        public IEnumerable<IExternalTask> Get(string userGroupName = null, Guid? workerId = null, ExternalTaskStates? state = null, OrderBy orderBy = OrderBy.OldestToNewest, int skip = 0, int take = 50)
         {
-            var query = _dataService.ExternalTasks.List(userGroupName, workerId, orderBy).Skip(skip).Take(take);
+            var query = _dataService.ExternalTasks.List(userGroupName, workerId, state, orderBy).Skip(skip).Take(take);
             List<IExternalTask> results = new List<IExternalTask>();
             foreach( var externalTask in query)
             {
@@ -36,7 +38,6 @@ namespace FlowBot.Controllers
         {
             return _dataService.ExternalTasks.Read(id);
         }
-
         // PATCH: api/ExternalTask
         public IHttpActionResult Patch(Guid id, JsonPatchDocument<ExternalTaskViewModel> deltaExternalTask)
         {
@@ -46,8 +47,16 @@ namespace FlowBot.Controllers
                 return NotFound();
             }
             var originalExternalTaskViewModel = new ExternalTaskViewModel(originalExternalTask);
-            deltaExternalTask.ApplyUpdatesTo(originalExternalTaskViewModel);
-            originalExternalTaskViewModel.Set(originalExternalTask);
+            if ( deltaExternalTask.HasValidOperations<ExternalTaskViewModel>("/state","/outputdata") )
+            {
+                deltaExternalTask.ApplyUpdatesTo(originalExternalTaskViewModel);
+                originalExternalTaskViewModel.CopyTo(originalExternalTask);
+                _dataService.ExternalTasks.Update(originalExternalTask);
+            }
+            else
+            {
+                return BadRequest("Operation not allowed");
+            }
             return Ok();
             
         }

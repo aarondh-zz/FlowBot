@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\WorkflowNotFoundException.cs" />
+    <Compile Include="Interfaces\Api\IBookmarkParameters.cs" />
     <Compile Include="Interfaces\Models\IBookmark.cs" />
     <Compile Include="Interfaces\Models\IConversation.cs" />
     <Compile Include="Interfaces\Models\IExternalTask.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Models\WorkflowInstanceStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WorkflowEventArgs.cs" />
+    <Compile Include="Utils\IRecordExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

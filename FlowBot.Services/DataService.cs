@@ -81,6 +81,40 @@ namespace FlowBot.Services
             {
                 return _dataService._container.Bookmarks.FirstOrDefault(bm => bm.WorkflowInstance.ExternalId == externalId && bm.Name == bookmarkName);
             }
+            public IOrderedQueryable<IBookmark> List(string bookmarkName = null, Guid? instanceId = null, string ownerDisplayName = null, BookmarkStates? state = null, OrderBy orderBy = OrderBy.OldestToNewest)
+            {
+                IQueryable<Bookmark> query = _dataService._container.Bookmarks;
+                if (bookmarkName != null)
+                {
+                    query = query.Where(bm => bm.Name == bookmarkName);
+                }
+                if (ownerDisplayName != null)
+                {
+                    query = query.Where(bm => bm.OwnerDisplayName == ownerDisplayName);
+                }
+                if (instanceId.HasValue)
+                {
+                    query = query.Where(bm => bm.WorkflowInstance.InstanceId == instanceId.Value);
+                }
+                if (state.HasValue)
+                {
+                    query = query.Where(bm => bm.State == state.Value);
+                }
+                switch (orderBy)
+                {
+                    case OrderBy.NewestToOldest:
+                        return query.OrderBy(bm => bm.CreateDate);
+                    case OrderBy.OldestToNewest:
+                        return query.OrderByDescending(bm => bm.CreateDate);
+                    case OrderBy.ByNameAssending:
+                        return query.OrderBy(bm => bm.Name);
+                    case OrderBy.ByNameDescending:
+                        return query.OrderByDescending(bm => bm.Name);
+                    case OrderBy.Unordered:
+                    default:
+                        return query.OrderBy(bm => bm.Id);
+                }
+            }
 
             public void SetState(IBookmark bookmark, BookmarkStates state)
             {
@@ -245,9 +279,9 @@ namespace FlowBot.Services
 
             public IOrderedQueryable<IExternalTask> List(OrderBy orderBy = OrderBy.Unordered)
             {
-                return List(null, null, orderBy);
+                return List(orderBy: orderBy);
             }
-            public IOrderedQueryable<IExternalTask> List(string groupName = null, Guid? workerId = null, OrderBy orderBy = OrderBy.Unordered)
+            public IOrderedQueryable<IExternalTask> List(string groupName = null, Guid? workerId = null, ExternalTaskStates? state = null, OrderBy orderBy = OrderBy.Unordered)
             {
                 IQueryable<IExternalTask> query = _dataService._container.ExternalTasks;
                 if (groupName != null)
@@ -257,6 +291,10 @@ namespace FlowBot.Services
                 if (workerId.HasValue)
                 {
                     query = query.Where(et => et.Worker != null && et.Worker.Id == workerId.Value);
+                }
+                if (state.HasValue)
+                {
+                    query = query.Where(et => et.State == state.Value);
                 }
                 switch (orderBy)
                 {
@@ -278,6 +316,37 @@ namespace FlowBot.Services
             {
                 return _dataService._container.ExternalTasks.Where(et => et.Id == id).FirstOrDefault();
             }
+            public void SetState(IExternalTask task, Guid workerId, ExternalTaskStates state, string outputData)
+            {
+                var dbTask = task as ExternalTask;
+                if (workerId != Guid.Empty)
+                {
+                    User worker = _dataService.Users.Read(workerId) as User;
+                    if (worker == null)
+                    {
+                        throw new ArgumentException($"worker {workerId} was not found.", "workerId");
+                    }
+                    dbTask.Worker = worker;
+                }
+                dbTask.State = state;
+                switch(state)
+                {
+                    case ExternalTaskStates.Claimed:
+                        dbTask.ClaimDate = DateTime.UtcNow;
+                        break;
+                    case ExternalTaskStates.Completed:
+                    case ExternalTaskStates.Error:
+                    case ExternalTaskStates.Failed:
+                        dbTask.ClaimDate = DateTime.UtcNow;
+                        break;
+                }
+                if ( outputData != null )
+                {
+                    dbTask.OutputData = outputData;
+                }
+                this.Update(dbTask);
+            }
+
 
             public void Update(IExternalTask obj)
             {

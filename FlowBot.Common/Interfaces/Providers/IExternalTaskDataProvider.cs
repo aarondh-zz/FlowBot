@@ -11,6 +11,8 @@ namespace FlowBot.Common.Interfaces.Providers
     public interface IExternalTaskDataProvider : IDataProvider<IExternalTask>
     {
         IExternalTask Create(IWorkflowInstance workflowInstance, string externalTaskTypeName, string externalId, string userGroupName, object inputData, string bookmarkName);
-        IOrderedQueryable<IExternalTask> List(string groupName = null, Guid? workerId = null, OrderBy orderBy = OrderBy.Unordered);
+        IOrderedQueryable<IExternalTask> List(string groupName = null, Guid? workerId = null, ExternalTaskStates? state = null, OrderBy orderBy = OrderBy.Unordered);
+        void SetState(IExternalTask task, Guid workerId, ExternalTaskStates state, string outputData);
+
     }
 }

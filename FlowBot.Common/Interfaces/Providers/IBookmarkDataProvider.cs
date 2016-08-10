@@ -13,5 +13,7 @@ namespace FlowBot.Common.Interfaces.Providers
         IBookmark Read(string externalId, string bookmarkName);
         IBookmark Create(IWorkflowInstance workflowInstance, string bookmarkName, string ownerDisplayName, BookmarkStates state = BookmarkStates.Waiting, Nullable<DateTime> completionDate = null);
         void SetState(IBookmark bookmark, BookmarkStates state);
+
+        IOrderedQueryable<IBookmark> List(string bookmarkName = null, Guid? instanceId = null, string ownerDisplayName = null, BookmarkStates? state = null, OrderBy orderBy = OrderBy.OldestToNewest);
    }
 }

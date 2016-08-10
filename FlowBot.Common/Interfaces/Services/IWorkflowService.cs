@@ -11,6 +11,7 @@ namespace FlowBot.Common.Interfaces.Services
     {
         void SetWorkflowRootDirectory(string workflowRootDirectory);
         IWorkflowHandle LookupWorkflow(string externalId);
+        IWorkflowHandle LookupWorkflow(Guid instanceId);
         IWorkflowHandle NewWorkflow(string package, string workflowName, string externalId, IDictionary<string, object> inputs);
     }
 }

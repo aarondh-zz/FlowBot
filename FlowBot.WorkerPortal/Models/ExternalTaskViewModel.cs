@@ -34,7 +34,7 @@ namespace FlowBot.WorkerPortal.Models
 
         public dynamic InputData { get; set; }
 
-        public dynamic OutputData { get; set; }
+        public string OutputData { get; set; }
 
         IUserGroup IExternalTask.UserGroup
         {
@@ -73,13 +73,6 @@ namespace FlowBot.WorkerPortal.Models
             }
         }
 
-        string IExternalTask.OutputData
-        {
-            get
-            {
-                return null;
-            }
-        }
 
         public ExternalTaskViewModel(IExternalTask externalTask)
         {
@@ -92,7 +85,7 @@ namespace FlowBot.WorkerPortal.Models
             this.State = externalTask.State;
             this.Id = externalTask.Id;
             this.InputData = externalTask.InputData == null ? null : JsonConvert.DeserializeObject(externalTask.InputData);
-            this.OutputData = externalTask.OutputData == null ? null :JsonConvert.DeserializeObject(externalTask.OutputData);
+            this.OutputData = externalTask.OutputData;
             this.UserGroupName = externalTask.UserGroup.Name;
             this.WorkerId = externalTask.Worker?.ExternalId;
             this.WorkflowInstanceId = externalTask.WorkflowInstance.InstanceId;

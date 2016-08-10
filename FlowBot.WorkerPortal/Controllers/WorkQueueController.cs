@@ -1,4 +1,5 @@
 ﻿using FlowBot.Common.Interfaces.Services;
+using FlowBot.Common.Models;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -14,7 +15,7 @@ namespace FlowBot.WorkerPortal.Controllers
         // GET: WorkQueue
         public ActionResult Index(string group = "Worker")
         {
-            var tasks = _dataService.ExternalTasks.List(group).ToList();
+            var tasks = _dataService.ExternalTasks.List(groupName:group, state: ExternalTaskStates.Queued, orderBy: OrderBy.OldestToNewest).ToList();
             return View(tasks);
         }
     }
