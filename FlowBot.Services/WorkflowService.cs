@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using FlowBot.Common.Exceptions;
+using FlowBot.Common.Interfaces;
 using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Interfaces.Providers;
 using FlowBot.Common.Interfaces.Services;
@@ -33,6 +34,18 @@ namespace FlowBot.Services
         private InstanceStore _instanceStore = null;
         private InstanceView _instanceView = null;
         private string _workflowRootDirectory;
+        private static readonly Dictionary<Type,Type> s_persistableServices = new Dictionary<Type,Type>();
+        public static void RegisterPersistableService<T,AsT>()
+        {
+            if ( typeof(T).IsAssignableTo<IPersistable>())
+            {
+                s_persistableServices.Add(typeof(AsT),typeof(T));
+            }
+            else
+            {
+                throw new ArgumentException($"{typeof(T)} does not implement {typeof(IPersistable)}", "serviceType");
+            }
+        }
         public WorkflowService(ILifetimeScopeProvider lifetimeScopeProvider, IDataService dataService)
         {
             _lifetimeScopeProvider = lifetimeScopeProvider;
@@ -69,18 +82,31 @@ namespace FlowBot.Services
 
         }
 
-        protected InstanceStore GetInstanceStore()
+        protected InstanceStore GetInstanceStore(WorkflowApplication workflowApplication, ILifetimeScope workflowScope)
         {
-            if (_instanceStore == null)
+            SqlWorkflowInstanceStore instanceStore = new SqlWorkflowInstanceStore(s_workflowInstanceStoreConnectionString);
+            List<XName> variantProperties = new List<XName>();
+            foreach( var persistableServiceEntry in s_persistableServices)
             {
-                SqlWorkflowInstanceStore instanceStore = new SqlWorkflowInstanceStore(s_workflowInstanceStoreConnectionString);
-                instanceStore.InstanceCompletionAction = InstanceCompletionAction.DeleteAll;
-                var instanceHandle = instanceStore.CreateInstanceHandle();
-                _instanceView = instanceStore.Execute(instanceHandle, new CreateWorkflowOwnerCommand(), TimeSpan.FromSeconds(5));
-                instanceHandle.Free();
-                instanceStore.DefaultInstanceOwner = _instanceView.InstanceOwner;
-                _instanceStore = instanceStore;
+                IPersistable persistableService = workflowScope.Resolve(persistableServiceEntry.Key) as IPersistable;
+                if (persistableService == null)
+                {
+                    throw new InvalidOperationException($"{persistableServiceEntry.Value} was registered as a persistable service but did not implement {typeof(IPersistable)}");
+                }
+                else
+                {
+                    variantProperties.Add(persistableService.GetPersistablePropertyName());
+                    workflowApplication.Extensions.Add(persistableService);
+                }
             }
+
+            instanceStore.Promote("additionalProperty", variantProperties, null);
+            instanceStore.InstanceCompletionAction = InstanceCompletionAction.DeleteAll;
+            var instanceHandle = instanceStore.CreateInstanceHandle();
+            _instanceView = instanceStore.Execute(instanceHandle, new CreateWorkflowOwnerCommand(), TimeSpan.FromSeconds(5));
+            instanceHandle.Free();
+            instanceStore.DefaultInstanceOwner = _instanceView.InstanceOwner;
+            _instanceStore = instanceStore;
             return _instanceStore;
         }
         public bool WaitForRunnableInstance(InstanceHandle instanceHandle)
@@ -107,7 +133,7 @@ namespace FlowBot.Services
             var iocService = new IOCService(workflowScope);
             workflowApplication.Extensions.Add<IIOCService>(() => { return iocService; });
 
-            workflowApplication.InstanceStore = GetInstanceStore();
+            workflowApplication.InstanceStore = GetInstanceStore(workflowApplication, workflowScope);
 
             workflowHandle.Bind(workflowApplication, iocService);
             workflowApplication.Completed = delegate (WorkflowApplicationCompletedEventArgs e)

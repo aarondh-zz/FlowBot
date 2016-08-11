@@ -257,6 +257,7 @@ namespace FlowBot.Services
                     CreateDate = DateTime.UtcNow,
                     ExternalId = externalId,
                     ExternalTaskType = (ExternalTaskType)externalTaskType,
+                    State = ExternalTaskStates.Queued,
                     InputData = null,
                     BookmarkName = bookmarkName,
                     UserGroup = (UserGroup)userGroup,

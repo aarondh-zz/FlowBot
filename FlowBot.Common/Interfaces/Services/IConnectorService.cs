@@ -17,6 +17,7 @@ namespace FlowBot.Common.Interfaces.Services
         string GetLocale();
         string GetMessage();
         string GetChannelId();
+        string GetServiceUrl();
 
         string GetConversationId();
         string GetConversationName();
@@ -25,6 +26,7 @@ namespace FlowBot.Common.Interfaces.Services
         string GetLocale(object activity);
         string GetTopic(object activity);
         string GetChannelId(object activity);
+        string GetServiceUrl(object activity);
 
         string GetConversationId(object activity);
         string GetConversationName(object activity);

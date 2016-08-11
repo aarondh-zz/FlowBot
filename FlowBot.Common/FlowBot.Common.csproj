@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\WorkflowNotFoundException.cs" />
     <Compile Include="Interfaces\Api\IBookmarkParameters.cs" />
+    <Compile Include="Interfaces\IPersistable.cs" />
     <Compile Include="Interfaces\Models\IBookmark.cs" />
     <Compile Include="Interfaces\Models\IConversation.cs" />
     <Compile Include="Interfaces\Models\IExternalTask.cs" />

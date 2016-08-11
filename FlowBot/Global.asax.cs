@@ -61,6 +61,8 @@ namespace FlowBot
 
             builder.RegisterType<ConnectorService>().As<IConnectorService>().InstancePerLifetimeScope();
 
+            WorkflowService.RegisterPersistableService<ConnectorService, IConnectorService>();
+
             builder.Register<LuisService>((context) =>
             {
                 return new LuisService("386327ee-db6e-4042-a3db-3804724d980c", "cb244805c4144637bfadde5d4da230ec");
