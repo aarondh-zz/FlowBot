@@ -136,8 +136,29 @@ namespace FlowBot.Services
             {
                 locale = GetLocale();
             }
+            
+            IMessageActivity message = Activity.CreateMessageActivity();
 
-            var conversationId = _connector.Conversations.CreateDirectConversation(_botChannelAccount, _userChannelAccount);
+            message.From = _botChannelAccount;
+
+            message.Recipient = _userChannelAccount;
+
+            message.Conversation = new ConversationAccount(id: _channelConversationId);
+
+            message.Text = text;
+
+            message.Locale = locale;
+
+            _connector.Conversations.SendToConversation((Activity)message);
+        }
+        public void StartConverstationAndSend(string text, string locale = null)
+        {
+            if (locale == null)
+            {
+                locale = GetLocale();
+            }
+
+            var resourceResponse = _connector.Conversations.CreateDirectConversation(_botChannelAccount, _userChannelAccount);
 
             IMessageActivity message = Activity.CreateMessageActivity();
 
@@ -145,7 +166,7 @@ namespace FlowBot.Services
 
             message.Recipient = _userChannelAccount;
 
-            message.Conversation = new ConversationAccount(id: conversationId.Id);
+            message.Conversation = new ConversationAccount(id: resourceResponse.Id);
 
             message.Text = text;
 
