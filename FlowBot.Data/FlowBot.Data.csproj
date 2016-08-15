@@ -148,6 +148,7 @@
       <DependentUpon>FlowBotModel.edmx</DependentUpon>
     </Content>
     <Content Include="Initialize.sql" />
+    <Content Include="PurgeAllWorkflowInstanceAndConversations.sql" />
     <Content Include="SqlWorkflowInstanceStoreLogic.sql" />
     <Content Include="SqlWorkflowInstanceStoreSchema.sql" />
   </ItemGroup>

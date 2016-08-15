@@ -76,7 +76,7 @@ namespace FlowBot
                 }
                 if (activity.Type == ActivityTypes.Message)
                 {
-                    var existingWorkflow = _workflowService.LookupWorkflow(activity.Conversation.Id);
+                    var existingWorkflow = _workflowService.LookupWorkflow(activity.Conversation.Id, Common.Models.WorkflowInstanceStates.Idle,"message");
                     if (existingWorkflow == null)
                     {
                         Dictionary<string, object> inputs = new Dictionary<string, object>();

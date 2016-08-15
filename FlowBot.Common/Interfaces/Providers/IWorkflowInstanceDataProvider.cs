@@ -11,7 +11,7 @@ namespace FlowBot.Common.Interfaces.Providers
     public interface IWorkflowInstanceDataProvider : IDataProvider<IWorkflowInstance>
     {
 
-        IWorkflowInstance Read(string externalId);
+        IWorkflowInstance Read(string externalId, WorkflowInstanceStates state = WorkflowInstanceStates.Undefined, string bookMarkName = null);
         IWorkflowInstance Read(IWorkflowHandle workflowHandle);
         IWorkflowInstance ReadByInstanceId(Guid instanceId);
         IWorkflowInstance Create(IWorkflowHandle workflowHandle, WorkflowInstanceStates state = WorkflowInstanceStates.Runnable, Nullable<DateTime> completionDate = null);

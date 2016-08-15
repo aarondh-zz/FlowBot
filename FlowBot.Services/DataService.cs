@@ -77,9 +77,21 @@ namespace FlowBot.Services
                 return _dataService._container.Bookmarks.FirstOrDefault(bm => bm.Id == id);
             }
 
-            public IBookmark Read(string externalId, string bookmarkName)
+            public IBookmark Read(Guid workflowInstanceId, string bookmarkName, BookmarkStates state = BookmarkStates.Undefined)
             {
-                return _dataService._container.Bookmarks.FirstOrDefault(bm => bm.WorkflowInstance.ExternalId == externalId && bm.Name == bookmarkName);
+                return _dataService._container.Bookmarks.FirstOrDefault(bm => bm.WorkflowInstance.InstanceId == workflowInstanceId && bm.Name == bookmarkName && (state == BookmarkStates.Undefined || bm.State == state));
+            }
+            public int CancelAllWaiting(Guid workflowInstanceId)
+            {
+                int canceled = 0;
+                var waitingBookmarks = _dataService._container.Bookmarks.Where(bm => bm.WorkflowInstance.InstanceId == workflowInstanceId && bm.State == BookmarkStates.Waiting).ToList();
+                foreach( var waitingBookmark in waitingBookmarks )
+                {
+                    waitingBookmark.State = BookmarkStates.Canceled;
+                    canceled++;
+                }
+                _dataService._container.SaveChanges();
+                return canceled;
             }
             public IOrderedQueryable<IBookmark> List(string bookmarkName = null, Guid? instanceId = null, string ownerDisplayName = null, BookmarkStates? state = null, OrderBy orderBy = OrderBy.OldestToNewest)
             {
@@ -761,9 +773,9 @@ namespace FlowBot.Services
                 return ReadByInstanceId(workflowHandle.InstanceId);
             }
 
-            public IWorkflowInstance Read(string externalId)
+            public IWorkflowInstance Read(string externalId, WorkflowInstanceStates state = WorkflowInstanceStates.Undefined, string bookMarkName = null)
             {
-                return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.ExternalId == externalId);
+                return _dataService._container.WorkflowInstances.FirstOrDefault(wi => wi.ExternalId == externalId && (state == WorkflowInstanceStates.Undefined || wi.State == state) && (bookMarkName == null || wi.Bookmarks.Any(bm=>bm.Name == bookMarkName)));
             }
 
             public void SetState(IWorkflowInstance workflowInstance, WorkflowInstanceStates state)
@@ -781,6 +793,7 @@ namespace FlowBot.Services
                     case WorkflowInstanceStates.Faulted:
                     case WorkflowInstanceStates.Completed:
                         dbWorkflowInstance.CompletionDate = DateTime.UtcNow;
+                        _dataService.Bookmarks.CancelAllWaiting(workflowInstance.InstanceId);
                         break;
                 }
                 Update(dbWorkflowInstance);

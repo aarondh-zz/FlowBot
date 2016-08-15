@@ -10,6 +10,7 @@ namespace FlowBot.Common.Models
     {
         Undefined = 0,
         Waiting = 1,
-        Completed = 2
+        Completed = 2,
+        Canceled = 3
     }
 }

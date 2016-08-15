@@ -247,7 +247,7 @@ namespace FlowBot.Services
             workflowApplication.Load(workflowInstance.InstanceId);
             workflowHandle.BookMarkResumed += (sender, args) =>
             {
-                var bookmark = _dataService.Bookmarks.Read(workflowInstance.ExternalId, args.BookmarkName);
+                var bookmark = _dataService.Bookmarks.Read(workflowInstance.InstanceId, args.BookmarkName, BookmarkStates.Waiting);
                 if (bookmark == null)
                 {
                     Trace.WriteLine($"Bookmark {args.BookmarkName} caused {workflowHandle} to resume by bookmark was not found in db");
@@ -255,13 +255,14 @@ namespace FlowBot.Services
                 else
                 {
                     _dataService.Bookmarks.SetState(bookmark, BookmarkStates.Completed);
+                    _dataService.WorkflowInstances.SetState(workflowInstance, WorkflowInstanceStates.Runnable);
                 }
             };
             return workflowHandle;
         }
-        public IWorkflowHandle LookupWorkflow(string externalId)
+        public IWorkflowHandle LookupWorkflow(string externalId, WorkflowInstanceStates state = WorkflowInstanceStates.Undefined, string bookMarkName = null)
         {
-            return FromInstance(_dataService.WorkflowInstances.Read(externalId));
+            return FromInstance(_dataService.WorkflowInstances.Read(externalId, state, bookMarkName));
         }
         public IWorkflowHandle LookupWorkflow(Guid instanceId)
         {
