@@ -639,29 +639,53 @@ namespace FlowBot.Services
 
             public IWorkflow Create(IWorkflow obj)
             {
-                throw new NotImplementedException();
+                Workflow workflow = new Workflow()
+                {
+                    Id = Guid.NewGuid(),
+                    CreateDate = DateTime.UtcNow,
+                    Package = obj.Package,
+                    Name = obj.Name,
+                    Major = obj.Major,
+                    Minor = obj.Minor,
+                    Build = obj.Build,
+                    Revision = obj.Revision
+                };
+
+                _dataService._container.Workflows.Add(workflow);
+                _dataService._container.SaveChanges();
+                return workflow;
             }
 
             public void Delete(IWorkflow obj)
             {
-                throw new NotImplementedException();
+                _dataService._container.Workflows.Remove((Workflow)obj);
+                _dataService._container.SaveChanges();
             }
 
-            public IOrderedQueryable<IWorkflow> List(OrderBy orderBy = OrderBy.Unordered)
+            public IOrderedQueryable<IWorkflow> List(string packageName = null, string workflowName = null, OrderBy orderBy = OrderBy.Unordered)
             {
+                IQueryable<Workflow> query = _dataService._container.Workflows;
+                if (packageName != null)
+                {
+                    query = query.Where(wf => wf.Package == packageName);
+                }
+                if (workflowName != null)
+                {
+                    query = query.Where(wf => wf.Name == workflowName);
+                }
                 switch (orderBy)
                 {
                     case OrderBy.NewestToOldest:
-                        return _dataService._container.Workflows.OrderBy(w => w.CreateDate);
+                        return query.OrderBy(w => w.CreateDate);
                     case OrderBy.OldestToNewest:
-                        return _dataService._container.Workflows.OrderByDescending(w => w.CreateDate);
+                        return query.OrderByDescending(w => w.CreateDate);
                     case OrderBy.ByNameAssending:
-                        return _dataService._container.Workflows.OrderBy(w => w.Package).ThenBy(w => w.Name).ThenBy(w => w.Major).ThenBy(w => w.Minor).ThenBy(w => w.Revision).ThenBy(w => w.Build);
+                        return query.OrderBy(w => w.Package).ThenBy(w => w.Name).ThenBy(w => w.Major).ThenBy(w => w.Minor).ThenBy(w => w.Revision).ThenBy(w => w.Build);
                     case OrderBy.ByNameDescending:
-                        return _dataService._container.Workflows.OrderBy(w => w.Package).ThenBy(w => w.Name).ThenBy(w => w.Major).ThenBy(w => w.Minor).ThenBy(w => w.Revision).ThenBy(w => w.Build);
+                        return query.OrderBy(w => w.Package).ThenBy(w => w.Name).ThenBy(w => w.Major).ThenBy(w => w.Minor).ThenBy(w => w.Revision).ThenBy(w => w.Build);
                     case OrderBy.Unordered:
                     default:
-                        return _dataService._container.Workflows;
+                        return query.OrderBy(wf=>wf.Id);
                 }
             }
 
@@ -691,6 +715,11 @@ namespace FlowBot.Services
             public void Update(IWorkflow obj)
             {
                 _dataService._container.SaveChanges();
+            }
+
+            IOrderedQueryable<IWorkflow> IDataProvider<IWorkflow>.List(OrderBy orderBy = OrderBy.Unordered)
+            {
+                return List(null, null, orderBy);
             }
         }
         private class WorkflowInstanceDataProvider : IWorkflowInstanceDataProvider

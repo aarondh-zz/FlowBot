@@ -200,6 +200,7 @@
     <Compile Include="Controllers\BookmarkController.cs" />
     <Compile Include="Controllers\ExternalTaskController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Controllers\WorkflowController.cs" />
     <Compile Include="Extensions\JsonPatchDocumentExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -210,6 +211,7 @@
     <Compile Include="Utils\NakedBodyParameterBinding.cs" />
     <Compile Include="ViewModels\BookmarkParametersViewModel.cs" />
     <Compile Include="ViewModels\ExternalTaskViewModel.cs" />
+    <Compile Include="ViewModels\WorkflowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -257,6 +259,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Bookmark\" />
+    <Folder Include="Views\Workflow\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

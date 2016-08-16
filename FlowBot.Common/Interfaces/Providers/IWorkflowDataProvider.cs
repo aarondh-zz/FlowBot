@@ -1,4 +1,5 @@
 ﻿using FlowBot.Common.Interfaces.Models;
+using FlowBot.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace FlowBot.Common.Interfaces.Providers
     {
         IWorkflow Read(string package, string name, Nullable<int> major = null, Nullable<int> minor = null, Nullable<int> build = null, Nullable<int> revision = null);
         IWorkflow Read(IWorkflowIdentity workflowIdentity);
+        IOrderedQueryable<IWorkflow> List(string packageName = null, string workflowName = null, OrderBy orderBy = OrderBy.Unordered);
     }
 }
