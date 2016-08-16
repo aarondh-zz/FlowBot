@@ -93,6 +93,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SpawnChildWorkflow.cs" />
     <Compile Include="ExternalTaskActivity.cs" />
     <Compile Include="BotReceiveActivity.cs" />
     <Compile Include="BotDialog.cs" />

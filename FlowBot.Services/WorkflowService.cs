@@ -146,16 +146,15 @@ namespace FlowBot.Services
                 }
                 else if (e.CompletionState == ActivityInstanceState.Canceled)
                 {
-                    workflowHandle.Terminated("Canceled");
                     _dataService.WorkflowInstances.SetState(workflowHandle, WorkflowInstanceStates.Canceled);
                 }
                 else
                 {
-                    workflowHandle.Completed(e);
                     _dataService.WorkflowInstances.SetState(workflowHandle, WorkflowInstanceStates.Completed);
                 }
                 iocService.Dispose();
                 workflowScope.Dispose();
+                workflowHandle.Complete(e);
             };
             workflowApplication.Aborted = delegate (WorkflowApplicationAbortedEventArgs e)
             {

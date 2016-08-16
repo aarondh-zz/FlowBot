@@ -8,12 +8,14 @@ using System.Activities;
 using FlowBot.Common.Interfaces.Models;
 using FlowBot.Common.Interfaces.Services;
 using FlowBot.Services.Models;
+using FlowBot.Common.Models;
 
 namespace FlowBot.Services
 {
     internal class WorkflowHandle : IWorkflowHandle
     {
         public event EventHandler<BookMarkResumedEventArgs> BookMarkResumed;
+        public event EventHandler<WorkflowCompletedEventArgs> Completed;
         public string ExternalId { get; private set; }
         public Guid InstanceId
         {
@@ -87,8 +89,9 @@ namespace FlowBot.Services
                 return _iocService;
             }
         }
-        public void Completed(WorkflowApplicationCompletedEventArgs args)
+        public void Complete(WorkflowApplicationCompletedEventArgs args)
         {
+            this.Completed?.Invoke(this, new WorkflowCompletedEventArgs(args.Outputs, args.CompletionState == ActivityInstanceState.Canceled, args.TerminationException));
         }
         public void Terminated(string reason)
         {

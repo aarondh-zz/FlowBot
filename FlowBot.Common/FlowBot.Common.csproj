@@ -79,6 +79,7 @@
     <Compile Include="Models\BookmarkStates.cs" />
     <Compile Include="Models\ExternalTaskStates.cs" />
     <Compile Include="Models\OrderBy.cs" />
+    <Compile Include="Models\WorkflowCompletedEventArgs.cs" />
     <Compile Include="Models\WorkflowInstanceStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WorkflowEventArgs.cs" />
