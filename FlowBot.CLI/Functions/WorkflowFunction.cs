@@ -1,12 +1,14 @@
 ﻿using FlowBot.CLI.Interfaces;
 using FlowBot.CLI.Models;
 using FlowBot.CLI.Utilities;
+using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Serializers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -127,14 +129,35 @@ namespace FlowBot.CLI.Functions
             {
                 context.Log.Write(LogLevels.Info, $"workflow source read from {context.Options.Input}");
             }
-            var workflowRequest = new RestRequest("api/workflow/{id}", Method.PATCH);
-            workflowRequest.AddParameter("id",context.Options.Id, ParameterType.UrlSegment);
-            workflowRequest.JsonSerializer = new FlowBot.CLI.JsonSerializer();
-            var body = context.Input.ReadToEnd();
-            workflowRequest.AddJsonBody(new Patch[] { new Patch(PatchOperators.Replace, "/body", body) });
             context.Log.Write(LogLevels.Info, $"updating workflow {context.Options.Id} from {context.Options.ServerUrl}");
-            var response = context.Client.Execute<Workflow>(workflowRequest);
-            response.ReportComplete(context.Log, "workflow update complete");
+            var body = context.Input.ReadToEnd();
+            var stringContent = JsonConvert.SerializeObject(new Patch[] { new Patch(PatchOperators.Replace, "/Body", body) });
+            var method = new HttpMethod("PATCH");
+            var request = new HttpRequestMessage(method,
+                context.Client.BaseUrl.ToString() +"api/workflow/" + context.Options.Id)
+            {
+                Content = new StringContent(stringContent,
+                System.Text.Encoding.UTF8, "application/json-patch+json")
+            };
+
+            // send it, using an HttpClient instance
+            HttpClient client = new HttpClient();
+            var result = client.SendAsync(request);
+            result.Wait();
+            if (result.Result.IsSuccessStatusCode)
+            {
+                context.Log.Write(LogLevels.Info, $"workflow update complete");
+            }
+            else
+            {
+                MemoryStream output = new MemoryStream();
+                result.Result.Content.CopyToAsync(output).Wait();
+                output.Seek(0, SeekOrigin.Begin);
+                var resultContent = new StreamReader(output).ReadToEnd();
+                context.Log.Write(LogLevels.Verbose , resultContent);
+                throw new InvalidOperationException(result.Result.ReasonPhrase);
+            }
+
         }
     }
 }

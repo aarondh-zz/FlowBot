@@ -1,4 +1,5 @@
 ﻿using FlowBot.Common.Interfaces.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,10 @@ namespace FlowBot.ViewModels
             this.Revision = workflow.Revision;
 
         }
+        [JsonProperty("body")]
         public string Body { get; set; }
 
+        [JsonProperty("build")]
         public int Build { get; set; }
 
 
@@ -36,16 +39,21 @@ namespace FlowBot.ViewModels
         public Guid Id { get; set; }
 
 
+        [JsonProperty("major")]
         public int Major { get; set; }
 
 
+        [JsonProperty("minor")]
         public int Minor { get; set; }
 
 
+        [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("package")]
         public string Package { get; set; }
 
+        [JsonProperty("revision")]
         public int Revision { get; set; }
 
     }

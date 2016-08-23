@@ -56,7 +56,7 @@ namespace FlowBot.Controllers
                 return NotFound();
             }
             var originaWorkflowViewModel = new WorkflowViewModel(originalWorkflow);
-            if (deltaWorkflow.HasValidOperations<WorkflowViewModel>("/body"))
+            if (deltaWorkflow.HasValidOperations<WorkflowViewModel>("/Body"))
             {
                 deltaWorkflow.ApplyUpdatesTo(originaWorkflowViewModel);
                 originaWorkflowViewModel.CopyTo(originalWorkflow);

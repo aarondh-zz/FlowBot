@@ -143,7 +143,7 @@
           <f:BotReplyActivity Locale="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReplyActivity_1" Text="Well hi there right back at you!" />
           <While sap2010:WorkflowViewState.IdRef="While_1">
             <While.Condition>
-              <mca:CSharpValue x:TypeArguments="x:Boolean">message != "exit"</mca:CSharpValue>
+              <mca:CSharpValue x:TypeArguments="x:Boolean">message != "bye"</mca:CSharpValue>
             </While.Condition>
             <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
               <f:BotReceiveActivity ChannelId="{x:Null}" ConversationId="{x:Null}" ConversationName="{x:Null}" From="{x:Null}" Locale="{x:Null}" Topic="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReceiveActivity_1">
@@ -230,7 +230,7 @@
       </If.Else>
     </If>
     <f:BotReplyActivity Locale="{x:Null}" sap2010:WorkflowViewState.IdRef="BotReplyActivity_4" Text="Goodbye" />
-    <sads:DebugSymbol.Symbol>d1lDOlxVc2Vyc1x2LWFkYWlcRG9jdW1lbnRzXFZpc3VhbCBTdHVkaW8gMjAxNVxQcm9qZWN0c1xGbG93Qm90XEZsb3dCb3RcV29ya2Zsb3dcU3RhcnQueGFtbDRXA+oBDgIBAWAFdRMDAYsBdgWGARYCAXSHAQXnAQoCAQToAQXoAXECAQJoC2hhAwGhAXILclgDAZoBYwtjXwMBkwFtC21YAwGMAXkLeWcDAYQBdk92VQMBgwGDAQuDAVACAXx+C35mAgF1igELigGJAQIBBY4BCaUBFAIBWKgBCeUBFAIBDOgBZegBbgIBA48BC48BkAECAXKQAQukARMCAVmsAQusAcIBAgFWrQEL5AETAgENjwFrjwGNAQIBc5QBDaMBGAIBYZIBD5IBXwIBWqwBa6wBvwECAVexAQ3jARgCARavAQ+vAacBAgEOlQEPmwEmAgFqnAEPogEkAgFisgEPvQEoAgFDvgEP0gEYAgEp0wEP4gEUAgEXmAEVmAFiAgFrnwEVnwFpAgFjtQEVtQHTAQIBTrIBTrIBYAIBTboBFboBiwECAUWyAaQBsgGsAQIBRMoBFcoBfQIBKs4BEc4BkgECAUHPARHPAdkBAgE/0AER0AGZAQIBPdEBEdEBogECATvAARPGASgCATLWARXWAYsBAgEY2gET4AEqAgEgzgF9zgGPAQIBQs8Bfs8B1gECAUDQAYAB0AGWAQIBPtEBhAHRAZ8BAgE8wwEZwwF3AgEz3QEZ3QFmAgEh</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1lDOlxVc2Vyc1x2LWFkYWlcRG9jdW1lbnRzXFZpc3VhbCBTdHVkaW8gMjAxNVxQcm9qZWN0c1xGbG93Qm90XEZsb3dCb3RcV29ya2Zsb3dcU3RhcnQueGFtbDRXA+oBDgIBAWAFdRMDAYsBdgWGARYCAXSHAQXnAQoCAQToAQXoAXECAQJoC2hhAwGhAXILclgDAZoBYwtjXwMBkwFtC21YAwGMAXkLeWcDAYQBdk92VQMBgwGDAQuDAVACAXx+C35mAgF1igELigGJAQIBBY4BCaUBFAIBWKgBCeUBFAIBDOgBZegBbgIBA48BC48BkAECAXKQAQukARMCAVmsAQusAcIBAgFWrQEL5AETAgENjwFrjwGNAQIBc5QBDaMBGAIBYZIBD5IBXgIBWqwBa6wBvwECAVexAQ3jARgCARavAQ+vAacBAgEOlQEPmwEmAgFqnAEPogEkAgFisgEPvQEoAgFDvgEP0gEYAgEp0wEP4gEUAgEXmAEVmAFiAgFrnwEVnwFpAgFjtQEVtQHTAQIBTrIBTrIBYAIBTboBFboBiwECAUWyAaQBsgGsAQIBRMoBFcoBfQIBKs4BEc4BkgECAUHPARHPAdkBAgE/0AER0AGZAQIBPdEBEdEBogECATvAARPGASgCATLWARXWAYsBAgEY2gET4AEqAgEgzgF9zgGPAQIBQs8Bfs8B1gECAUDQAYAB0AGWAQIBPtEBhAHRAZ8BAgE8wwEZwwF3AgEz3QEZ3QFmAgEh</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -261,34 +261,34 @@
       <sap2010:ViewStateData Id="BotReplyActivity_7" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
       <sap2010:ViewStateData Id="BotReplyActivity_8" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
       <sap2010:ViewStateData Id="BotReplyActivity_9" sap:VirtualizedContainerService.HintSize="344,72.6666666666667" />
-      <sap2010:ViewStateData Id="Switch`1_1" sap:VirtualizedContainerService.HintSize="476.666666666667,239.333333333333" />
+      <sap2010:ViewStateData Id="Switch`1_1" sap:VirtualizedContainerService.HintSize="476.666666666667,233.333333333333" />
       <sap2010:ViewStateData Id="BotReceiveActivity_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="476.666666666667,214.666666666667" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="498.666666666667,680">
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="498.666666666667,674">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="While_2" sap:VirtualizedContainerService.HintSize="525.333333333333,844.666666666667" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="547.333333333333,1081.33333333333">
+      <sap2010:ViewStateData Id="While_2" sap:VirtualizedContainerService.HintSize="525.333333333333,838.666666666667" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="547.333333333333,1075.33333333333">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1059.33333333333,1236" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="1059.33333333333,1230" />
       <sap2010:ViewStateData Id="BotReplyActivity_4" sap:VirtualizedContainerService.HintSize="1059.33333333333,72.6666666666667" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1081.33333333333,1596.66666666667">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1081.33333333333,1590.66666666667">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="FlowBot.Workflow.Activity1_1" sap:VirtualizedContainerService.HintSize="1121.33333333333,1676.66666666667" />
+      <sap2010:ViewStateData Id="FlowBot.Workflow.Activity1_1" sap:VirtualizedContainerService.HintSize="1121.33333333333,1670.66666666667" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

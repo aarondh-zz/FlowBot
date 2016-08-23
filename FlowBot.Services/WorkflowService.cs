@@ -198,18 +198,22 @@ namespace FlowBot.Services
                 return PersistableIdleAction.Unload;
             };
         }
-        public Activity LoadWorkflow(string workflowName)
+        public Activity LoadWorkflow(IWorkflow workflow)
         {
-            var workflowPath = _workflowRootDirectory + workflowName + WorkflowFileExtension;
             ActivityXamlServicesSettings settings = new ActivityXamlServicesSettings
             {
                 CompileExpressions = true
             };
+#if READ_FROM_FILE
+            var workflowPath = _workflowRootDirectory + workflow.Name + WorkflowFileExtension;
 
             using (var streamReader = File.OpenText(workflowPath))
             {
                 return ActivityXamlServices.Load(new XamlXmlReader(streamReader), settings);
             }
+#else
+            return ActivityXamlServices.Load(new XamlXmlReader(new StringReader(workflow.Body)), settings);
+#endif
         }
         public IWorkflowHandle NewWorkflow(string packageName, string workflowName, string externalId, IDictionary<string, object> inputs)
         {
@@ -218,7 +222,7 @@ namespace FlowBot.Services
             {
                 throw new WorkflowNotFoundException(packageName, workflowName);
             }
-            var workflowDefinition = LoadWorkflow(workflowName);
+            var workflowDefinition = LoadWorkflow(workflow);
             if (workflowDefinition == null)
             {
                 throw new WorkflowNotFoundException(packageName, workflowName);
@@ -238,7 +242,7 @@ namespace FlowBot.Services
                 return null;
             }
 
-            var workflowDefinition = LoadWorkflow(workflowInstance.Workflow.Name);
+            var workflowDefinition = LoadWorkflow(workflowInstance.Workflow);
             var workflowIdentity = workflowInstance.Workflow.GetWorkflowIdentity();
             var workflowHandle = new WorkflowHandle(workflowIdentity, workflowInstance.ExternalId);
             WorkflowApplication workflowApplication = new WorkflowApplication(workflowDefinition, workflowIdentity);

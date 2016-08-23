@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using JsonPatch.Formatting;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace FlowBot
                 Formatting = Newtonsoft.Json.Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore,
             };
+            config.Formatters.Add(new JsonPatchFormatter());
 
             // Web API configuration and services
 
