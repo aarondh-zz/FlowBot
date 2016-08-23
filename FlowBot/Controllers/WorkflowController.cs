@@ -25,7 +25,7 @@ namespace FlowBot.Controllers
         public IEnumerable<IWorkflow> Get(string package = null, string name = null, OrderBy orderBy = OrderBy.OldestToNewest, int skip = 0, int take = 50)
         {
             var query = _dataService.Workflows.List(package, name, orderBy).Skip(skip).Take(take);
-            return query.ToArray();
+            return query.ToArray().Select(wf => new WorkflowViewModel(wf)).ToArray();
         }
 
         // GET: api/Workflow/{guid}
@@ -33,7 +33,7 @@ namespace FlowBot.Controllers
         {
             return _dataService.Workflows.Read(id);
         }
-        public IHttpActionResult Put(WorkflowViewModel workflow)
+        public IHttpActionResult Post(WorkflowViewModel workflow)
         {
             try
             {
@@ -46,7 +46,9 @@ namespace FlowBot.Controllers
             }
         }
         // PATCH: api/Workflow
-        public IHttpActionResult Patch(Guid id, JsonPatchDocument<WorkflowViewModel> deltaWorkflow)
+        [System.Web.Http.Route("api/workflow/{id}")]
+        [System.Web.Http.HttpPatch]
+        public IHttpActionResult Patch(Guid id, [FromBody]JsonPatchDocument<WorkflowViewModel> deltaWorkflow)
         {
             var originalWorkflow = _dataService.Workflows.Read(id);
             if (originalWorkflow == null)
@@ -54,7 +56,7 @@ namespace FlowBot.Controllers
                 return NotFound();
             }
             var originaWorkflowViewModel = new WorkflowViewModel(originalWorkflow);
-            if (deltaWorkflow.HasValidOperations<WorkflowViewModel>("/state", "/outputdata"))
+            if (deltaWorkflow.HasValidOperations<WorkflowViewModel>("/body"))
             {
                 deltaWorkflow.ApplyUpdatesTo(originaWorkflowViewModel);
                 originaWorkflowViewModel.CopyTo(originalWorkflow);

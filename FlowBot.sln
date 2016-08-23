@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.WorkerPortal", "Flo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.Json", "FlowBot.Json\FlowBot.Json.csproj", "{7F3E9A80-79BB-4D70-9D01-3B642AE5884E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowBot.CLI", "FlowBot.CLI\FlowBot.CLI.csproj", "{1931B37C-E5D1-450B-BAF1-FE2596CBC4F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{7F3E9A80-79BB-4D70-9D01-3B642AE5884E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F3E9A80-79BB-4D70-9D01-3B642AE5884E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F3E9A80-79BB-4D70-9D01-3B642AE5884E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1931B37C-E5D1-450B-BAF1-FE2596CBC4F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1931B37C-E5D1-450B-BAF1-FE2596CBC4F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1931B37C-E5D1-450B-BAF1-FE2596CBC4F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1931B37C-E5D1-450B-BAF1-FE2596CBC4F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

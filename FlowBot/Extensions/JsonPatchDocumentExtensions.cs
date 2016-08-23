@@ -10,6 +10,10 @@ namespace FlowBot.Extensions
     {
         public static bool HasValidOperations<T>(this JsonPatchDocument<T> patchDocument, params string[] validPaths) where T : class, new()
         {
+            if( patchDocument == null)
+            {
+                return false;
+            }
             HashSet<string> validPathSet = new HashSet<string>(validPaths, StringComparer.InvariantCultureIgnoreCase);
             foreach( var operation in patchDocument.Operations)
             {
